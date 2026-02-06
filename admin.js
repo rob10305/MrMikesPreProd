@@ -90,6 +90,90 @@ const AdminAuth = {
 };
 
 // =====================
+// GitHub Upload Module
+// =====================
+const GitHubUpload = {
+  // Upload a file to GitHub repository
+  async uploadImage(file) {
+    if (!CONFIG.isGitHubConfigured()) {
+      return {
+        success: false,
+        error: 'GitHub not configured. Add your GitHub token to config.js',
+        path: null
+      };
+    }
+
+    try {
+      // Convert file to base64
+      const base64Content = await this.fileToBase64(file);
+
+      // Generate unique filename to avoid conflicts
+      const timestamp = Date.now();
+      const safeName = file.name.replace(/[^a-zA-Z0-9.-]/g, '_');
+      const filename = `${timestamp}_${safeName}`;
+      const path = `images/${filename}`;
+
+      // GitHub API endpoint
+      const url = `https://api.github.com/repos/${CONFIG.GITHUB_OWNER}/${CONFIG.GITHUB_REPO}/contents/${path}`;
+
+      const response = await fetch(url, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `token ${CONFIG.GITHUB_TOKEN}`,
+          'Content-Type': 'application/json',
+          'Accept': 'application/vnd.github.v3+json'
+        },
+        body: JSON.stringify({
+          message: `Upload image: ${filename}`,
+          content: base64Content,
+          branch: CONFIG.GITHUB_BRANCH
+        })
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Upload failed');
+      }
+
+      const data = await response.json();
+
+      return {
+        success: true,
+        path: path,
+        url: data.content.download_url,
+        sha: data.content.sha
+      };
+    } catch (error) {
+      console.error('GitHub upload error:', error);
+      return {
+        success: false,
+        error: error.message,
+        path: null
+      };
+    }
+  },
+
+  // Convert file to base64
+  fileToBase64(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        // Remove the data URL prefix (e.g., "data:image/jpeg;base64,")
+        const base64 = reader.result.split(',')[1];
+        resolve(base64);
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  },
+
+  // Check if GitHub is configured
+  isConfigured() {
+    return typeof CONFIG !== 'undefined' && CONFIG.isGitHubConfigured && CONFIG.isGitHubConfigured();
+  }
+};
+
+// =====================
 // Content Storage Module
 // =====================
 const ContentStorage = {
@@ -449,24 +533,53 @@ class AdminDashboard {
 
     this.openModal(isNew ? 'Add New Product' : `Edit ${product.title || category}`, formHtml);
 
-    // Handle file upload preview
-    document.getElementById('product-image-file').addEventListener('change', (e) => {
+    // Handle file upload with GitHub integration
+    document.getElementById('product-image-file').addEventListener('change', async (e) => {
       const file = e.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = (event) => {
-          document.getElementById('product-image').value = `images/${file.name}`;
-          const preview = document.querySelector('.image-preview');
-          if (preview) {
-            preview.querySelector('img').src = event.target.result;
-          } else {
-            const newPreview = document.createElement('div');
-            newPreview.className = 'image-preview';
-            newPreview.innerHTML = `<img src="${event.target.result}" alt="Preview">`;
-            document.getElementById('product-form').appendChild(newPreview);
-          }
-        };
-        reader.readAsDataURL(file);
+      if (!file) return;
+
+      const fileInput = e.target;
+      const imagePathInput = document.getElementById('product-image');
+      const form = document.getElementById('product-form');
+
+      // Show preview immediately
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const preview = document.querySelector('.image-preview');
+        if (preview) {
+          preview.querySelector('img').src = event.target.result;
+        } else {
+          const newPreview = document.createElement('div');
+          newPreview.className = 'image-preview';
+          newPreview.innerHTML = `<img src="${event.target.result}" alt="Preview">`;
+          form.appendChild(newPreview);
+        }
+      };
+      reader.readAsDataURL(file);
+
+      // Upload to GitHub if configured
+      if (GitHubUpload.isConfigured()) {
+        // Show uploading status
+        const originalLabel = fileInput.nextElementSibling.innerHTML;
+        fileInput.nextElementSibling.innerHTML = '<span style="color: #f59e0b;">Uploading...</span>';
+        fileInput.disabled = true;
+
+        const result = await GitHubUpload.uploadImage(file);
+
+        fileInput.disabled = false;
+        fileInput.nextElementSibling.innerHTML = originalLabel;
+
+        if (result.success) {
+          imagePathInput.value = result.path;
+          this.showNotification('Image uploaded to GitHub!');
+        } else {
+          this.showNotification('Upload failed: ' + result.error, 'error');
+          imagePathInput.value = `images/${file.name}`;
+        }
+      } else {
+        // No GitHub config - just set the path (user must upload manually)
+        imagePathInput.value = `images/${file.name}`;
+        this.showNotification('Note: Configure GitHub token in config.js for auto-upload', 'error');
       }
     });
   }
@@ -630,24 +743,51 @@ class AdminDashboard {
 
     this.openModal(item ? 'Edit Image' : 'Add Image', formHtml);
 
-    // Handle file upload preview
-    document.getElementById('gallery-image-file').addEventListener('change', (e) => {
+    // Handle file upload with GitHub integration
+    document.getElementById('gallery-image-file').addEventListener('change', async (e) => {
       const file = e.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = (event) => {
-          document.getElementById('gallery-image').value = `images/${file.name}`;
-          const preview = document.querySelector('.image-preview');
-          if (preview) {
-            preview.querySelector('img').src = event.target.result;
-          } else {
-            const newPreview = document.createElement('div');
-            newPreview.className = 'image-preview';
-            newPreview.innerHTML = `<img src="${event.target.result}" alt="Preview">`;
-            document.getElementById('gallery-form').appendChild(newPreview);
-          }
-        };
-        reader.readAsDataURL(file);
+      if (!file) return;
+
+      const fileInput = e.target;
+      const imagePathInput = document.getElementById('gallery-image');
+      const form = document.getElementById('gallery-form');
+
+      // Show preview immediately
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const preview = document.querySelector('.image-preview');
+        if (preview) {
+          preview.querySelector('img').src = event.target.result;
+        } else {
+          const newPreview = document.createElement('div');
+          newPreview.className = 'image-preview';
+          newPreview.innerHTML = `<img src="${event.target.result}" alt="Preview">`;
+          form.appendChild(newPreview);
+        }
+      };
+      reader.readAsDataURL(file);
+
+      // Upload to GitHub if configured
+      if (GitHubUpload.isConfigured()) {
+        const originalLabel = fileInput.nextElementSibling.innerHTML;
+        fileInput.nextElementSibling.innerHTML = '<span style="color: #f59e0b;">Uploading...</span>';
+        fileInput.disabled = true;
+
+        const result = await GitHubUpload.uploadImage(file);
+
+        fileInput.disabled = false;
+        fileInput.nextElementSibling.innerHTML = originalLabel;
+
+        if (result.success) {
+          imagePathInput.value = result.path;
+          this.showNotification('Image uploaded to GitHub!');
+        } else {
+          this.showNotification('Upload failed: ' + result.error, 'error');
+          imagePathInput.value = `images/${file.name}`;
+        }
+      } else {
+        imagePathInput.value = `images/${file.name}`;
+        this.showNotification('Note: Configure GitHub token in config.js for auto-upload', 'error');
       }
     });
   }

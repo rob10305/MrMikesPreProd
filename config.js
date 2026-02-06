@@ -6,6 +6,14 @@
  */
 
 const CONFIG = {
+  // GitHub Configuration (for image uploads)
+  // Create a token at: https://github.com/settings/tokens
+  // Token needs 'repo' permission (Contents: Read and write)
+  GITHUB_TOKEN: 'YOUR_GITHUB_TOKEN',
+  GITHUB_OWNER: 'rob10305',
+  GITHUB_REPO: 'MrMikes',
+  GITHUB_BRANCH: 'main',
+
   // Supabase Configuration (Get free account at supabase.com)
   SUPABASE_URL: 'YOUR_SUPABASE_URL',
   SUPABASE_ANON_KEY: 'YOUR_SUPABASE_KEY',
@@ -23,6 +31,10 @@ const CONFIG = {
 
   isSupabaseConfigured() {
     return this.SUPABASE_URL !== 'YOUR_SUPABASE_URL' && this.SUPABASE_ANON_KEY !== 'YOUR_SUPABASE_KEY';
+  },
+
+  isGitHubConfigured() {
+    return this.GITHUB_TOKEN !== 'YOUR_GITHUB_TOKEN' && this.GITHUB_TOKEN.length > 0;
   }
 };
 
