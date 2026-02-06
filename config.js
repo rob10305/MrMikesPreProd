@@ -7,12 +7,21 @@
 
 const CONFIG = {
   // GitHub Configuration (for image uploads)
-  // Create a token at: https://github.com/settings/tokens
-  // Token needs 'repo' permission (Contents: Read and write)
-  GITHUB_TOKEN: 'YOUR_GITHUB_TOKEN',
+  // Token is stored in browser localStorage for security (not in code)
+  // Enter your token in Admin > Settings > GitHub Token
   GITHUB_OWNER: 'rob10305',
   GITHUB_REPO: 'MrMikes',
   GITHUB_BRANCH: 'main',
+
+  // Get GitHub token from localStorage
+  getGitHubToken() {
+    return localStorage.getItem('github_token') || '';
+  },
+
+  // Save GitHub token to localStorage
+  setGitHubToken(token) {
+    localStorage.setItem('github_token', token);
+  },
 
   // Supabase Configuration (Get free account at supabase.com)
   SUPABASE_URL: 'YOUR_SUPABASE_URL',
@@ -34,7 +43,8 @@ const CONFIG = {
   },
 
   isGitHubConfigured() {
-    return this.GITHUB_TOKEN !== 'YOUR_GITHUB_TOKEN' && this.GITHUB_TOKEN.length > 0;
+    const token = this.getGitHubToken();
+    return token && token.length > 0;
   }
 };
 

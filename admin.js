@@ -98,7 +98,7 @@ const GitHubUpload = {
     if (!CONFIG.isGitHubConfigured()) {
       return {
         success: false,
-        error: 'GitHub not configured. Add your GitHub token to config.js',
+        error: 'GitHub not configured. Go to Settings and enter your GitHub token.',
         path: null
       };
     }
@@ -119,7 +119,7 @@ const GitHubUpload = {
       const response = await fetch(url, {
         method: 'PUT',
         headers: {
-          'Authorization': `token ${CONFIG.GITHUB_TOKEN}`,
+          'Authorization': `token ${CONFIG.getGitHubToken()}`,
           'Content-Type': 'application/json',
           'Accept': 'application/vnd.github.v3+json'
         },
@@ -1062,6 +1062,35 @@ class AdminDashboard {
 
   // Settings
   bindSettings() {
+    // GitHub Token handling
+    const githubTokenInput = document.getElementById('github-token');
+    const githubTokenStatus = document.getElementById('github-token-status');
+    const saveGithubTokenBtn = document.getElementById('save-github-token');
+
+    // Load existing token (masked)
+    const existingToken = CONFIG.getGitHubToken();
+    if (existingToken) {
+      githubTokenInput.value = existingToken;
+      githubTokenStatus.innerHTML = '<span style="color: var(--admin-success);">Token configured. Image uploads enabled.</span>';
+    } else {
+      githubTokenStatus.innerHTML = '<span style="color: var(--admin-text-muted);">No token configured. Enter your GitHub token to enable image uploads.</span>';
+    }
+
+    // Save GitHub token
+    saveGithubTokenBtn.addEventListener('click', () => {
+      const token = githubTokenInput.value.trim();
+      if (token) {
+        CONFIG.setGitHubToken(token);
+        githubTokenStatus.innerHTML = '<span style="color: var(--admin-success);">Token saved! Image uploads are now enabled.</span>';
+        this.showNotification('GitHub token saved!');
+      } else {
+        CONFIG.setGitHubToken('');
+        githubTokenStatus.innerHTML = '<span style="color: var(--admin-text-muted);">Token removed.</span>';
+        this.showNotification('GitHub token removed');
+      }
+    });
+
+    // Password form
     document.getElementById('settings-form').addEventListener('submit', (e) => {
       e.preventDefault();
 

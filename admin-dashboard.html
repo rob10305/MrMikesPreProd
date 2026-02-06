@@ -259,6 +259,17 @@
           </div>
 
           <div class="settings-form-container">
+            <div class="settings-info" style="margin-bottom: 2rem;">
+              <h3>GitHub Image Upload</h3>
+              <p>Enter your GitHub Personal Access Token to enable automatic image uploads. <a href="https://github.com/settings/tokens" target="_blank">Create token here</a> (needs 'repo' permission).</p>
+              <div class="form-group" style="margin-top: 1rem;">
+                <label for="github-token">GitHub Token</label>
+                <input type="password" id="github-token" placeholder="ghp_xxxxxxxxxxxx" style="font-family: monospace;">
+              </div>
+              <div id="github-token-status" style="margin-top: 0.5rem; font-size: 0.875rem;"></div>
+              <button type="button" class="btn btn-primary" id="save-github-token" style="margin-top: 0.5rem;">Save Token</button>
+            </div>
+
             <form id="settings-form" class="admin-form">
               <h3>Change Password</h3>
               <div class="form-group">
