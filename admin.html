@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Login - MrMikes</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="admin.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="admin-body">
+  <div class="admin-login-container">
+    <div class="admin-login-box">
+      <div class="admin-logo">
+        <span class="logo-text">MrMikes</span>
+        <span class="admin-badge">Admin</span>
+      </div>
+
+      <h1>Administrator Login</h1>
+      <p class="admin-subtitle">Enter your credentials to access the admin panel</p>
+
+      <form id="login-form" class="admin-form">
+        <div class="form-group">
+          <label for="username">Username</label>
+          <input type="text" id="username" name="username" required autocomplete="username">
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" required autocomplete="current-password">
+        </div>
+
+        <div id="login-error" class="error-message" style="display: none;"></div>
+
+        <button type="submit" class="btn btn-primary btn-full">Login</button>
+      </form>
+
+      <a href="index.html" class="back-link">Back to Website</a>
+    </div>
+  </div>
+
+  <script src="admin.js"></script>
+  <script>
+    // Check if already logged in
+    if (AdminAuth.isLoggedIn()) {
+      window.location.href = 'admin-dashboard.html';
+    }
+
+    // Handle login form
+    document.getElementById('login-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+      const errorDiv = document.getElementById('login-error');
+
+      if (AdminAuth.login(username, password)) {
+        window.location.href = 'admin-dashboard.html';
+      } else {
+        errorDiv.textContent = 'Invalid username or password';
+        errorDiv.style.display = 'block';
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="MrMikes Color Chart - Leather and leather-ette colors available for your custom upholstery project.">
+  <title>Colors | MrMikes</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+  <style>
+    /* Lightbox styles */
+    .color-card img {
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+    .color-card img:hover {
+      transform: scale(1.05);
+    }
+    .color-card .click-hint {
+      font-size: 0.75rem;
+      color: var(--color-gray-500);
+      margin-top: var(--spacing-xs);
+    }
+    .lightbox {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.9);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+    .lightbox.active {
+      display: flex;
+    }
+    .lightbox img {
+      max-width: 90%;
+      max-height: 70vh;
+      object-fit: contain;
+      border-radius: 8px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    }
+    .lightbox-caption {
+      color: white;
+      margin-top: 20px;
+      text-align: center;
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+    .lightbox-subtitle {
+      color: #ccc;
+      margin-top: 8px;
+      text-align: center;
+      font-size: 1rem;
+    }
+    .lightbox-close {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      color: white;
+      font-size: 40px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: color 0.2s;
+      line-height: 1;
+    }
+    .lightbox-close:hover {
+      color: #ccc;
+    }
+  </style>
+</head>
+<body>
+  <div class="top-bar">
+    <div class="container top-bar-content">
+      <div class="top-bar-contact">
+        <a href="tel:941-922-5070">941-922-5070</a>
+        <span class="separator">|</span>
+        <span>Mon-Fri 10-4 ET</span>
+      </div>
+    </div>
+  </div>
+
+  <header class="header">
+    <div class="container header-content">
+      <a href="index.html" class="logo">
+        <span class="logo-text">MrMikes</span>
+        <span class="logo-tagline">Car Upholstery Kits</span>
+      </a>
+      <nav class="main-nav">
+        <ul class="nav-list">
+          <li><a href="index.html#products">Products</a></li>
+          <li><a href="index.html#about">About</a></li>
+          <li><a href="index.html#contact">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <section class="page-header">
+    <div class="container">
+      <nav class="breadcrumb">
+        <a href="index.html">Home</a> <span>/</span> <span>Colors</span>
+      </nav>
+      <h1>Color Chart</h1>
+      <p>Available leather and leather-ette colors for your project</p>
+    </div>
+  </section>
+
+  <section class="info-page">
+    <div class="container">
+      <div class="info-content" style="max-width: 1100px;">
+
+        <!-- Sample Request Box -->
+        <div style="background: var(--color-primary); color: white; padding: var(--spacing-xl); border-radius: var(--radius-lg); margin-bottom: var(--spacing-2xl); text-align: center;">
+          <h2 style="margin-top: 0; color: white;">Request Free Color Samples</h2>
+          <p style="font-size: 1.1rem; margin-bottom: var(--spacing-md); color: white;">Email your list of colors to receive physical samples before ordering.</p>
+          <p style="margin-bottom: var(--spacing-lg); color: white;">Samples typically arrive within a week.</p>
+          <a href="mailto:mrmike@mrmikes.com?subject=Color Samples Request" class="btn" style="background: white; color: var(--color-primary);">Email Sample Request</a>
+        </div>
+
+        <p style="text-align: center; color: var(--color-gray-600); margin-bottom: var(--spacing-xl); font-style: italic;">Click any color swatch to see a larger view of the fabric texture</p>
+
+        <!-- Tans & Browns -->
+        <h2>Tans & Browns</h2>
+        <div class="color-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: var(--spacing-md); margin-bottom: var(--spacing-2xl);">
+
+          <div class="color-card" style="background: white; border: 1px solid var(--color-gray-200); border-radius: var(--radius-md); overflow: hidden;">
+            <img src="images/newtan31.jpg" alt="New-Tan #31" style="width: 100%; height: 80px; object-fit: cover;">
+            <div style="padding: var(--spacing-md);">
+              <h4 style="margin: 0 0 var(--spacing-xs);">New-Tan #31</h4>
+              <p style="margin: 0; font-size: 0.875rem; color: var(--color-gray-600);">Leather-ette | Primary or Insert</p>
+            </div>
+          </div>
+
+          <div class="color-card" style="background: white; border: 1px solid var(--color-gray-200); border-radius: var(--radius-md); overflow: hidden;">
+            <img src="images/goldentan34.jpg" alt="Golden-Tan #34" style="width: 100%; height: 80px; object-fit: cover;">
+            <div style="padding: var(--spacing-md);">
+              <h4 style="margin: 0 0 var(--spacing-xs);">Golden-Tan #34</h4>
+              <p style="margin: 0; font-size: 0.875rem; color: var(--color-gray-600);">Leather-ette | Primary or Insert</p>
+            </div>
+          </div>
+
+          <div class="color-card" style="background: white; border: 1px solid var(--color-gray-200); border-radius: var(--radius-md); overflow: hidden;">
+            <img src="images/honeytan35.jpg" alt="Honey-Tan #35" style="width: 100%; height: 80px; object-fit: cover;">
+            <div style="padding: var(--spacing-md);">
+              <h4 style="margin: 0 0 var(--spacing-xs);">Honey-Tan #35</h4>
+              <p style="margin: 0; font-size: 0.875rem; color: var(--color-gray-600);">Leather-ette | Primary or Insert</p>
+            </div>
+          </div>
+
+          <div class="color-card" style="background: white; border: 1px solid var(--color-gray-200); border-radius: var(--radius-md); overflow: hidden;">
+            <img src="images/saddle36.jpg" alt="Saddle #36" style="width: 100%; height: 80px; object-fit: cover;">
+            <div style="padding: var(--spacing-md);">
+              <h4 style="margin: 0 0 var(--spacing-xs);">Saddle #36</h4>
+              <p style="margin: 0; font-size: 0.875rem; color: var(--color-gray-600);">Leather-ette | Dark Brown</p>
+            </div>
+          </div>
+
+          <div class="color-card" style="background: white; border: 1px solid var(--color-gray-200); border-radius: var(--radius-md); overflow: hidden;">
+            <img src="images/chestnut33.jpg" alt="Chestnut #33" style="width: 100%; height: 80px; object-fit: cover;">
+            <div style="padding: var(--spacing-md);">
+              <h4 style="margin: 0 0 var(--spacing-xs);">Chestnut #33</h4>
+              <p style="margin: 0; font-size: 0.875rem; color: var(--color-gray-600);">Leather-ette | Very Dark Brown</p>
+            </div>
+          </div>
+
+          <div class="color-card" style="background: white; border: 1px solid var(--color-gray-200); border-radius: var(--radius-md); overflow: hidden;">
+            <img src="images/lighttan.jpg" alt="Light Tan #13" style="width: 100%; height: 80px; object-fit: cover;">
+            <div style="padding: var(--spacing-md);">
+              <h4 style="margin: 0 0 var(--spacing-xs);">Light Tan #13</h4>
+              <p style="margin: 0; font-size: 0.875rem; color: var(--color-gray-600);">Leather-ette | Primary or Insert</p>
+            </div>
+          </div>
+
+          <div class="color-card" style="background: white; border: 1px solid var(--color-gray-200); border-radius: var(--radius-md); overflow: hidden;">
+            <img src="images/darktan.jpg" alt="Dark Tan #14" style="width: 100%; height: 80px; object-fit: cover;">
+            <div style="padding: var(--spacing-md);">
+              <h4 style="margin: 0 0 var(--spacing-xs);">Dark Tan #14</h4>
+              <p style="margin: 0; font-size: 0.875rem; color: var(--color-gray-600);">Leather-ette | Primary or Insert</p>
+            </div>
+          </div>
+
+          <div class="color-card" style="background: white; border: 1px solid var(--color-gray-200); border-radius: var(--radius-md); overflow: hidden;">
+            <img src="images/cashmere01.jpg" alt="Cashmere #15" style="width: 100%; height: 80px; object-fit: cover;">
+            <div style="padding: var(--spacing-md);">
+              <h4 style="margin: 0 0 var(--spacing-xs);">Cashmere #15</h4>
+              <p style="margin: 0; font-size: 0.875rem; color: var(--color-gray-600);">Leather/Leather-ette | Parchment</p>
+            </div>
+          </div>
+
+          <div class="color-card" style="background: white; border: 1px solid var(--color-gray-200); border-radius: var(--radius-md); overflow: hidden;">
+            <img src="images/medtaupe.jpg" alt="Taupe #16" style="width: 100%; height: 80px; object-fit: cover;">
+            <div style="padding: var(--spacing-md);">
+              <h4 style="margin: 0 0 var(--spacing-xs);">Taupe #16</h4>
+              <p style="margin: 0; font-size: 0.875rem; color: var(--color-gray-600);">Leather/Leather-ette | Primary or Insert</p>
+            </div>
+          </div>
+
+          <div class="color-card" style="background: white; border: 1px solid var(--color-gray-200); border-radius: var(--radius-md); overflow: hidden;">
+            <div style="height: 80px; background: #6d4c41;"></div>
+            <div style="padding: var(--spacing-md);">
+              <h4 style="margin: 0 0 var(--spacing-xs);">Bronze #17</h4>
+              <p style="margin: 0; font-size: 0.875rem; color: var(--color-gray-600);">Leather/Leather-ette | Primary or Insert</p>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Blacks & Grays -->
+        <h2>Blacks & Grays</h2>
+        <div class="color-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: var(--spacing-md); margin-bottom: var(--spacing-2xl);">
+
+          <div class="color-card" style="background: white; border: 1px solid var(--color-gray-200); border-radius: var(--radius-md); overflow: hidden;">
+            <img src="images/black.jpg" alt="Black #1" style="width: 100%; height: 80px; object-fit: cover;">
+            <div style="padding: var(--spacing-md);">
+              <h4 style="margin: 0 0 var(--spacing-xs);">Black #1</h4>
+              <p style="margin: 0; font-size: 0.875rem; color: var(--color-gray-600);">Leather/Leather-ette | Primary or Insert</p>
+            </div>
+          </div>
+
+          <div class="color-card" style="background: white; border: 1px solid var(--color-gray-200); border-radius: var(--radius-md); overflow: hidden;">
+            <img src="images/blackdots.jpg" alt="Black Dots" style="width: 100%; height: 80px; object-fit: cover;">
+            <div style="padding: var(--spacing-md);">
+              <h4 style="margin: 0 0 var(--spacing-xs);">Black Dots</h4>
+              <p style="margin: 0; font-size: 0.875rem; color: var(--color-gray-600);">Leather-ette | Insert Only</p>
+            </div>
+          </div>
+
+          <div class="color-card" style="background: white; border: 1px solid var(--color-gray-200); border-radius: var(--radius-md); overflow: hidden;">
+            <img src="images/slatedark.jpg" alt="Midnight #9" style="width: 100%; height: 80px; object-fit: cover;">
+            <div style="padding: var(--spacing-md);">
+              <h4 style="margin: 0 0 var(--spacing-xs);">Midnight #9</h4>
+              <p style="margin: 0; font-size: 0.875rem; color: var(--color-gray-600);">Leather/Leather-ette | Graphite</p>
+            </div>
+          </div>
+
+          <div class="color-card" style="background: white; border: 1px solid var(--color-gray-200); border-radius: var(--radius-md); overflow: hidden;">
+            <img src="images/graymedium.jpg" alt="Dark Gray #8" style="width: 100%; height: 80px; object-fit: cover;">
+            <div style="padding: var(--spacing-md);">
+              <h4 style="margin: 0 0 var(--spacing-xs);">Dark Gray #8</h4>
+              <p style="margin: 0; font-size: 0.875rem; color: var(--color-gray-600);">Leather-ette | Primary or Insert</p>
+            </div>
+          </div>
+
+          <div class="color-card" style="background: white; border: 1px solid var(--color-gray-200); border-radius: var(--radius-md); overflow: hidden;">
+            <img src="images/lightgray.jpg" alt="Light Gray #7" style="width: 100%; height: 80px; object-fit: cover;">
+            <div style="padding: var(--spacing-md);">
+              <h4 style="margin: 0 0 var(--spacing-xs);">Light Gray #7</h4>
+              <p style="margin: 0; font-size: 0.875rem; color: var(--color-gray-600);">Leather/Leather-ette | Primary or Insert</p>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Whites -->
+        <h2>Whites</h2>
+        <div class="color-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: var(--spacing-md); margin-bottom: var(--spacing-2xl);">
+
+          <div class="color-card" style="background: white; border: 1px solid var(--color-gray-200); border-radius: var(--radius-md); overflow: hidden;">
+            <img src="images/oxfordwht3111.jpg" alt="Oxford White #41" style="width: 100%; height: 80px; object-fit: cover;">
+            <div style="padding: var(--spacing-md);">
+              <h4 style="margin: 0 0 var(--spacing-xs);">Oxford White #41</h4>
+              <p style="margin: 0; font-size: 0.875rem; color: var(--color-gray-600);">Leather-ette | Hint of Gray</p>
+            </div>
+          </div>
+
+          <div class="color-card" style="background: white; border: 1px solid var(--color-gray-200); border-radius: var(--radius-md); overflow: hidden;">
+            <img src="images/offwht4421.jpg" alt="Off-White #42" style="width: 100%; height: 80px; object-fit: cover;">
+            <div style="padding: var(--spacing-md);">
+              <h4 style="margin: 0 0 var(--spacing-xs);">Off-White #42</h4>
+              <p style="margin: 0; font-size: 0.875rem; color: var(--color-gray-600);">Leather-ette | Creamy White</p>
+            </div>
+          </div>
+
+          <div class="color-card" style="background: white; border: 1px solid var(--color-gray-200); border-radius: var(--radius-md); overflow: hidden;">
+            <img src="images/brightwhite3203.jpg" alt="Bright White #43" style="width: 100%; height: 80px; object-fit: cover;">
+            <div style="padding: var(--spacing-md);">
+              <h4 style="margin: 0 0 var(--spacing-xs);">Bright White #43</h4>
+              <p style="margin: 0; font-size: 0.875rem; color: var(--color-gray-600);">Leather-ette | Pure White</p>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Metallics -->
+        <h2>Metallics</h2>
+        <div class="color-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: var(--spacing-md); margin-bottom: var(--spacing-2xl);">
+
+          <div class="color-card" style="background: white; border: 1px solid var(--color-gray-200); border-radius: var(--radius-md); overflow: hidden;">
+            <img src="images/silver.jpg" alt="Silver Metallic #20" style="width: 100%; height: 80px; object-fit: cover;">
+            <div style="padding: var(--spacing-md);">
+              <h4 style="margin: 0 0 var(--spacing-xs);">Silver Metallic #20</h4>
+              <p style="margin: 0; font-size: 0.875rem; color: var(--color-gray-600);">Leather-ette | Primary or Insert</p>
+            </div>
+          </div>
+
+          <div class="color-card" style="background: white; border: 1px solid var(--color-gray-200); border-radius: var(--radius-md); overflow: hidden;">
+            <img src="images/steel.jpg" alt="Steel Metallic #21" style="width: 100%; height: 80px; object-fit: cover;">
+            <div style="padding: var(--spacing-md);">
+              <h4 style="margin: 0 0 var(--spacing-xs);">Steel Metallic #21</h4>
+              <p style="margin: 0; font-size: 0.875rem; color: var(--color-gray-600);">Leather | Insert Only</p>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Blues -->
+        <h2>Blues</h2>
+        <div class="color-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: var(--spacing-md); margin-bottom: var(--spacing-2xl);">
+
+          <div class="color-card" style="background: white; border: 1px solid var(--color-gray-200); border-radius: var(--radius-md); overflow: hidden;">
+            <img src="images/electricblue.jpg" alt="Electric Blue #4" style="width: 100%; height: 80px; object-fit: cover;">
+            <div style="padding: var(--spacing-md);">
+              <h4 style="margin: 0 0 var(--spacing-xs);">Electric Blue #4</h4>
+              <p style="margin: 0; font-size: 0.875rem; color: var(--color-gray-600);">Leather/Leather-ette | Primary or Insert</p>
+            </div>
+          </div>
+
+          <div class="color-card" style="background: white; border: 1px solid var(--color-gray-200); border-radius: var(--radius-md); overflow: hidden;">
+            <img src="images/patriotblue.jpg" alt="Patriot Blue #5" style="width: 100%; height: 80px; object-fit: cover;">
+            <div style="padding: var(--spacing-md);">
+              <h4 style="margin: 0 0 var(--spacing-xs);">Patriot Blue #5</h4>
+              <p style="margin: 0; font-size: 0.875rem; color: var(--color-gray-600);">Leather | Insert Only</p>
+            </div>
+          </div>
+
+          <div class="color-card" style="background: white; border: 1px solid var(--color-gray-200); border-radius: var(--radius-md); overflow: hidden;">
+            <img src="images/navyblue.jpg" alt="Navy Blue #6" style="width: 100%; height: 80px; object-fit: cover;">
+            <div style="padding: var(--spacing-md);">
+              <h4 style="margin: 0 0 var(--spacing-xs);">Navy Blue #6</h4>
+              <p style="margin: 0; font-size: 0.875rem; color: var(--color-gray-600);">Leather-ette | Primary or Insert</p>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Bright Colors -->
+        <h2>Bright Colors</h2>
+        <div class="color-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: var(--spacing-md); margin-bottom: var(--spacing-2xl);">
+
+          <div class="color-card" style="background: white; border: 1px solid var(--color-gray-200); border-radius: var(--radius-md); overflow: hidden;">
+            <img src="images/yellow.jpg" alt="Yellow" style="width: 100%; height: 80px; object-fit: cover;">
+            <div style="padding: var(--spacing-md);">
+              <h4 style="margin: 0 0 var(--spacing-xs);">Yellow</h4>
+              <p style="margin: 0; font-size: 0.875rem; color: var(--color-gray-600);">Leather/Leather-ette | Insert Only</p>
+            </div>
+          </div>
+
+          <div class="color-card" style="background: white; border: 1px solid var(--color-gray-200); border-radius: var(--radius-md); overflow: hidden;">
+            <img src="images/orange.jpg" alt="Orange" style="width: 100%; height: 80px; object-fit: cover;">
+            <div style="padding: var(--spacing-md);">
+              <h4 style="margin: 0 0 var(--spacing-xs);">Orange</h4>
+              <p style="margin: 0; font-size: 0.875rem; color: var(--color-gray-600);">Leather/Leather-ette | Insert Only</p>
+            </div>
+          </div>
+
+          <div class="color-card" style="background: white; border: 1px solid var(--color-gray-200); border-radius: var(--radius-md); overflow: hidden;">
+            <img src="images/chryslertangerine.jpg" alt="Burnt Orange" style="width: 100%; height: 80px; object-fit: cover;">
+            <div style="padding: var(--spacing-md);">
+              <h4 style="margin: 0 0 var(--spacing-xs);">Burnt Orange</h4>
+              <p style="margin: 0; font-size: 0.875rem; color: var(--color-gray-600);">Leather Only | Insert Only</p>
+            </div>
+          </div>
+
+          <div class="color-card" style="background: white; border: 1px solid var(--color-gray-200); border-radius: var(--radius-md); overflow: hidden;">
+            <img src="images/red.jpg" alt="Red #3" style="width: 100%; height: 80px; object-fit: cover;">
+            <div style="padding: var(--spacing-md);">
+              <h4 style="margin: 0 0 var(--spacing-xs);">Red #3</h4>
+              <p style="margin: 0; font-size: 0.875rem; color: var(--color-gray-600);">Leather-ette | Primary or Insert</p>
+            </div>
+          </div>
+
+          <div class="color-card" style="background: white; border: 1px solid var(--color-gray-200); border-radius: var(--radius-md); overflow: hidden;">
+            <img src="images/maroon18.jpg" alt="Maroon #18" style="width: 100%; height: 80px; object-fit: cover;">
+            <div style="padding: var(--spacing-md);">
+              <h4 style="margin: 0 0 var(--spacing-xs);">Maroon #18</h4>
+              <p style="margin: 0; font-size: 0.875rem; color: var(--color-gray-600);">Leather/Leather-ette | Primary or Insert</p>
+            </div>
+          </div>
+
+          <div class="color-card" style="background: white; border: 1px solid var(--color-gray-200); border-radius: var(--radius-md); overflow: hidden;">
+            <img src="images/purple.jpg" alt="Purple" style="width: 100%; height: 80px; object-fit: cover;">
+            <div style="padding: var(--spacing-md);">
+              <h4 style="margin: 0 0 var(--spacing-xs);">Purple</h4>
+              <p style="margin: 0; font-size: 0.875rem; color: var(--color-gray-600);">Leather/Leather-ette | Primary or Insert</p>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Specialty -->
+        <h2>Specialty</h2>
+        <div class="color-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: var(--spacing-md); margin-bottom: var(--spacing-2xl);">
+
+          <div class="color-card" style="background: white; border: 1px solid var(--color-gray-200); border-radius: var(--radius-md); overflow: hidden;">
+            <img src="images/gecko.jpg" alt="Gecko" style="width: 100%; height: 80px; object-fit: cover;">
+            <div style="padding: var(--spacing-md);">
+              <h4 style="margin: 0 0 var(--spacing-xs);">Gecko</h4>
+              <p style="margin: 0; font-size: 0.875rem; color: var(--color-gray-600);">Leather/Leather-ette | Primary or Insert</p>
+            </div>
+          </div>
+
+          <div class="color-card" style="background: white; border: 1px solid var(--color-gray-200); border-radius: var(--radius-md); overflow: hidden;">
+            <div style="height: 80px; background: repeating-linear-gradient(90deg, #2f2f2f, #2f2f2f 2px, #1a1a1a 2px, #1a1a1a 4px);"></div>
+            <div style="padding: var(--spacing-md);">
+              <h4 style="margin: 0 0 var(--spacing-xs);">Dragon</h4>
+              <p style="margin: 0; font-size: 0.875rem; color: var(--color-gray-600);">Leather | Insert Only</p>
+            </div>
+          </div>
+
+          <div class="color-card" style="background: white; border: 1px solid var(--color-gray-200); border-radius: var(--radius-md); overflow: hidden;">
+            <div style="height: 80px; background: #c4a777;"></div>
+            <div style="padding: var(--spacing-md);">
+              <h4 style="margin: 0 0 var(--spacing-xs);">Mercedes Palomino *</h4>
+              <p style="margin: 0; font-size: 0.875rem; color: var(--color-gray-600);">Leather-ette | $40 Up-Charge</p>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Note -->
+        <div style="background: var(--color-gray-100); padding: var(--spacing-xl); border-radius: var(--radius-lg); margin-top: var(--spacing-xl);">
+          <h3 style="margin-top: 0;">Important Notes</h3>
+          <ul style="margin-bottom: 0;">
+            <li><strong>Primary Color:</strong> Can be used as the main seat color</li>
+            <li><strong>Insert Color:</strong> Used for center panels, accents, or two-tone combinations</li>
+            <li>Colors may vary slightly from screen display - request physical samples for accurate matching</li>
+            <li>Please do not request one of everything - specify your top choices</li>
+          </ul>
+        </div>
+
+        <div style="text-align: center; margin-top: var(--spacing-2xl);">
+          <a href="mailto:mrmike@mrmikes.com?subject=Color Samples Request" class="btn btn-primary">Request Samples</a>
+          <a href="tel:941-922-5070" class="btn btn-secondary">Call 941-922-5070</a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container footer-content">
+      <div class="footer-brand">
+        <span class="logo-text">MrMikes</span>
+        <p>"Do-it-right / Do-it-yourself"</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="container">
+        <p>&copy; 1994 - 2026 MrMikes.com. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+  <!-- Lightbox Modal -->
+  <div class="lightbox" id="colorLightbox">
+    <span class="lightbox-close" onclick="closeLightbox()">&times;</span>
+    <img id="lightboxImg" src="" alt="">
+    <div class="lightbox-caption" id="lightboxCaption"></div>
+    <div class="lightbox-subtitle" id="lightboxSubtitle"></div>
+  </div>
+
+  <script>
+    // Get all color card images
+    document.querySelectorAll('.color-card img').forEach(img => {
+      img.addEventListener('click', function() {
+        const card = this.closest('.color-card');
+        const title = card.querySelector('h4').textContent;
+        const subtitle = card.querySelector('p').textContent;
+
+        document.getElementById('lightboxImg').src = this.src;
+        document.getElementById('lightboxCaption').textContent = title;
+        document.getElementById('lightboxSubtitle').textContent = subtitle;
+        document.getElementById('colorLightbox').classList.add('active');
+        document.body.style.overflow = 'hidden';
+      });
+    });
+
+    function closeLightbox() {
+      document.getElementById('colorLightbox').classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    // Close on background click
+    document.getElementById('colorLightbox').addEventListener('click', function(e) {
+      if (e.target === this) {
+        closeLightbox();
+      }
+    });
+
+    // Close on Escape key
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        closeLightbox();
+      }
+    });
+  </script>
+</body>
+</html>

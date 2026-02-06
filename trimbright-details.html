@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="TrimBright welt colors and installation guide - add accent colors to your car interior.">
+  <title>TrimBright Colors & Installation | MrMikes</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+  <style>
+    .welt-color-card {
+      background: white;
+      border: 1px solid var(--color-gray-200);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      text-align: center;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .welt-color-card:hover {
+      transform: scale(1.03);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+    .welt-color-card img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    .welt-color-card .color-name {
+      padding: var(--spacing-sm);
+      font-weight: 600;
+      font-size: 0.875rem;
+    }
+    .welt-color-card .color-code {
+      font-size: 0.75rem;
+      color: var(--color-gray-500);
+    }
+    .lightbox {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.9);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+    .lightbox.active {
+      display: flex;
+    }
+    .lightbox img {
+      max-width: 90%;
+      max-height: 70vh;
+      object-fit: contain;
+    }
+    .lightbox-caption {
+      color: white;
+      margin-top: var(--spacing-lg);
+      font-size: 1.25rem;
+      text-align: center;
+    }
+    .lightbox-close {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      color: white;
+      font-size: 2rem;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 10px;
+    }
+    .lightbox-close:hover {
+      color: var(--color-gray-300);
+    }
+  </style>
+</head>
+<body>
+  <div class="top-bar">
+    <div class="container top-bar-content">
+      <div class="top-bar-contact">
+        <a href="tel:941-922-5070">941-922-5070</a>
+        <span class="separator">|</span>
+        <span>Mon-Fri 10-4 ET</span>
+      </div>
+    </div>
+  </div>
+
+  <header class="header">
+    <div class="container header-content">
+      <a href="index.html" class="logo">
+        <span class="logo-text">MrMikes</span>
+        <span class="logo-tagline">Car Upholstery Kits</span>
+      </a>
+      <nav class="main-nav">
+        <ul class="nav-list">
+          <li><a href="index.html#products">Products</a></li>
+          <li><a href="index.html#about">About</a></li>
+          <li><a href="index.html#contact">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <section class="page-header">
+    <div class="container">
+      <nav class="breadcrumb">
+        <a href="index.html">Home</a> <span>/</span> <a href="trimbright.html">TrimBright</a> <span>/</span> <span>Colors & Installation</span>
+      </nav>
+      <h1>TrimBright Colors & Installation</h1>
+      <p>Available colors and how to install TrimBright welt</p>
+    </div>
+  </section>
+
+  <section class="info-page">
+    <div class="container">
+      <div class="info-content" style="max-width: 1000px;">
+
+        <!-- Quick Nav -->
+        <div style="background: var(--color-gray-100); padding: var(--spacing-lg); border-radius: var(--radius-lg); margin-bottom: var(--spacing-2xl);">
+          <div style="display: flex; gap: var(--spacing-md); flex-wrap: wrap; justify-content: center;">
+            <a href="#colors" class="btn btn-secondary">Available Colors</a>
+            <a href="#installation" class="btn btn-secondary">Installation Guide</a>
+            <a href="#ideas" class="btn btn-secondary">Application Ideas</a>
+            <a href="#twotone" class="btn btn-secondary">Two-Tone Technique</a>
+          </div>
+        </div>
+
+        <!-- COLORS SECTION -->
+        <div id="colors" style="margin-bottom: var(--spacing-2xl);">
+          <h2>Available TrimBright Colors</h2>
+          <p style="margin-bottom: var(--spacing-md);">TrimBright welt comes in a wide variety of colors to match or accent your interior.</p>
+          <p style="margin-bottom: var(--spacing-xl); color: var(--color-gray-600); font-size: 0.875rem;"><strong>Click any color swatch to see a larger view.</strong></p>
+
+          <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: var(--spacing-md); margin-bottom: var(--spacing-xl);">
+
+            <!-- Blues -->
+            <div class="welt-color-card" onclick="openLightbox('images/weblue.jpg', 'Electric Blue (W7)')">
+              <img src="images/weblue.jpg" alt="Electric Blue welt">
+              <div class="color-name">Electric Blue<br><span class="color-code">W7</span></div>
+            </div>
+            <div class="welt-color-card" onclick="openLightbox('images/wpatriotblue.jpg', 'Patriot Blue (W8)')">
+              <img src="images/wpatriotblue.jpg" alt="Patriot Blue welt">
+              <div class="color-name">Patriot Blue<br><span class="color-code">W8</span></div>
+            </div>
+            <div class="welt-color-card" onclick="openLightbox('images/wnavyblue.jpg', 'Navy Blue (W9)')">
+              <img src="images/wnavyblue.jpg" alt="Navy Blue welt">
+              <div class="color-name">Navy Blue<br><span class="color-code">W9</span></div>
+            </div>
+            <div class="welt-color-card" onclick="openLightbox('images/wturquoise.jpg', 'Turquoise (W14)')">
+              <img src="images/wturquoise.jpg" alt="Turquoise welt">
+              <div class="color-name">Turquoise<br><span class="color-code">W14</span></div>
+            </div>
+
+            <!-- Greens -->
+            <div class="welt-color-card" onclick="openLightbox('images/wlimegreen.jpg', 'Lime Green (W23)')">
+              <img src="images/wlimegreen.jpg" alt="Lime Green welt">
+              <div class="color-name">Lime Green<br><span class="color-code">W23</span></div>
+            </div>
+            <div class="welt-color-card" onclick="openLightbox('images/wdarkgreen.jpg', 'Dark Green (W17)')">
+              <img src="images/wdarkgreen.jpg" alt="Dark Green welt">
+              <div class="color-name">Dark Green<br><span class="color-code">W17</span></div>
+            </div>
+
+            <!-- Reds/Pinks -->
+            <div class="welt-color-card" onclick="openLightbox('images/wred.jpg', 'Red (W6)')">
+              <img src="images/wred.jpg" alt="Red welt">
+              <div class="color-name">Red<br><span class="color-code">W6</span></div>
+            </div>
+            <div class="welt-color-card" onclick="openLightbox('images/wfire.jpg', 'Fire (WF)')">
+              <img src="images/wfire.jpg" alt="Fire welt">
+              <div class="color-name">Fire<br><span class="color-code">WF</span></div>
+            </div>
+            <div class="welt-color-card" onclick="openLightbox('images/wburgundy.jpg', 'Burgundy (W16)')">
+              <img src="images/wburgundy.jpg" alt="Burgundy welt">
+              <div class="color-name">Burgundy<br><span class="color-code">W16</span></div>
+            </div>
+            <div class="welt-color-card" onclick="openLightbox('images/wmaroon.jpg', 'Maroon (W15)')">
+              <img src="images/wmaroon.jpg" alt="Maroon welt">
+              <div class="color-name">Maroon<br><span class="color-code">W15</span></div>
+            </div>
+            <div class="welt-color-card" onclick="openLightbox('images/wpink.jpg', 'Pink')">
+              <img src="images/wpink.jpg" alt="Pink welt">
+              <div class="color-name">Pink</div>
+            </div>
+            <div class="welt-color-card" onclick="openLightbox('images/wpurple.jpg', 'Purple')">
+              <img src="images/wpurple.jpg" alt="Purple welt">
+              <div class="color-name">Purple</div>
+            </div>
+
+            <!-- Oranges/Yellows -->
+            <div class="welt-color-card" onclick="openLightbox('images/worange.jpg', 'Orange (W4)')">
+              <img src="images/worange.jpg" alt="Orange welt">
+              <div class="color-name">Orange<br><span class="color-code">W4</span></div>
+            </div>
+            <div class="welt-color-card" onclick="openLightbox('images/wyellow.jpg', 'Dark Yellow (W5)')">
+              <img src="images/wyellow.jpg" alt="Dark Yellow welt">
+              <div class="color-name">Dark Yellow<br><span class="color-code">W5</span></div>
+            </div>
+
+            <!-- Neutrals -->
+            <div class="welt-color-card" onclick="openLightbox('images/wwhite.jpg', 'White (W2)')">
+              <img src="images/wwhite.jpg" alt="White welt">
+              <div class="color-name">White<br><span class="color-code">W2</span></div>
+            </div>
+            <div class="welt-color-card" onclick="openLightbox('images/woffwhite.jpg', 'Creme (W3)')">
+              <img src="images/woffwhite.jpg" alt="Creme welt">
+              <div class="color-name">Creme<br><span class="color-code">W3</span></div>
+            </div>
+            <div class="welt-color-card" onclick="openLightbox('images/wsilvergray.jpg', 'Silver Gray (W10)')">
+              <img src="images/wsilvergray.jpg" alt="Silver Gray welt">
+              <div class="color-name">Silver Gray<br><span class="color-code">W10</span></div>
+            </div>
+            <div class="welt-color-card" onclick="openLightbox('images/wmedgray.jpg', 'Medium Gray (W11)')">
+              <img src="images/wmedgray.jpg" alt="Medium Gray welt">
+              <div class="color-name">Medium Gray<br><span class="color-code">W11</span></div>
+            </div>
+            <div class="welt-color-card" onclick="openLightbox('images/wlighttaupe.jpg', 'Light Taupe (W12)')">
+              <img src="images/wlighttaupe.jpg" alt="Light Taupe welt">
+              <div class="color-name">Light Taupe<br><span class="color-code">W12</span></div>
+            </div>
+            <div class="welt-color-card" onclick="openLightbox('images/wbrown.jpg', 'Brown (W22)')">
+              <img src="images/wbrown.jpg" alt="Brown welt">
+              <div class="color-name">Brown<br><span class="color-code">W22</span></div>
+            </div>
+            <div class="welt-color-card" onclick="openLightbox('images/wblack.jpg', 'Black (W1)')">
+              <img src="images/wblack.jpg" alt="Black welt">
+              <div class="color-name">Black<br><span class="color-code">W1</span></div>
+            </div>
+
+            <!-- Metallics -->
+            <div class="welt-color-card" onclick="openLightbox('images/wsilvertinsel.jpg', 'Silver Tinsel')">
+              <img src="images/wsilvertinsel.jpg" alt="Silver Tinsel welt">
+              <div class="color-name">Silver Tinsel</div>
+            </div>
+            <div class="welt-color-card" onclick="openLightbox('images/wgold.jpg', 'Gold Tinsel')">
+              <img src="images/wgold.jpg" alt="Gold Tinsel welt">
+              <div class="color-name">Gold Tinsel</div>
+            </div>
+
+          </div>
+
+          <p style="color: var(--color-gray-600); font-size: 0.875rem; text-align: center;">
+            Note: Monitor colors may vary. Contact MrMike for actual color samples.
+          </p>
+        </div>
+
+        <!-- INSTALLATION SECTION -->
+        <div id="installation" style="margin-bottom: var(--spacing-2xl);">
+          <h2>Installation Guide</h2>
+
+          <div style="background: white; border: 1px solid var(--color-gray-200); border-radius: var(--radius-lg); overflow: hidden; margin-bottom: var(--spacing-xl);">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0;">
+              <div style="padding: 0;">
+                <img src="images/bwdone3.jpg" alt="TrimBright welt installed" style="width: 100%; height: 100%; object-fit: cover;">
+              </div>
+              <div style="padding: var(--spacing-xl); display: flex; flex-direction: column; justify-content: center;">
+                <h3 style="margin-top: 0; color: var(--color-primary);">Friction Fit - No Glue Needed</h3>
+                <p style="margin-bottom: 0;">
+                  TrimBright is a continuous plastic product used to fill in gaps, trim around door panels, sunroof openings, and more. <strong>No glue is necessary</strong> - the welt just stuffs into the cracks. We call this a "friction fit."
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <h3 style="margin-top: var(--spacing-xl);">Application Examples</h3>
+          <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: var(--spacing-lg); margin-bottom: var(--spacing-xl);">
+
+            <div style="background: white; border: 1px solid var(--color-gray-200); border-radius: var(--radius-lg); overflow: hidden;">
+              <img src="images/stangdashtrimbright01.jpg" alt="TrimBright on Mustang dashboard" style="width: 100%; height: 180px; object-fit: cover;">
+              <div style="padding: var(--spacing-md);">
+                <h4 style="margin-top: 0; margin-bottom: var(--spacing-xs); font-size: 1rem;">Dashboard Trim</h4>
+                <p style="margin-bottom: 0; color: var(--color-gray-600); font-size: 0.875rem;">Red welt on Mustang dashboard</p>
+              </div>
+            </div>
+
+            <div style="background: white; border: 1px solid var(--color-gray-200); border-radius: var(--radius-lg); overflow: hidden;">
+              <img src="images/doortrimbright01.jpg" alt="TrimBright on door panel" style="width: 100%; height: 180px; object-fit: cover;">
+              <div style="padding: var(--spacing-md);">
+                <h4 style="margin-top: 0; margin-bottom: var(--spacing-xs); font-size: 1rem;">Door Panel Insert</h4>
+                <p style="margin-bottom: 0; color: var(--color-gray-600); font-size: 0.875rem;">Electric Blue on PT Cruiser door</p>
+              </div>
+            </div>
+
+            <div style="background: white; border: 1px solid var(--color-gray-200); border-radius: var(--radius-lg); overflow: hidden;">
+              <img src="images/stangdoortrimbright02.jpg" alt="TrimBright on Mustang door" style="width: 100%; height: 180px; object-fit: cover;">
+              <div style="padding: var(--spacing-md);">
+                <h4 style="margin-top: 0; margin-bottom: var(--spacing-xs); font-size: 1rem;">Door Panel Edge</h4>
+                <p style="margin-bottom: 0; color: var(--color-gray-600); font-size: 0.875rem;">Welt along door panel perimeter</p>
+              </div>
+            </div>
+
+            <div style="background: white; border: 1px solid var(--color-gray-200); border-radius: var(--radius-lg); overflow: hidden;">
+              <img src="images/consoletrimbright01.jpg" alt="TrimBright on console" style="width: 100%; height: 180px; object-fit: cover;">
+              <div style="padding: var(--spacing-md);">
+                <h4 style="margin-top: 0; margin-bottom: var(--spacing-xs); font-size: 1rem;">Console Edges</h4>
+                <p style="margin-bottom: 0; color: var(--color-gray-600); font-size: 0.875rem;">Accent trim around center console</p>
+              </div>
+            </div>
+
+            <div style="background: white; border: 1px solid var(--color-gray-200); border-radius: var(--radius-lg); overflow: hidden;">
+              <img src="images/silltrimbright01.jpg" alt="TrimBright on sill plate" style="width: 100%; height: 180px; object-fit: cover;">
+              <div style="padding: var(--spacing-md);">
+                <h4 style="margin-top: 0; margin-bottom: var(--spacing-xs); font-size: 1rem;">Sill Plates</h4>
+                <p style="margin-bottom: 0; color: var(--color-gray-600); font-size: 0.875rem;">Trim along door sill plates</p>
+              </div>
+            </div>
+
+            <div style="background: white; border: 1px solid var(--color-gray-200); border-radius: var(--radius-lg); overflow: hidden;">
+              <img src="images/headlinertrimbright01.jpg" alt="TrimBright on headliner" style="width: 100%; height: 180px; object-fit: cover;">
+              <div style="padding: var(--spacing-md);">
+                <h4 style="margin-top: 0; margin-bottom: var(--spacing-xs); font-size: 1rem;">Headliner Edge</h4>
+                <p style="margin-bottom: 0; color: var(--color-gray-600); font-size: 0.875rem;">Clean edge around headliner</p>
+              </div>
+            </div>
+
+            <div style="background: white; border: 1px solid var(--color-gray-200); border-radius: var(--radius-lg); overflow: hidden;">
+              <img src="images/orangewelt01.jpg" alt="Orange TrimBright welt" style="width: 100%; height: 180px; object-fit: cover;">
+              <div style="padding: var(--spacing-md);">
+                <h4 style="margin-top: 0; margin-bottom: var(--spacing-xs); font-size: 1rem;">Orange Accent</h4>
+                <p style="margin-bottom: 0; color: var(--color-gray-600); font-size: 0.875rem;">Bold orange welt on door panel</p>
+              </div>
+            </div>
+
+            <div style="background: white; border: 1px solid var(--color-gray-200); border-radius: var(--radius-lg); overflow: hidden;">
+              <img src="images/bwdone2.jpg" alt="Completed TrimBright installation" style="width: 100%; height: 180px; object-fit: cover;">
+              <div style="padding: var(--spacing-md);">
+                <h4 style="margin-top: 0; margin-bottom: var(--spacing-xs); font-size: 1rem;">Completed Install</h4>
+                <p style="margin-bottom: 0; color: var(--color-gray-600); font-size: 0.875rem;">Finished door with welt trim</p>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Bending and Cutting -->
+          <h3>Bending & Cutting Welt</h3>
+          <div style="background: white; border: 1px solid var(--color-gray-200); border-radius: var(--radius-lg); overflow: hidden; margin-bottom: var(--spacing-xl);">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0;">
+              <div style="padding: 0;">
+                <img src="images/weltbendandcut.jpg" alt="How to bend and cut TrimBright welt" style="width: 100%; height: 100%; object-fit: cover;">
+              </div>
+              <div style="padding: var(--spacing-xl); display: flex; flex-direction: column; justify-content: center;">
+                <h4 style="margin-top: 0; color: var(--color-primary);">Easy to Work With</h4>
+                <p style="margin-bottom: 0;">
+                  TrimBright welt bends easily around corners and curves. Use sharp scissors or a utility knife to cut to length. The flexible plastic material holds its shape once installed.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Connecting Pieces -->
+          <h3>Connecting Welt Pieces</h3>
+          <p style="margin-bottom: var(--spacing-lg);">When you need to connect two pieces of welt, follow these steps for a seamless joint:</p>
+          <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--spacing-md); margin-bottom: var(--spacing-xl);">
+            <div style="text-align: center;">
+              <img src="images/weltconnect1.jpg" alt="Welt connection step 1" style="width: 100%; border-radius: var(--radius-md); border: 1px solid var(--color-gray-200);">
+              <p style="margin-top: var(--spacing-sm); font-size: 0.875rem; color: var(--color-gray-600);"><strong>Step 1:</strong> Cut ends at matching angles</p>
+            </div>
+            <div style="text-align: center;">
+              <img src="images/weltconnect2.jpg" alt="Welt connection step 2" style="width: 100%; border-radius: var(--radius-md); border: 1px solid var(--color-gray-200);">
+              <p style="margin-top: var(--spacing-sm); font-size: 0.875rem; color: var(--color-gray-600);"><strong>Step 2:</strong> Align the two pieces</p>
+            </div>
+            <div style="text-align: center;">
+              <img src="images/weltconnect3.jpg" alt="Welt connection step 3" style="width: 100%; border-radius: var(--radius-md); border: 1px solid var(--color-gray-200);">
+              <p style="margin-top: var(--spacing-sm); font-size: 0.875rem; color: var(--color-gray-600);"><strong>Step 3:</strong> Press together firmly</p>
+            </div>
+            <div style="text-align: center;">
+              <img src="images/weltconnect4.jpg" alt="Welt connection step 4" style="width: 100%; border-radius: var(--radius-md); border: 1px solid var(--color-gray-200);">
+              <p style="margin-top: var(--spacing-sm); font-size: 0.875rem; color: var(--color-gray-600);"><strong>Step 4:</strong> Seamless connection</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- APPLICATION IDEAS -->
+        <div id="ideas" style="margin-bottom: var(--spacing-2xl);">
+          <h2>Use Your Imagination</h2>
+          <p style="margin-bottom: var(--spacing-xl);">TrimBright can be used to accent many areas of your interior:</p>
+
+          <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: var(--spacing-md); margin-bottom: var(--spacing-xl);">
+            <div style="background: var(--color-gray-100); padding: var(--spacing-lg); border-radius: var(--radius-md); text-align: center;">
+              <strong>Dashboard edges</strong>
+            </div>
+            <div style="background: var(--color-gray-100); padding: var(--spacing-lg); border-radius: var(--radius-md); text-align: center;">
+              <strong>Door panel trim</strong>
+            </div>
+            <div style="background: var(--color-gray-100); padding: var(--spacing-lg); border-radius: var(--radius-md); text-align: center;">
+              <strong>Headliner edges</strong>
+            </div>
+            <div style="background: var(--color-gray-100); padding: var(--spacing-lg); border-radius: var(--radius-md); text-align: center;">
+              <strong>Sun visor trim</strong>
+            </div>
+            <div style="background: var(--color-gray-100); padding: var(--spacing-lg); border-radius: var(--radius-md); text-align: center;">
+              <strong>Console edges</strong>
+            </div>
+            <div style="background: var(--color-gray-100); padding: var(--spacing-lg); border-radius: var(--radius-md); text-align: center;">
+              <strong>Sill plates</strong>
+            </div>
+            <div style="background: var(--color-gray-100); padding: var(--spacing-lg); border-radius: var(--radius-md); text-align: center;">
+              <strong>Sunroof openings</strong>
+            </div>
+            <div style="background: var(--color-gray-100); padding: var(--spacing-lg); border-radius: var(--radius-md); text-align: center;">
+              <strong>Speaker grilles</strong>
+            </div>
+          </div>
+
+          <div style="background: var(--color-gray-100); padding: var(--spacing-xl); border-radius: var(--radius-lg); border-left: 4px solid var(--color-primary);">
+            <h4 style="margin-top: 0;">Pro Tip</h4>
+            <p style="margin-bottom: 0;">Match your floor mats! Console edges trimmed in the same color as your floor mats creates a coordinated, custom look.</p>
+          </div>
+        </div>
+
+        <!-- TWO-TONE SECTION -->
+        <div id="twotone" style="margin-bottom: var(--spacing-2xl);">
+          <h2>Two-Tone Technique</h2>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-lg); margin-bottom: var(--spacing-xl);">
+            <div style="background: white; border: 1px solid var(--color-gray-200); border-radius: var(--radius-lg); overflow: hidden;">
+              <img src="images/2tone01.jpg" alt="Two-tone TrimBright Red and Silver" style="width: 100%; height: 220px; object-fit: cover;">
+              <div style="padding: var(--spacing-lg);">
+                <h4 style="margin-top: 0; margin-bottom: var(--spacing-sm);">Red + Silver Tinsel</h4>
+                <p style="margin-bottom: 0; color: var(--color-gray-600); font-size: 0.875rem;">Double-sided tape holds the two welts properly positioned for a dramatic effect.</p>
+              </div>
+            </div>
+            <div style="background: white; border: 1px solid var(--color-gray-200); border-radius: var(--radius-lg); overflow: hidden;">
+              <img src="images/2tone02.jpg" alt="Two-tone TrimBright installed" style="width: 100%; height: 220px; object-fit: cover;">
+              <div style="padding: var(--spacing-lg);">
+                <h4 style="margin-top: 0; margin-bottom: var(--spacing-sm);">Installed Two-Tone</h4>
+                <p style="margin-bottom: 0; color: var(--color-gray-600); font-size: 0.875rem;">The finished result creates a unique custom look for your interior.</p>
+              </div>
+            </div>
+          </div>
+
+          <div style="background: white; border: 1px solid var(--color-gray-200); border-radius: var(--radius-lg); overflow: hidden; margin-bottom: var(--spacing-xl);">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0;">
+              <div style="padding: 0;">
+                <img src="images/doublesidetape01.jpg" alt="Double-sided tape for two-tone welt" style="width: 100%; height: 100%; object-fit: cover;">
+              </div>
+              <div style="padding: var(--spacing-xl); display: flex; flex-direction: column; justify-content: center;">
+                <h4 style="margin-top: 0; color: var(--color-primary);">Double-Sided Tape Included</h4>
+                <p style="margin-bottom: 0;">
+                  Two-tone orders include double-sided tape to hold the welts together. Simply apply the tape between the two colors and press firmly.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div style="background: var(--color-gray-100); padding: var(--spacing-xl); border-radius: var(--radius-lg);">
+            <h4 style="margin-top: 0;">Popular Two-Tone Combinations:</h4>
+            <ul style="margin-bottom: 0; padding-left: var(--spacing-lg);">
+              <li>Red + Silver Tinsel</li>
+              <li>Patriot Blue + Silver Tinsel</li>
+              <li>Electric Blue + Gold Tinsel</li>
+              <li>Black + Red</li>
+              <li>Black + Silver</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- CTA -->
+        <div style="background: var(--color-primary); color: white; padding: var(--spacing-2xl); border-radius: var(--radius-lg); text-align: center;">
+          <h2 style="margin-top: 0; color: white;">Ready to Order TrimBright?</h2>
+          <p style="font-size: 1.1rem; margin-bottom: var(--spacing-xl); color: white;">15 feet - $19 | 30 feet - $27 (includes shipping)</p>
+          <div style="display: flex; gap: var(--spacing-md); justify-content: center; flex-wrap: wrap;">
+            <a href="mailto:mrmike@mrmikes.com?subject=TrimBright Order" class="btn" style="background: white; color: var(--color-primary);">Email to Order</a>
+            <a href="tel:941-922-5070" class="btn" style="background: transparent; color: white; border: 2px solid white;">Call 941-922-5070</a>
+            <a href="trimbright.html" class="btn" style="background: transparent; color: white; border: 2px solid white;">Back to TrimBright</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container footer-content">
+      <div class="footer-brand">
+        <span class="logo-text">MrMikes</span>
+        <p>"Do-it-right / Do-it-yourself"</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="container">
+        <p>&copy; 1994 - 2026 MrMikes.com. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Lightbox -->
+  <div id="lightbox" class="lightbox" onclick="closeLightbox()">
+    <button class="lightbox-close" onclick="closeLightbox()">&times;</button>
+    <img id="lightbox-img" src="" alt="Color swatch enlarged view">
+    <div id="lightbox-caption" class="lightbox-caption"></div>
+  </div>
+
+  <script>
+    function openLightbox(src, caption) {
+      document.getElementById('lightbox-img').src = src;
+      document.getElementById('lightbox-caption').textContent = caption;
+      document.getElementById('lightbox').classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox() {
+      document.getElementById('lightbox').classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        closeLightbox();
+      }
+    });
+  </script>
+</body>
+</html>

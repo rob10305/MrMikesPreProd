@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MrMikes Site Migration Map</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+  <style>
+    .status-migrated { background: #d4edda; color: #155724; }
+    .status-partial { background: #fff3cd; color: #856404; }
+    .status-missing { background: #f8d7da; color: #721c24; }
+    .status-na { background: #e2e3e5; color: #383d41; }
+    .map-table { width: 100%; border-collapse: collapse; margin-bottom: 2rem; }
+    .map-table th, .map-table td { padding: 0.75rem; border: 1px solid var(--color-gray-300); text-align: left; }
+    .map-table th { background: var(--color-gray-100); }
+    .map-table tr:hover { background: var(--color-gray-50); }
+    .badge { padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.75rem; font-weight: 600; }
+    .section-header { background: var(--color-primary); color: white; }
+    .section-header th { color: white; }
+  </style>
+</head>
+<body>
+  <div class="top-bar">
+    <div class="container top-bar-content">
+      <div class="top-bar-contact">
+        <span>Site Migration Map - Internal Document</span>
+      </div>
+    </div>
+  </div>
+
+  <section class="page-header">
+    <div class="container">
+      <h1>MrMikes Site Migration Map</h1>
+      <p>Mapping of original mrmikes.com pages to new modern site</p>
+    </div>
+  </section>
+
+  <section class="info-page">
+    <div class="container">
+      <div class="info-content" style="max-width: 1200px;">
+
+        <!-- Legend -->
+        <div style="background: var(--color-gray-100); padding: var(--spacing-lg); border-radius: var(--radius-lg); margin-bottom: var(--spacing-2xl);">
+          <h3 style="margin-top: 0;">Status Legend</h3>
+          <div style="display: flex; gap: var(--spacing-lg); flex-wrap: wrap;">
+            <span><span class="badge status-migrated">MIGRATED</span> - Content fully migrated to new page</span>
+            <span><span class="badge status-partial">PARTIAL</span> - Main content migrated, some subpages pending</span>
+            <span><span class="badge status-missing">MISSING</span> - Not yet migrated</span>
+            <span><span class="badge status-na">N/A</span> - Not needed or consolidated</span>
+          </div>
+        </div>
+
+        <!-- Summary Stats -->
+        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--spacing-lg); margin-bottom: var(--spacing-2xl);">
+          <div style="background: #d4edda; padding: var(--spacing-lg); border-radius: var(--radius-lg); text-align: center;">
+            <div style="font-size: 2rem; font-weight: bold; color: #155724;">42</div>
+            <div style="color: #155724;">Pages Migrated</div>
+          </div>
+          <div style="background: #fff3cd; padding: var(--spacing-lg); border-radius: var(--radius-lg); text-align: center;">
+            <div style="font-size: 2rem; font-weight: bold; color: #856404;">6</div>
+            <div style="color: #856404;">Partial Migration</div>
+          </div>
+          <div style="background: #f8d7da; padding: var(--spacing-lg); border-radius: var(--radius-lg); text-align: center;">
+            <div style="font-size: 2rem; font-weight: bold; color: #721c24;">~50</div>
+            <div style="color: #721c24;">Gallery/Detail Pages</div>
+          </div>
+          <div style="background: #e2e3e5; padding: var(--spacing-lg); border-radius: var(--radius-lg); text-align: center;">
+            <div style="font-size: 2rem; font-weight: bold; color: #383d41;">N/A</div>
+            <div style="color: #383d41;">Consolidated</div>
+          </div>
+        </div>
+
+        <!-- MAIN PAGES -->
+        <h2>Main Navigation Pages</h2>
+        <table class="map-table">
+          <tr>
+            <th style="width: 35%;">Original Page</th>
+            <th style="width: 35%;">New Page</th>
+            <th style="width: 15%;">Status</th>
+            <th style="width: 15%;">Notes</th>
+          </tr>
+          <tr>
+            <td>index.html (home)</td>
+            <td><a href="index.html">index.html</a></td>
+            <td><span class="badge status-migrated">MIGRATED</span></td>
+            <td>Complete</td>
+          </tr>
+          <tr>
+            <td>contact.htm</td>
+            <td><a href="contact.html">contact.html</a></td>
+            <td><span class="badge status-migrated">MIGRATED</span></td>
+            <td>Complete</td>
+          </tr>
+          <tr>
+            <td>legal.htm</td>
+            <td><a href="legal.html">legal.html</a></td>
+            <td><span class="badge status-migrated">MIGRATED</span></td>
+            <td>Complete</td>
+          </tr>
+          <tr>
+            <td>giftcertificates.htm</td>
+            <td><a href="gift-certificates.html">gift-certificates.html</a></td>
+            <td><span class="badge status-migrated">MIGRATED</span></td>
+            <td>Complete</td>
+          </tr>
+          <tr>
+            <td>mrmikesusa.htm</td>
+            <td><a href="about.html">about.html</a></td>
+            <td><span class="badge status-migrated">MIGRATED</span></td>
+            <td>Renamed</td>
+          </tr>
+          <tr>
+            <td>associates.htm</td>
+            <td><a href="associates.html">associates.html</a></td>
+            <td><span class="badge status-migrated">MIGRATED</span></td>
+            <td>Partner links page</td>
+          </tr>
+        </table>
+
+        <!-- FIERO SECTION -->
+        <h2>Fiero Section</h2>
+        <table class="map-table">
+          <tr class="section-header">
+            <th>Original Page</th>
+            <th>New Page</th>
+            <th>Status</th>
+            <th>Notes</th>
+          </tr>
+          <tr>
+            <td>fierohome.htm</td>
+            <td><a href="fiero.html">fiero.html</a></td>
+            <td><span class="badge status-migrated">MIGRATED</span></td>
+            <td>Main Fiero page</td>
+          </tr>
+          <tr>
+            <td>fierogt.htm</td>
+            <td><a href="fiero-style-gt.html">fiero-style-gt.html</a></td>
+            <td><span class="badge status-migrated">MIGRATED</span></td>
+            <td>GT style dedicated page</td>
+          </tr>
+          <tr>
+            <td>fierosports.htm</td>
+            <td><a href="fiero-style-sport.html">fiero-style-sport.html</a></td>
+            <td><span class="badge status-migrated">MIGRATED</span></td>
+            <td>Sport styles dedicated page</td>
+          </tr>
+          <tr>
+            <td>fieroclassic.htm</td>
+            <td><a href="fiero-style-classic.html">fiero-style-classic.html</a></td>
+            <td><span class="badge status-migrated">MIGRATED</span></td>
+            <td>Classic style dedicated page</td>
+          </tr>
+          <tr>
+            <td>fieroitalian.htm</td>
+            <td><a href="fiero-style-italian.html">fiero-style-italian.html</a></td>
+            <td><span class="badge status-migrated">MIGRATED</span></td>
+            <td>Italian style dedicated page</td>
+          </tr>
+          <tr>
+            <td>fierovetter.htm</td>
+            <td><a href="fiero-style-vetter.html">fiero-style-vetter.html</a></td>
+            <td><span class="badge status-migrated">MIGRATED</span></td>
+            <td>Vetter style dedicated page</td>
+          </tr>
+          <tr>
+            <td>fiero88.htm</td>
+            <td><a href="fiero-examples.html#88style">fiero-examples.html#88style</a></td>
+            <td><span class="badge status-migrated">MIGRATED</span></td>
+            <td>1988 Fiero specific</td>
+          </tr>
+          <tr>
+            <td>fierocloth.htm</td>
+            <td><a href="fiero-examples.html#cloth">fiero-examples.html#cloth</a></td>
+            <td><span class="badge status-migrated">MIGRATED</span></td>
+            <td>Cloth options</td>
+          </tr>
+          <tr>
+            <td>fieroleatherette.htm</td>
+            <td><a href="fiero-examples.html#leatherette">fiero-examples.html#leatherette</a></td>
+            <td><span class="badge status-migrated">MIGRATED</span></td>
+            <td>Leatherette details</td>
+          </tr>
+          <tr>
+            <td>fieroindy.htm</td>
+            <td><a href="fiero-examples.html#indy">fiero-examples.html#indy</a></td>
+            <td><span class="badge status-migrated">MIGRATED</span></td>
+            <td>Indy style details</td>
+          </tr>
+          <tr>
+            <td>fierorocky.htm</td>
+            <td>-</td>
+            <td><span class="badge status-missing">MISSING</span></td>
+            <td>Customer example</td>
+          </tr>
+          <tr>
+            <td>fierospecial.htm</td>
+            <td>-</td>
+            <td><span class="badge status-missing">MISSING</span></td>
+            <td>Special editions</td>
+          </tr>
+          <tr>
+            <td>fierooptions.htm</td>
+            <td><a href="options.html">options.html</a></td>
+            <td><span class="badge status-migrated">MIGRATED</span></td>
+            <td>General options page</td>
+          </tr>
+          <tr>
+            <td>fierotips.htm</td>
+            <td><a href="tips.html">tips.html</a></td>
+            <td><span class="badge status-migrated">MIGRATED</span></td>
+            <td>Tips & tricks</td>
+          </tr>
+          <tr>
+            <td>fieroquestions.htm</td>
+            <td><a href="faq.html">faq.html</a></td>
+            <td><span class="badge status-migrated">MIGRATED</span></td>
+            <td>FAQ page</td>
+          </tr>
+          <tr>
+            <td>fieroinstall.htm</td>
+            <td><a href="fiero-instructions.html">fiero-instructions.html</a></td>
+            <td><span class="badge status-migrated">MIGRATED</span></td>
+            <td>25-step Fiero installation guide</td>
+          </tr>
+          <tr>
+            <td>fieroorder.htm</td>
+            <td><a href="how-to-order.html">how-to-order.html</a></td>
+            <td><span class="badge status-migrated">MIGRATED</span></td>
+            <td>Ordering info</td>
+          </tr>
+          <tr>
+            <td>mrmikescolors.htm</td>
+            <td><a href="colors.html">colors.html</a></td>
+            <td><span class="badge status-migrated">MIGRATED</span></td>
+            <td>Color chart</td>
+          </tr>
+          <tr>
+            <td>fierocarpet.htm</td>
+            <td><a href="fiero-carpet.html">fiero-carpet.html</a></td>
+            <td><span class="badge status-migrated">MIGRATED</span></td>
+            <td>Carpet products</td>
+          </tr>
+          <tr>
+            <td>fieromatchingmaterials.htm</td>
+            <td>Mentioned in options.html</td>
+            <td><span class="badge status-partial">PARTIAL</span></td>
+            <td>Bulk materials</td>
+          </tr>
+          <tr>
+            <td>fierotwinlines.htm</td>
+            <td>Covered in options.html</td>
+            <td><span class="badge status-na">N/A</span></td>
+            <td>Consolidated</td>
+          </tr>
+          <tr>
+            <td>fierotwotone.htm</td>
+            <td>Covered in options.html</td>
+            <td><span class="badge status-na">N/A</span></td>
+            <td>Consolidated</td>
+          </tr>
+          <tr>
+            <td>fieroupandover.htm</td>
+            <td>Covered in options.html</td>
+            <td><span class="badge status-na">N/A</span></td>
+            <td>Consolidated</td>
+          </tr>
+          <tr>
+            <td>fierogrommets.htm</td>
+            <td>Covered in options.html</td>
+            <td><span class="badge status-na">N/A</span></td>
+            <td>Consolidated</td>
+          </tr>
+          <tr>
+            <td>fierospeakers.htm</td>
+            <td>Covered in options.html</td>
+            <td><span class="badge status-na">N/A</span></td>
+            <td>Consolidated</td>
+          </tr>
+          <tr>
+            <td>fieroseatbeltslots.htm</td>
+            <td>Covered in options.html</td>
+            <td><span class="badge status-na">N/A</span></td>
+            <td>Consolidated</td>
+          </tr>
+          <tr>
+            <td>LogoLand.htm</td>
+            <td>Covered in options.html</td>
+            <td><span class="badge status-na">N/A</span></td>
+            <td>Consolidated</td>
+          </tr>
+        </table>
+
+        <!-- MIATA/TRIUMPH SECTION -->
+        <h2>Miata/Triumph Section</h2>
+        <table class="map-table">
+          <tr class="section-header">
+            <th>Original Page</th>
+            <th>New Page</th>
+            <th>Status</th>
+            <th>Notes</th>
+          </tr>
+          <tr>
+            <td>miata_to_triumph.htm</td>
+            <td><a href="triumph.html">triumph.html</a></td>
+            <td><span class="badge status-migrated">MIGRATED</span></td>
+            <td>Main Miata page with 21 customer examples</td>
+          </tr>
+          <tr>
+            <td>miatawhychange.htm</td>
+            <td><a href="miata-why-change.html">miata-why-change.html</a></td>
+            <td><span class="badge status-migrated">MIGRATED</span></td>
+            <td>Why change seats</td>
+          </tr>
+          <tr>
+            <td>triumph_upholstery.htm</td>
+            <td>Consolidated into <a href="triumph.html">triumph.html</a></td>
+            <td><span class="badge status-migrated">MIGRATED</span></td>
+            <td>28 customer examples with images and testimonials</td>
+          </tr>
+          <tr>
+            <td>miatacolors.htm</td>
+            <td><a href="colors.html">colors.html</a></td>
+            <td><span class="badge status-migrated">MIGRATED</span></td>
+            <td>Shares main colors page</td>
+          </tr>
+          <tr>
+            <td>miata_types.htm</td>
+            <td><a href="miata-seat-types.html">miata-seat-types.html</a></td>
+            <td><span class="badge status-migrated">MIGRATED</span></td>
+            <td>Bullnose vs Waterfall</td>
+          </tr>
+          <tr>
+            <td>miatapleatstyles.htm</td>
+            <td><a href="miata-pleat-styles.html">miata-pleat-styles.html</a></td>
+            <td><span class="badge status-migrated">MIGRATED</span></td>
+            <td>Pleat options</td>
+          </tr>
+          <tr>
+            <td>miataoptions.htm</td>
+            <td><a href="miata-options.html">miata-options.html</a></td>
+            <td><span class="badge status-migrated">MIGRATED</span></td>
+            <td>Miata-specific options</td>
+          </tr>
+          <tr>
+            <td>miataseatadapters.htm</td>
+            <td><a href="miata-mounting.html">miata-mounting.html</a></td>
+            <td><span class="badge status-migrated">MIGRATED</span></td>
+            <td>Mounting brackets</td>
+          </tr>
+          <tr>
+            <td>miatainstallnew.htm</td>
+            <td><a href="miata-instructions.html">miata-instructions.html</a></td>
+            <td><span class="badge status-migrated">MIGRATED</span></td>
+            <td>12-step install guide</td>
+          </tr>
+          <tr>
+            <td>miatatips.htm</td>
+            <td><a href="tips.html">tips.html</a></td>
+            <td><span class="badge status-partial">PARTIAL</span></td>
+            <td>Shares main tips page</td>
+          </tr>
+          <tr>
+            <td>Miata_Questions.htm</td>
+            <td><a href="faq.html">faq.html</a></td>
+            <td><span class="badge status-partial">PARTIAL</span></td>
+            <td>Shares main FAQ</td>
+          </tr>
+          <tr>
+            <td>miatakitorder.htm</td>
+            <td><a href="how-to-order.html">how-to-order.html</a></td>
+            <td><span class="badge status-migrated">MIGRATED</span></td>
+            <td>Shares main order page</td>
+          </tr>
+          <tr>
+            <td>miata_matching_materials.htm</td>
+            <td><a href="matching-materials.html">matching-materials.html</a></td>
+            <td><span class="badge status-migrated">MIGRATED</span></td>
+            <td>Bulk materials</td>
+          </tr>
+          <tr>
+            <td>bob_tr_panels.htm</td>
+            <td><a href="tr6-panels.html">tr6-panels.html</a></td>
+            <td><span class="badge status-migrated">MIGRATED</span></td>
+            <td>Door panels</td>
+          </tr>
+          <tr>
+            <td>legal_miata.htm</td>
+            <td><a href="legal.html">legal.html</a></td>
+            <td><span class="badge status-na">N/A</span></td>
+            <td>Uses main legal page</td>
+          </tr>
+          <tr>
+            <td>miataII.htm</td>
+            <td>-</td>
+            <td><span class="badge status-missing">MISSING</span></td>
+            <td>Additional content page</td>
+          </tr>
+        </table>
+
+        <!-- MIATA INSTALL SUBPAGES -->
+        <h2>Miata Installation Detail Pages</h2>
+        <table class="map-table">
+          <tr class="section-header">
+            <th>Original Page</th>
+            <th>New Page</th>
+            <th>Status</th>
+            <th>Notes</th>
+          </tr>
+          <tr>
+            <td>miatainstalldismantle.htm</td>
+            <td>Consolidated into miata-instructions.html</td>
+            <td><span class="badge status-na">N/A</span></td>
+            <td>Step 1 content</td>
+          </tr>
+          <tr>
+            <td>miatainstallpaintpan.htm</td>
+            <td>Consolidated into miata-instructions.html</td>
+            <td><span class="badge status-na">N/A</span></td>
+            <td>Step 2 content</td>
+          </tr>
+          <tr>
+            <td>miatainstallremoveold.htm</td>
+            <td>Consolidated into miata-instructions.html</td>
+            <td><span class="badge status-na">N/A</span></td>
+            <td>Step 3 content</td>
+          </tr>
+          <tr>
+            <td>miatainstallfixfoam.htm</td>
+            <td>Consolidated into miata-instructions.html</td>
+            <td><span class="badge status-na">N/A</span></td>
+            <td>Step 4 content</td>
+          </tr>
+          <tr>
+            <td>miatainstallfixwires.htm</td>
+            <td>Consolidated into miata-instructions.html</td>
+            <td><span class="badge status-na">N/A</span></td>
+            <td>Step 5 content</td>
+          </tr>
+          <tr>
+            <td>miatainstallspeakers.htm</td>
+            <td>Consolidated into miata-instructions.html</td>
+            <td><span class="badge status-na">N/A</span></td>
+            <td>Step 6 content</td>
+          </tr>
+          <tr>
+            <td>miatainstallprepheads.htm</td>
+            <td>Consolidated into miata-instructions.html</td>
+            <td><span class="badge status-na">N/A</span></td>
+            <td>Step 7 content</td>
+          </tr>
+          <tr>
+            <td>miatainstlback.htm</td>
+            <td>Consolidated into miata-instructions.html</td>
+            <td><span class="badge status-na">N/A</span></td>
+            <td>Step 8 content</td>
+          </tr>
+          <tr>
+            <td>miatainstallbottom.htm</td>
+            <td>Consolidated into miata-instructions.html</td>
+            <td><span class="badge status-na">N/A</span></td>
+            <td>Step 9 content</td>
+          </tr>
+          <tr>
+            <td>miatainstalassemb.htm</td>
+            <td>Consolidated into miata-instructions.html</td>
+            <td><span class="badge status-na">N/A</span></td>
+            <td>Step 10 content</td>
+          </tr>
+          <tr>
+            <td>miatainstallfinnish.htm</td>
+            <td>Consolidated into miata-instructions.html</td>
+            <td><span class="badge status-na">N/A</span></td>
+            <td>Step 11 content</td>
+          </tr>
+          <tr>
+            <td>miatainstallhogring.htm</td>
+            <td>Consolidated into miata-instructions.html</td>
+            <td><span class="badge status-na">N/A</span></td>
+            <td>Step 12 content</td>
+          </tr>
+          <tr>
+            <td>miataseatheaters.htm</td>
+            <td>-</td>
+            <td><span class="badge status-missing">MISSING</span></td>
+            <td>Third-party product</td>
+          </tr>
+        </table>
+
+        <!-- MIATA EXAMPLE GALLERIES -->
+        <h2>Miata/Triumph Example Gallery Pages (~20 pages)</h2>
+        <table class="map-table">
+          <tr class="section-header">
+            <th>Original Page</th>
+            <th>New Page</th>
+            <th>Status</th>
+            <th>Notes</th>
+          </tr>
+          <tr>
+            <td>miatato69corvette.htm, miatatriumphvikas.htm, miatabriansmg.htm, miatadaveswedge.htm, miatakeithhoundstooth.htm, miatapeterip.htm, miatadennytr.htm, miatastevewtr.htm, miatarodhtexas.htm, miatafairlady.htm, miatatr6pat.htm, miatarosstr6.htm, miatamarkfshnr.htm, miatabillsunbeam.htm, davidsmiata.htm, willstr6.htm, miatapaulschlsinmg.htm, tr6russ.htm, etc.</td>
+            <td>Consolidated into <a href="triumph.html">triumph.html</a></td>
+            <td><span class="badge status-migrated">MIGRATED</span></td>
+            <td>29 customer examples now on main triumph.html page</td>
+          </tr>
+        </table>
+
+        <!-- OTHER VEHICLE SECTIONS -->
+        <h2>Corvette Section</h2>
+        <table class="map-table">
+          <tr class="section-header">
+            <th>Original Page</th>
+            <th>New Page</th>
+            <th>Status</th>
+            <th>Notes</th>
+          </tr>
+          <tr>
+            <td>corvettes.htm</td>
+            <td><a href="corvette.html">corvette.html</a></td>
+            <td><span class="badge status-migrated">MIGRATED</span></td>
+            <td>Main Corvette page with 29 customer examples</td>
+          </tr>
+          <tr>
+            <td>corvettemounts.htm</td>
+            <td>Consolidated into <a href="corvette.html">corvette.html</a></td>
+            <td><span class="badge status-migrated">MIGRATED</span></td>
+            <td>Mounting brackets section added</td>
+          </tr>
+          <tr>
+            <td>corvettemountingplates.htm</td>
+            <td>Consolidated into <a href="corvette.html">corvette.html</a></td>
+            <td><span class="badge status-migrated">MIGRATED</span></td>
+            <td>Mounting brackets section added</td>
+          </tr>
+          <tr>
+            <td>~24 customer gallery pages</td>
+            <td>Consolidated into <a href="corvette.html">corvette.html</a></td>
+            <td><span class="badge status-migrated">MIGRATED</span></td>
+            <td>29 examples with images and testimonials</td>
+          </tr>
+        </table>
+
+        <h2>MG Section</h2>
+        <table class="map-table">
+          <tr class="section-header">
+            <th>Original Page</th>
+            <th>New Page</th>
+            <th>Status</th>
+            <th>Notes</th>
+          </tr>
+          <tr>
+            <td>mg.htm</td>
+            <td><a href="mg.html">mg.html</a></td>
+            <td><span class="badge status-migrated">MIGRATED</span></td>
+            <td>Main MG page with 18 customer examples</td>
+          </tr>
+          <tr>
+            <td>fierotomginstall.htm</td>
+            <td>Consolidated into <a href="mg.html">mg.html</a></td>
+            <td><span class="badge status-partial">PARTIAL</span></td>
+            <td>Fitment info on main page</td>
+          </tr>
+          <tr>
+            <td>mgreclinertabs.htm</td>
+            <td>Consolidated into <a href="mg.html">mg.html</a></td>
+            <td><span class="badge status-migrated">MIGRATED</span></td>
+            <td>Recliner tabs section with images</td>
+          </tr>
+          <tr>
+            <td>~12 customer gallery pages</td>
+            <td>Consolidated into <a href="mg.html">mg.html</a></td>
+            <td><span class="badge status-migrated">MIGRATED</span></td>
+            <td>18 examples with images</td>
+          </tr>
+        </table>
+
+        <h2>Pony Cars Section</h2>
+        <table class="map-table">
+          <tr class="section-header">
+            <th>Original Page</th>
+            <th>New Page</th>
+            <th>Status</th>
+            <th>Notes</th>
+          </tr>
+          <tr>
+            <td>ponycars.htm</td>
+            <td><a href="ponycars.html">ponycars.html</a></td>
+            <td><span class="badge status-migrated">MIGRATED</span></td>
+            <td>Main Pony Cars page with 13 examples</td>
+          </tr>
+          <tr>
+            <td>vintagemustangandrew.htm</td>
+            <td>Consolidated into <a href="ponycars.html">ponycars.html</a></td>
+            <td><span class="badge status-migrated">MIGRATED</span></td>
+            <td>68 Mustang convertible example</td>
+          </tr>
+          <tr>
+            <td>vintagecamarobenj.htm</td>
+            <td>Consolidated into <a href="ponycars.html">ponycars.html</a></td>
+            <td><span class="badge status-migrated">MIGRATED</span></td>
+            <td>69 Camaro example</td>
+          </tr>
+          <tr>
+            <td>~10 additional customer photos</td>
+            <td>Consolidated into <a href="ponycars.html">ponycars.html</a></td>
+            <td><span class="badge status-migrated">MIGRATED</span></td>
+            <td>Multiple Mustang examples with images</td>
+          </tr>
+        </table>
+
+        <h2>Kit Cars Section</h2>
+        <table class="map-table">
+          <tr class="section-header">
+            <th>Original Page</th>
+            <th>New Page</th>
+            <th>Status</th>
+            <th>Notes</th>
+          </tr>
+          <tr>
+            <td>fierobasedkitcars.htm</td>
+            <td><a href="kitcar.html">kitcar.html</a></td>
+            <td><span class="badge status-migrated">MIGRATED</span></td>
+            <td>Main Kit Cars page with 8 examples + tips</td>
+          </tr>
+          <tr>
+            <td>fierobasedlambo.htm</td>
+            <td>Consolidated into <a href="kitcar.html">kitcar.html</a></td>
+            <td><span class="badge status-migrated">MIGRATED</span></td>
+            <td>Countach example with image</td>
+          </tr>
+          <tr>
+            <td>fierodunebuggy.htm</td>
+            <td>Consolidated into <a href="kitcar.html">kitcar.html</a></td>
+            <td><span class="badge status-migrated">MIGRATED</span></td>
+            <td>Manx dune buggy example</td>
+          </tr>
+          <tr>
+            <td>fierokrispantera.htm</td>
+            <td>Consolidated into <a href="kitcar.html">kitcar.html</a></td>
+            <td><span class="badge status-migrated">MIGRATED</span></td>
+            <td>Pantera example with image</td>
+          </tr>
+          <tr>
+            <td>kitcarbilltestarossa.htm</td>
+            <td>Consolidated into <a href="kitcar.html">kitcar.html</a></td>
+            <td><span class="badge status-migrated">MIGRATED</span></td>
+            <td>Testarossa example with testimonial</td>
+          </tr>
+          <tr>
+            <td>kitcardash.htm</td>
+            <td>Consolidated into <a href="kitcar.html">kitcar.html</a></td>
+            <td><span class="badge status-migrated">MIGRATED</span></td>
+            <td>Dashboard tips section added</td>
+          </tr>
+          <tr>
+            <td>pantera.htm</td>
+            <td>Consolidated into <a href="kitcar.html">kitcar.html</a></td>
+            <td><span class="badge status-migrated">MIGRATED</span></td>
+            <td>Pantera example with image</td>
+          </tr>
+        </table>
+
+        <h2>Retro/Resto-Mod Section</h2>
+        <table class="map-table">
+          <tr class="section-header">
+            <th>Original Page</th>
+            <th>New Page</th>
+            <th>Status</th>
+            <th>Notes</th>
+          </tr>
+          <tr>
+            <td>retromain.htm</td>
+            <td><a href="retro.html">retro.html</a></td>
+            <td><span class="badge status-migrated">MIGRATED</span></td>
+            <td>Main Retro page with 11 customer examples</td>
+          </tr>
+          <tr>
+            <td>retrota01.htm</td>
+            <td>Consolidated into <a href="retro.html">retro.html</a></td>
+            <td><span class="badge status-migrated">MIGRATED</span></td>
+            <td>1971 Trans Am example</td>
+          </tr>
+          <tr>
+            <td>volvomiatapete.htm</td>
+            <td>Consolidated into <a href="retro.html">retro.html</a></td>
+            <td><span class="badge status-migrated">MIGRATED</span></td>
+            <td>Volvo 1800ES on Miata chassis example</td>
+          </tr>
+          <tr>
+            <td>montecarlofiero.htm</td>
+            <td>Consolidated into <a href="retro.html">retro.html</a></td>
+            <td><span class="badge status-migrated">MIGRATED</span></td>
+            <td>1982 Monte Carlo example</td>
+          </tr>
+          <tr>
+            <td>retromodrobin.htm</td>
+            <td>Consolidated into <a href="retro.html">retro.html</a></td>
+            <td><span class="badge status-migrated">MIGRATED</span></td>
+            <td>1935 Retro-Mod example</td>
+          </tr>
+          <tr>
+            <td>~7 additional retro examples</td>
+            <td>Consolidated into <a href="retro.html">retro.html</a></td>
+            <td><span class="badge status-migrated">MIGRATED</span></td>
+            <td>T-Bucket, Ram Truck, Dodge Van, 1937 Ford, Ranchero, Electric Car, Street Rod</td>
+          </tr>
+        </table>
+
+        <h2>TrimBright Section</h2>
+        <table class="map-table">
+          <tr class="section-header">
+            <th>Original Page</th>
+            <th>New Page</th>
+            <th>Status</th>
+            <th>Notes</th>
+          </tr>
+          <tr>
+            <td>trimbright.htm</td>
+            <td><a href="trimbright.html">trimbright.html</a></td>
+            <td><span class="badge status-migrated">MIGRATED</span></td>
+            <td>Main TrimBright page with 8 customer examples, pricing, ordering info</td>
+          </tr>
+          <tr>
+            <td>trimbrightcolors.htm</td>
+            <td><a href="trimbright-details.html#colors">trimbright-details.html</a></td>
+            <td><span class="badge status-migrated">MIGRATED</span></td>
+            <td>TrimBright colors</td>
+          </tr>
+          <tr>
+            <td>trimbrightweltinstall.htm</td>
+            <td><a href="trimbright-details.html#installation">trimbright-details.html</a></td>
+            <td><span class="badge status-migrated">MIGRATED</span></td>
+            <td>Welt installation</td>
+          </tr>
+          <tr>
+            <td>trimbrightchallenger.htm</td>
+            <td>Consolidated into <a href="trimbright.html">trimbright.html</a></td>
+            <td><span class="badge status-migrated">MIGRATED</span></td>
+            <td>Dodge Challenger example</td>
+          </tr>
+          <tr>
+            <td>trijmbrighttracy.htm, trimbrightscott.htm</td>
+            <td>Consolidated into <a href="trimbright.html">trimbright.html</a></td>
+            <td><span class="badge status-migrated">MIGRATED</span></td>
+            <td>Mustang door repair examples</td>
+          </tr>
+          <tr>
+            <td>trimbrightg501.htm, trimbrightmustang01-03.htm</td>
+            <td>Consolidated into <a href="trimbright.html">trimbright.html</a></td>
+            <td><span class="badge status-migrated">MIGRATED</span></td>
+            <td>GTO and additional Mustang examples</td>
+          </tr>
+        </table>
+
+        <!-- RECOMMENDATIONS -->
+        <h2 style="margin-top: var(--spacing-2xl);">Recommendations for Complete Migration</h2>
+        <div style="background: var(--color-gray-100); padding: var(--spacing-xl); border-radius: var(--radius-lg);">
+          <h3 style="margin-top: 0;">Priority 1 - Essential Pages <span class="badge status-migrated">COMPLETE</span></h3>
+          <ul>
+            <li><s>associates.htm</s> - <a href="associates.html">MIGRATED</a></li>
+            <li><s>miata_matching_materials.htm</s> - <a href="matching-materials.html">MIGRATED</a></li>
+            <li><s>bob_tr_panels.htm</s> - <a href="tr6-panels.html">MIGRATED</a></li>
+          </ul>
+
+          <h3>Priority 2 - Product Detail Pages <span class="badge status-migrated">COMPLETE</span></h3>
+          <ul>
+            <li><s>Fiero style pages</s> - MIGRATED to dedicated pages:
+              <ul>
+                <li><a href="fiero-style-classic.html">fiero-style-classic.html</a></li>
+                <li><a href="fiero-style-gt.html">fiero-style-gt.html</a></li>
+                <li><a href="fiero-style-vetter.html">fiero-style-vetter.html</a></li>
+                <li><a href="fiero-style-italian.html">fiero-style-italian.html</a></li>
+                <li><a href="fiero-style-sport.html">fiero-style-sport.html</a></li>
+              </ul>
+            </li>
+            <li><s>fierocarpet.htm</s> - <a href="fiero-carpet.html">MIGRATED</a></li>
+            <li><s>TrimBright detail pages</s> - <a href="trimbright-details.html">MIGRATED</a></li>
+          </ul>
+
+          <h3>Priority 3 - Customer Galleries</h3>
+          <ul>
+            <li>~50+ individual customer example pages across all sections</li>
+            <li>Consider creating gallery pages for each vehicle type with thumbnails linking to detail views</li>
+            <li>Or consolidate into existing example pages with more images</li>
+          </ul>
+
+          <h3>Already Handled via Consolidation</h3>
+          <ul>
+            <li>Fiero option detail pages (twin lines, two-tone, grommets, etc.) - consolidated into options.html</li>
+            <li>Miata installation step pages - consolidated into miata-instructions.html</li>
+            <li>Individual style pages - consolidated into main product pages</li>
+          </ul>
+        </div>
+
+        <div style="text-align: center; margin-top: var(--spacing-2xl);">
+          <a href="index.html" class="btn btn-primary">Back to Home</a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container footer-content">
+      <div class="footer-brand">
+        <span class="logo-text">MrMikes</span>
+        <p>"Do-it-right / Do-it-yourself"</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="container">
+        <p>&copy; 1994 - 2026 MrMikes.com. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
