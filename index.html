@@ -90,95 +90,52 @@
         <p>Select your vehicle to explore our custom-fit upholstery solutions</p>
       </div>
 
-      <div class="product-grid">
-        <a href="fiero.html" class="product-card">
-          <div class="product-image">
-            <img src="images/rocky1_star.jpg" alt="Fiero upholstery kits" width="300" height="200">
-          </div>
-          <div class="product-info">
-            <h3>Fiero</h3>
-            <p>Complete seat upholstery kits for all Fiero models</p>
-            <span class="product-link">View Kits</span>
-          </div>
-        </a>
-
-        <a href="corvette.html" class="product-card">
-          <div class="product-image">
-            <img src="images/fieroinvette01.jpg" alt="Corvette upholstery kits" width="300" height="200">
-          </div>
-          <div class="product-info">
-            <h3>Corvette</h3>
-            <p>Classic Corvette interior restoration kits</p>
-            <span class="product-link">View Kits</span>
-          </div>
-        </a>
-
-        <a href="mg.html" class="product-card">
-          <div class="product-image">
-            <img src="images/blackwyellowmgandweltsm.jpg" alt="MG upholstery kits" width="300" height="200">
-          </div>
-          <div class="product-info">
-            <h3>MG</h3>
-            <p>British classic car upholstery solutions</p>
-            <span class="product-link">View Kits</span>
-          </div>
-        </a>
-
-        <a href="triumph.html" class="product-card">
-          <div class="product-image">
-            <img src="images/tr6beforeandafter_sm.jpg" alt="Triumph Miata upholstery kits" width="300" height="200">
-          </div>
-          <div class="product-info">
-            <h3>Triumph - Miata</h3>
-            <p>Miata seats customized for Triumph fitment</p>
-            <span class="product-link">View Kits</span>
-          </div>
-        </a>
-
-        <a href="kitcar.html" class="product-card">
-          <div class="product-image">
-            <img src="images/pilasmira.jpg" alt="Kit car and Pantera upholstery kits" width="300" height="200">
-          </div>
-          <div class="product-info">
-            <h3>Kit-Car & Pantera</h3>
-            <p>Fiero-based kit cars and exotic applications</p>
-            <span class="product-link">View Kits</span>
-          </div>
-        </a>
-
-        <a href="ponycars.html" class="product-card">
-          <div class="product-image">
-            <img src="images/FieroSeatsIn65Mustang01.jpg" alt="Vintage Mustang and Camaro upholstery kits" width="300" height="200">
-          </div>
-          <div class="product-info">
-            <h3>Vintage Mustang & Camaro</h3>
-            <p>Classic American muscle car interiors</p>
-            <span class="product-link">View Kits</span>
-          </div>
-        </a>
-
-        <a href="retro.html" class="product-card">
-          <div class="product-image">
-            <img src="images/transam02_sm.jpg" alt="Retro-mod upholstery kits" width="300" height="200">
-          </div>
-          <div class="product-info">
-            <h3>Retro-Mods</h3>
-            <p>Modern seats with vintage styling</p>
-            <span class="product-link">View Kits</span>
-          </div>
-        </a>
-
-        <a href="trimbright.html" class="product-card">
-          <div class="product-image">
-            <img src="images/mustangpink01.jpg" alt="TrimBright welt" width="300" height="200">
-          </div>
-          <div class="product-info">
-            <h3>TrimBright Welt</h3>
-            <p>Premium trim and welt accessories</p>
-            <span class="product-link">View Products</span>
-          </div>
-        </a>
+      <div class="product-grid" id="product-grid">
+        <!-- Products loaded dynamically from localStorage or defaults -->
       </div>
+      <script>
+        // Default products (shown if nothing in localStorage)
+        const defaultProducts = {
+          fiero: { title: 'Fiero', description: 'Complete seat upholstery kits for all Fiero models', image: 'images/rocky1_star.jpg', link: 'fiero.html' },
+          corvette: { title: 'Corvette', description: 'Classic Corvette interior restoration kits', image: 'images/fieroinvette01.jpg', link: 'corvette.html' },
+          mg: { title: 'MG', description: 'British classic car upholstery solutions', image: 'images/blackwyellowmgandweltsm.jpg', link: 'mg.html' },
+          triumph: { title: 'Triumph - Miata', description: 'Miata seats customized for Triumph fitment', image: 'images/tr6beforeandafter_sm.jpg', link: 'triumph.html' },
+          kitcar: { title: 'Kit-Car & Pantera', description: 'Fiero-based kit cars and exotic applications', image: 'images/pilasmira.jpg', link: 'kitcar.html' },
+          ponycars: { title: 'Vintage Mustang & Camaro', description: 'Classic American muscle car interiors', image: 'images/FieroSeatsIn65Mustang01.jpg', link: 'ponycars.html' },
+          retro: { title: 'Retro-Mods', description: 'Modern seats with vintage styling', image: 'images/transam02_sm.jpg', link: 'retro.html' },
+          trimbright: { title: 'TrimBright Welt', description: 'Premium trim and welt accessories', image: 'images/mustangpink01.jpg', link: 'trimbright.html' }
+        };
+
+        // Load products from localStorage or use defaults
+        function loadProducts() {
+          const stored = localStorage.getItem('mrmikesContent');
+          let products = defaultProducts;
+
+          if (stored) {
+            const content = JSON.parse(stored);
+            if (content.products && Object.keys(content.products).length > 0) {
+              products = content.products;
+            }
+          }
+
+          const grid = document.getElementById('product-grid');
+          grid.innerHTML = Object.entries(products).map(([key, product]) => `
+            <a href="${product.link || key + '.html'}" class="product-card">
+              <div class="product-image">
+                <img src="${product.image}" alt="${product.title} upholstery kits" width="300" height="200" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22200%22><rect fill=%22%23ddd%22 width=%22300%22 height=%22200%22/><text fill=%22%23999%22 x=%22150%22 y=%22100%22 text-anchor=%22middle%22>No Image</text></svg>'">
+              </div>
+              <div class="product-info">
+                <h3>${product.title}</h3>
+                <p>${product.description}</p>
+                <span class="product-link">View Kits</span>
+              </div>
+            </a>
+          `).join('');
+        }
+
+        // Load on page ready
+        document.addEventListener('DOMContentLoaded', loadProducts);
+      </script>
     </div>
   </section>
 
