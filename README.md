@@ -1,197 +1,278 @@
-# MrMikes - Premium Car Upholstery Kits
+# MrMikes - Complete Website Import Instructions
 
-A complete multi-page website for MrMikes car upholstery business with 40 HTML pages, admin panel, and 343 product images.
+## LOVABLE.DEV IMPORT INSTRUCTIONS
 
-## IMPORTANT: Complete File Structure
+**THIS IS A COMPLETE 390-FILE WEBSITE. YOU MUST IMPORT ALL FILES.**
 
-This is a **40-page website** - not just a single page. All HTML files in the root directory are part of the website.
+### REQUIRED FILES TO IMPORT
 
-### All HTML Pages (40 total)
-
-#### Main Pages
-| File | Description |
-|------|-------------|
-| `index.html` | Homepage - main landing page |
-| `about.html` | About MrMikes page |
-| `contact.html` | Contact information and form |
-| `faq.html` | Frequently asked questions |
-| `legal.html` | Legal/terms page |
-
-#### Product Category Pages
-| File | Description |
-|------|-------------|
-| `fiero.html` | Fiero seat upholstery kits |
-| `corvette.html` | Corvette interior kits |
-| `mg.html` | MG British classic car kits |
-| `triumph.html` | Triumph/Miata seat kits |
-| `kitcar.html` | Kit-Car & Pantera applications |
-| `ponycars.html` | Vintage Mustang & Camaro kits |
-| `retro.html` | Retro-Mods styling |
-| `trimbright.html` | TrimBright welt products |
-| `trimbright-details.html` | Detailed TrimBright info |
-| `colors.html` | Color selection guide |
-
-#### Fiero Specific Pages
-| File | Description |
-|------|-------------|
-| `fiero-style-classic.html` | Classic style Fiero kits |
-| `fiero-style-gt.html` | GT style Fiero kits |
-| `fiero-style-vetter.html` | Vetter style Fiero kits |
-| `fiero-style-italian.html` | Italian style Fiero kits |
-| `fiero-style-sport.html` | Sport style Fiero kits |
-| `fiero-carpet.html` | Fiero carpet options |
-| `fiero-examples.html` | Fiero customer examples |
-| `fiero-instructions.html` | Fiero installation guide |
-
-#### Miata Specific Pages
-| File | Description |
-|------|-------------|
-| `miata-seat-types.html` | Miata seat type guide |
-| `miata-pleat-styles.html` | Miata pleat style options |
-| `miata-options.html` | Miata customization options |
-| `miata-instructions.html` | Miata installation guide |
-| `miata-why-change.html` | Why upgrade Miata seats |
-| `miata-mounting.html` | Miata seat mounting info |
-
-#### Information & Help Pages
-| File | Description |
-|------|-------------|
-| `options.html` | Product options overview |
-| `tips.html` | Installation tips |
-| `instructions.html` | General installation guide |
-| `how-to-order.html` | Ordering information |
-| `matching-materials.html` | Material matching guide |
-| `tr6-panels.html` | TR6 panel information |
-| `gift-certificates.html` | Gift certificate info |
-| `associates.html` | Business associates |
-| `sitemap-mapping.html` | Site navigation map |
-
-#### Admin Pages
-| File | Description |
-|------|-------------|
-| `admin.html` | Admin login page |
-| `admin-dashboard.html` | Admin control panel |
-
-### CSS Files (2 total)
-| File | Description |
-|------|-------------|
-| `styles.css` | Main website styles |
-| `admin.css` | Admin panel styles |
-
-### JavaScript Files (3 total)
-| File | Description |
-|------|-------------|
-| `app.js` | Main website functionality |
-| `admin.js` | Admin panel functionality |
-| `config.js` | Site configuration & default data |
-
-### Other Files
-| File | Description |
-|------|-------------|
-| `setup-supabase.sql` | Database setup for Supabase (optional) |
-| `README.md` | This documentation file |
-
-### Images Folder
-The `images/` folder contains **343 product images**:
-- Product photography
-- Customer installation examples
-- Color swatches
-- Installation guide photos
-- Brand assets
-
-## Page Navigation Structure
-
+#### 1. STYLESHEETS (IMPORT THESE FIRST)
 ```
-index.html (Homepage)
-├── Product Pages
-│   ├── fiero.html → fiero-style-*.html, fiero-*.html
-│   ├── corvette.html
-│   ├── mg.html
-│   ├── triumph.html
-│   ├── kitcar.html
-│   ├── ponycars.html
-│   ├── retro.html
-│   └── trimbright.html → trimbright-details.html
-├── Information Pages
-│   ├── about.html
-│   ├── contact.html
-│   ├── faq.html
-│   ├── options.html
-│   ├── colors.html
-│   ├── tips.html
-│   ├── instructions.html
-│   ├── how-to-order.html
-│   └── matching-materials.html
-├── Miata Section
-│   ├── miata-seat-types.html
-│   ├── miata-pleat-styles.html
-│   ├── miata-options.html
-│   ├── miata-instructions.html
-│   ├── miata-why-change.html
-│   └── miata-mounting.html
-└── Admin Section
-    ├── admin.html (login)
-    └── admin-dashboard.html (dashboard)
+styles.css      - Main website styles (REQUIRED for all pages)
+admin.css       - Admin panel styles (REQUIRED for admin pages)
 ```
 
-## Quick Start
-
-1. **View Website:** Open `index.html` in a browser
-2. **Admin Access:** Open `admin.html` (password: `mrmikes2024`)
-3. **Deploy:** Upload ALL files to your hosting provider
-
-## Admin Panel Features
-
-- **Products:** Add, edit, delete product categories
-- **Gallery:** Manage image gallery by category
-- **Testimonials:** Manage customer reviews
-- **Page Content:** Edit hero, about, contact sections
-- **Export:** Download all data as backup
-
-## Configuration
-
-Edit `config.js` to customize:
-
-```javascript
-const CONFIG = {
-  SUPABASE_URL: 'YOUR_SUPABASE_URL',      // For cloud storage
-  SUPABASE_ANON_KEY: 'YOUR_SUPABASE_KEY', // For cloud storage
-  USE_SIMPLE_AUTH: true,                   // Simple password auth
-  SIMPLE_PASSWORD: 'mrmikes2024',          // Admin password
-  SITE_NAME: 'MrMikes',
-  SITE_TAGLINE: 'Premium Car Upholstery Kits'
-};
+#### 2. JAVASCRIPT FILES (IMPORT THESE SECOND)
+```
+config.js       - Configuration and default data (REQUIRED)
+app.js          - Main website functionality (REQUIRED)
+admin.js        - Admin panel functionality (REQUIRED for admin)
 ```
 
-## For Lovable.dev Import
+#### 3. ALL 40 HTML PAGES (IMPORT ALL OF THESE)
 
-**IMPORTANT:** This repository contains 40 HTML pages, not just index.html.
+**Main Pages:**
+```
+index.html              - Homepage (links to all other pages)
+about.html              - About page
+contact.html            - Contact page with form
+faq.html                - FAQ page
+legal.html              - Legal/terms page
+```
 
-To import the complete website:
-1. Connect this GitHub repository
-2. Ensure ALL .html files are recognized (40 total)
-3. Include the `images/` folder (343 images)
-4. Include all .css and .js files
+**Product Pages:**
+```
+fiero.html              - Fiero products
+corvette.html           - Corvette products
+mg.html                 - MG products
+triumph.html            - Triumph/Miata products
+kitcar.html             - Kit-Car & Pantera products
+ponycars.html           - Mustang & Camaro products
+retro.html              - Retro-Mods products
+trimbright.html         - TrimBright products
+trimbright-details.html - TrimBright details
+colors.html             - Color selection guide
+```
 
-### File Count Summary
-- HTML files: 40
-- CSS files: 2
-- JS files: 3
-- SQL files: 1
-- Images: 343
-- **Total: 390 files**
+**Fiero Sub-Pages:**
+```
+fiero-style-classic.html
+fiero-style-gt.html
+fiero-style-vetter.html
+fiero-style-italian.html
+fiero-style-sport.html
+fiero-carpet.html
+fiero-examples.html
+fiero-instructions.html
+```
 
-## Technology Stack
+**Miata Sub-Pages:**
+```
+miata-seat-types.html
+miata-pleat-styles.html
+miata-options.html
+miata-instructions.html
+miata-why-change.html
+miata-mounting.html
+```
 
-- Pure HTML5, CSS3, JavaScript (no frameworks)
+**Information Pages:**
+```
+options.html
+tips.html
+instructions.html
+how-to-order.html
+matching-materials.html
+tr6-panels.html
+gift-certificates.html
+associates.html
+sitemap-mapping.html
+```
+
+**Admin Pages:**
+```
+admin.html              - Admin login
+admin-dashboard.html    - Admin dashboard
+```
+
+#### 4. IMAGES FOLDER (IMPORT ENTIRE FOLDER - 343 FILES)
+
+**YOU MUST IMPORT THE ENTIRE `images/` FOLDER**
+
+The images folder contains 343 image files that are referenced by the HTML pages:
+
+```
+images/
+├── rocky1_star.jpg           - Used by index.html, config.js
+├── fieroinvette01.jpg        - Used by corvette.html, config.js
+├── blackwyellowmgandweltsm.jpg - Used by mg.html, config.js
+├── tr6beforeandafter_sm.jpg  - Used by triumph.html, config.js
+├── pilasmira.jpg             - Used by kitcar.html, config.js
+├── FieroSeatsIn65Mustang01.jpg - Used by ponycars.html, config.js
+├── transam02_sm.jpg          - Used by retro.html, config.js
+├── mustangpink01.jpg         - Used by trimbright.html, config.js
+├── [335 more image files...]
+└── youtubemrmikes2017b.jpg
+```
+
+**Image files are referenced in HTML like this:**
+```html
+<img src="images/rocky1_star.jpg" alt="Product">
+```
+
+**ALL images use relative paths starting with `images/`**
+
+---
+
+## FILE DEPENDENCIES
+
+### styles.css is required by:
+- index.html
+- about.html
+- contact.html
+- faq.html
+- legal.html
+- fiero.html (and all fiero-*.html pages)
+- corvette.html
+- mg.html
+- triumph.html
+- kitcar.html
+- ponycars.html
+- retro.html
+- trimbright.html, trimbright-details.html
+- colors.html
+- options.html
+- tips.html
+- instructions.html
+- how-to-order.html
+- matching-materials.html
+- tr6-panels.html
+- gift-certificates.html
+- associates.html
+- sitemap-mapping.html
+- miata-*.html (all 6 miata pages)
+
+### admin.css is required by:
+- admin.html
+- admin-dashboard.html
+
+### config.js is required by:
+- index.html
+- admin.html
+- admin-dashboard.html
+
+### app.js is required by:
+- index.html
+
+### admin.js is required by:
+- admin.html
+- admin-dashboard.html
+
+### images/ folder is required by:
+- ALL HTML pages (they reference images with src="images/filename.jpg")
+- config.js (contains default image paths)
+
+---
+
+## COLOR SCHEME (defined in styles.css)
+
+```css
+:root {
+  --primary: #b91c1c;      /* Red - brand color */
+  --secondary: #1e293b;    /* Dark blue - headers */
+  --accent: #f59e0b;       /* Gold - accents */
+  --background: #ffffff;   /* White - page background */
+  --text: #1e293b;         /* Dark - body text */
+  --text-light: #64748b;   /* Gray - secondary text */
+  --border: #e2e8f0;       /* Light gray - borders */
+}
+```
+
+---
+
+## LAYOUT STRUCTURE
+
+Each HTML page follows this structure:
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <!-- Navigation menu linking to other pages -->
+  </header>
+
+  <main>
+    <!-- Page content with images from images/ folder -->
+    <img src="images/example.jpg">
+  </main>
+
+  <footer>
+    <!-- Footer with links -->
+  </footer>
+</body>
+</html>
+```
+
+---
+
+## COMPLETE FILE MANIFEST
+
+**Total: 390 files**
+
+| Category | Count | Files |
+|----------|-------|-------|
+| HTML Pages | 40 | index.html, about.html, contact.html, faq.html, legal.html, fiero.html, fiero-style-classic.html, fiero-style-gt.html, fiero-style-vetter.html, fiero-style-italian.html, fiero-style-sport.html, fiero-carpet.html, fiero-examples.html, fiero-instructions.html, corvette.html, mg.html, triumph.html, kitcar.html, ponycars.html, retro.html, trimbright.html, trimbright-details.html, colors.html, options.html, tips.html, instructions.html, how-to-order.html, matching-materials.html, tr6-panels.html, gift-certificates.html, associates.html, sitemap-mapping.html, miata-seat-types.html, miata-pleat-styles.html, miata-options.html, miata-instructions.html, miata-why-change.html, miata-mounting.html, admin.html, admin-dashboard.html |
+| CSS Files | 2 | styles.css, admin.css |
+| JS Files | 3 | config.js, app.js, admin.js |
+| SQL Files | 1 | setup-supabase.sql |
+| Images | 343 | All files in images/ folder |
+| Documentation | 1 | README.md |
+
+---
+
+## IMPORT CHECKLIST
+
+- [ ] Import `styles.css` (main stylesheet)
+- [ ] Import `admin.css` (admin stylesheet)
+- [ ] Import `config.js` (configuration)
+- [ ] Import `app.js` (main JavaScript)
+- [ ] Import `admin.js` (admin JavaScript)
+- [ ] Import `index.html` (homepage)
+- [ ] Import all 39 other HTML pages
+- [ ] Import entire `images/` folder (343 images)
+- [ ] Verify all pages load with correct styling
+- [ ] Verify all images display correctly
+
+---
+
+## TESTING AFTER IMPORT
+
+1. Open `index.html` - should show styled homepage with images
+2. Click navigation links - should go to other pages
+3. Check `fiero.html` - should show product images
+4. Check `colors.html` - should show color swatches
+5. Open `admin.html` - should show login page
+6. Login with password: `mrmikes2024`
+
+---
+
+## TROUBLESHOOTING
+
+**Pages have no styling:**
+- Ensure `styles.css` is imported
+- Check that HTML files reference `href="styles.css"`
+
+**Images not showing:**
+- Ensure entire `images/` folder is imported
+- Check that image paths use `src="images/filename.jpg"`
+
+**Admin not working:**
+- Ensure `config.js`, `admin.js`, and `admin.css` are imported
+
+---
+
+## TECHNOLOGY
+
+- Pure HTML5, CSS3, JavaScript
+- No build process required
+- No npm/node dependencies
+- Works as static files
 - LocalStorage for data persistence
-- Optional Supabase integration for cloud storage
-- Responsive design for mobile/tablet/desktop
 
-## Browser Support
-
-Chrome, Firefox, Safari, Edge (latest versions)
-
-## License
+## LICENSE
 
 Copyright MrMikes. All rights reserved.
