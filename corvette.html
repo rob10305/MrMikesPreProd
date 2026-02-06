@@ -491,6 +491,31 @@
     </div>
   </section>
 
+  <!-- Customer Gallery -->
+  <section class="customer-gallery" id="customer-gallery" style="display: none;">
+    <div class="container">
+      <h2>Customer Gallery</h2>
+      <p>See what our customers have done with their Corvette seats</p>
+      <div class="gallery-grid" id="gallery-grid"></div>
+    </div>
+  </section>
+
+  <script>
+    (function() {
+      const category = 'corvette';
+      const stored = localStorage.getItem('mrmikesContent');
+      if (!stored) return;
+      const content = JSON.parse(stored);
+      const gallery = content.gallery || [];
+      const categoryImages = gallery.filter(item => item.category === category);
+      if (categoryImages.length === 0) return;
+      document.getElementById('customer-gallery').style.display = 'block';
+      document.getElementById('gallery-grid').innerHTML = categoryImages.map(item =>
+        '<div class="gallery-item"><img src="' + item.image + '" alt="' + (item.caption || 'Customer photo') + '" onclick="this.classList.toggle(\'zoomed\')"><p class="gallery-caption">' + (item.caption || '') + '</p></div>'
+      ).join('');
+    })();
+  </script>
+
   <footer class="footer">
     <div class="container footer-content">
       <div class="footer-brand">

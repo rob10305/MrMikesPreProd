@@ -215,6 +215,41 @@
     </div>
   </section>
 
+  <!-- Customer Gallery -->
+  <section class="customer-gallery" id="customer-gallery" style="display: none;">
+    <div class="container">
+      <h2>Customer Gallery</h2>
+      <p>See what our customers have done with their Fiero seats</p>
+      <div class="gallery-grid" id="gallery-grid"></div>
+    </div>
+  </section>
+
+  <script>
+    // Load gallery images for this category
+    (function() {
+      const category = 'fiero';
+      const stored = localStorage.getItem('mrmikesContent');
+      if (!stored) return;
+
+      const content = JSON.parse(stored);
+      const gallery = content.gallery || [];
+      const categoryImages = gallery.filter(item => item.category === category);
+
+      if (categoryImages.length === 0) return;
+
+      const section = document.getElementById('customer-gallery');
+      const grid = document.getElementById('gallery-grid');
+
+      section.style.display = 'block';
+      grid.innerHTML = categoryImages.map(item => `
+        <div class="gallery-item">
+          <img src="${item.image}" alt="${item.caption || 'Customer photo'}" onclick="this.classList.toggle('zoomed')">
+          ${item.caption ? `<p class="gallery-caption">${item.caption}</p>` : ''}
+        </div>
+      `).join('');
+    })();
+  </script>
+
   <!-- Footer -->
   <footer class="footer">
     <div class="container footer-content">
