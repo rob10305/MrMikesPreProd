@@ -360,14 +360,37 @@
 /* Section Toolbar */
 .section-toolbar {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
+  gap: 1rem;
   margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--admin-border);
 }
 
 .section-toolbar h2 {
   margin: 0;
   color: var(--admin-text);
+  flex: 1;
+  min-width: 200px;
+}
+
+.section-toolbar .btn {
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+@media (max-width: 480px) {
+  .section-toolbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .section-toolbar .btn {
+    width: 100%;
+    justify-content: center;
+  }
 }
 
 /* Product Categories */
