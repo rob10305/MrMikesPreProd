@@ -681,6 +681,10 @@ class AdminDashboard {
         </div>
         <div class="gallery-item-info">
           <p>${item.caption || 'No caption'}</p>
+          <button class="btn btn-sm share-facebook-btn" data-id="${item.id}" style="margin-top: 0.5rem; background: #1877f2; color: white; border: none; display: flex; align-items: center; gap: 0.25rem; font-size: 0.75rem;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+            Share to Facebook
+          </button>
         </div>
       </div>
     `).join('');
@@ -692,6 +696,58 @@ class AdminDashboard {
 
     grid.querySelectorAll('.delete-gallery-btn').forEach(btn => {
       btn.addEventListener('click', () => this.deleteGalleryItem(btn.dataset.id));
+    });
+
+    // Bind share to Facebook buttons
+    grid.querySelectorAll('.share-facebook-btn').forEach(btn => {
+      btn.addEventListener('click', () => this.shareToFacebook(btn.dataset.id));
+    });
+  }
+
+  // Share gallery item to Facebook
+  shareToFacebook(id) {
+    const gallery = ContentStorage.getSection('gallery') || [];
+    const item = gallery.find(g => g.id == id);
+    if (!item) return;
+
+    // Create the post text
+    const siteName = CONFIG.SITE_NAME || 'MrMikes';
+    const caption = item.caption || 'Check out this custom upholstery!';
+    const hashtags = '#MrMikes #CarUpholstery #CustomSeats #AutoInterior';
+    const postText = `${caption}\n\n${hashtags}\n\nVisit us at mrmikes.com`;
+
+    // Copy to clipboard
+    navigator.clipboard.writeText(postText).then(() => {
+      this.showNotification('Caption copied! Facebook will open - paste the text and upload the image.');
+
+      // Open Facebook create post page
+      setTimeout(() => {
+        window.open('https://www.facebook.com/', '_blank');
+      }, 500);
+
+      // Show instructions modal
+      this.openModal('Share to Facebook', `
+        <div style="text-align: center;">
+          <p style="margin-bottom: 1rem;"><strong>Caption copied to clipboard!</strong></p>
+          <div style="background: #f1f5f9; padding: 1rem; border-radius: 8px; text-align: left; margin-bottom: 1rem;">
+            <p style="white-space: pre-wrap; font-size: 0.875rem;">${postText}</p>
+          </div>
+          <p style="margin-bottom: 1rem;">Image to upload:</p>
+          <img src="${item.image}" alt="Image to share" style="max-width: 200px; border-radius: 8px; margin-bottom: 1rem;">
+          <ol style="text-align: left; font-size: 0.875rem;">
+            <li>Facebook has opened in a new tab</li>
+            <li>Click "What's on your mind?" to create a post</li>
+            <li>Paste the copied text (Ctrl+V / Cmd+V)</li>
+            <li>Click the photo icon and upload this image</li>
+            <li>Click Post!</li>
+          </ol>
+          <p style="margin-top: 1rem; font-size: 0.75rem; color: #64748b;">
+            Tip: Right-click the image above and "Save image as..." to download it for uploading.
+          </p>
+        </div>
+      `);
+    }).catch(err => {
+      this.showNotification('Could not copy to clipboard', 'error');
     });
   }
 
