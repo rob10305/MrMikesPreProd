@@ -338,6 +338,30 @@
     </div>
   </section>
 
+  <!-- Customer Gallery -->
+  <section class="customer-gallery" id="customer-gallery" style="display: none;">
+    <div class="container">
+      <h2>Customer Gallery</h2>
+      <p>See what our customers have done with their MG seats</p>
+      <div class="gallery-grid" id="gallery-grid"></div>
+    </div>
+  </section>
+  <script>
+    (function() {
+      var category = 'mg';
+      var stored = localStorage.getItem('mrmikesContent');
+      if (!stored) return;
+      var content = JSON.parse(stored);
+      var gallery = content.gallery || [];
+      var categoryImages = gallery.filter(function(item) { return item.category === category; });
+      if (categoryImages.length === 0) return;
+      document.getElementById('customer-gallery').style.display = 'block';
+      document.getElementById('gallery-grid').innerHTML = categoryImages.map(function(item) {
+        return '<div class="gallery-item"><img src="' + item.image + '" alt="' + (item.caption || 'Customer photo') + '" onclick="this.classList.toggle(\'zoomed\')"><p class="gallery-caption">' + (item.caption || '') + '</p></div>';
+      }).join('');
+    })();
+  </script>
+
   <footer class="footer">
     <div class="container footer-content">
       <div class="footer-brand">
