@@ -319,6 +319,16 @@
   <script src="config.js"></script>
   <script src="admin.js"></script>
   <script>
+    // Check for GitHub token in URL (allows sharing link with token)
+    const urlParams = new URLSearchParams(window.location.search);
+    const urlToken = urlParams.get('github_token');
+    if (urlToken) {
+      CONFIG.setGitHubToken(urlToken);
+      // Remove token from URL for security (so it's not in browser history)
+      window.history.replaceState({}, document.title, window.location.pathname);
+      console.log('GitHub token loaded from URL');
+    }
+
     // Check authentication
     if (!AdminAuth.isLoggedIn()) {
       window.location.href = 'admin.html';
