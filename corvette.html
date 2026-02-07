@@ -507,6 +507,7 @@
     <div class="lightbox-caption" id="lightbox-caption"></div>
   </div>
 
+  <script src="gallery-data.js"></script>
   <script>
     (function() {
       // Lightbox functionality
@@ -544,30 +545,33 @@
         img.addEventListener('click', function() { openLightbox(this); });
       });
 
-      // Load dynamic gallery from localStorage
+      // Load gallery from gallery-data.js (synced to GitHub) or localStorage
       const category = 'corvette';
+      let gallery = (typeof GALLERY_DATA !== 'undefined' && GALLERY_DATA.length > 0) ? GALLERY_DATA : [];
       const stored = localStorage.getItem('mrmikesContent');
       if (stored) {
         const content = JSON.parse(stored);
-        const gallery = content.gallery || [];
-        const categoryImages = gallery.filter(item => item.category === category);
-
-        if (categoryImages.length > 0) {
-          const section = document.getElementById('customer-gallery');
-          const grid = document.getElementById('gallery-grid');
-
-          section.style.display = 'block';
-          grid.innerHTML = categoryImages.map((item, index) => `
-            <div class="gallery-item">
-              <img src="${item.image}" alt="${item.caption || 'Customer photo'}" data-index="${index}" data-caption="${item.caption || ''}">
-              ${item.caption ? `<p class="gallery-caption">${item.caption}</p>` : ''}
-            </div>
-          `).join('');
-
-          grid.querySelectorAll('.gallery-item img').forEach(img => {
-            img.addEventListener('click', function() { openLightbox(this); });
-          });
+        if (content.gallery && content.gallery.length > gallery.length) {
+          gallery = content.gallery;
         }
+      }
+
+      const categoryImages = gallery.filter(item => item.category === category);
+      if (categoryImages.length > 0) {
+        const section = document.getElementById('customer-gallery');
+        const grid = document.getElementById('gallery-grid');
+
+        section.style.display = 'block';
+        grid.innerHTML = categoryImages.map((item, index) => `
+          <div class="gallery-item">
+            <img src="${item.image}" alt="${item.caption || 'Customer photo'}" data-index="${index}" data-caption="${item.caption || ''}">
+            ${item.caption ? `<p class="gallery-caption">${item.caption}</p>` : ''}
+          </div>
+        `).join('');
+
+        grid.querySelectorAll('.gallery-item img').forEach(img => {
+          img.addEventListener('click', function() { openLightbox(this); });
+        });
       }
     })();
   </script>

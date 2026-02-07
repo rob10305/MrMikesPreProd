@@ -170,6 +170,77 @@ const GitHubUpload = {
   // Check if GitHub is configured
   isConfigured() {
     return typeof CONFIG !== 'undefined' && CONFIG.isGitHubConfigured && CONFIG.isGitHubConfigured();
+  },
+
+  // Sync gallery data to GitHub repository
+  async syncGalleryData(galleryData) {
+    if (!this.isConfigured()) {
+      console.log('GitHub not configured - gallery sync skipped');
+      return { success: false, error: 'GitHub not configured' };
+    }
+
+    try {
+      const content = `/**
+ * MrMikes Gallery Data
+ * This file is automatically updated when gallery images are added/edited via the admin panel.
+ * DO NOT EDIT MANUALLY - changes will be overwritten.
+ * Last updated: ${new Date().toISOString()}
+ */
+const GALLERY_DATA = ${JSON.stringify(galleryData, null, 2)};
+`;
+
+      const base64Content = btoa(unescape(encodeURIComponent(content)));
+      const path = 'gallery-data.js';
+      const url = `https://api.github.com/repos/${CONFIG.GITHUB_OWNER}/${CONFIG.GITHUB_REPO}/contents/${path}`;
+
+      // First, try to get the current file to get its SHA (required for updates)
+      let sha = null;
+      try {
+        const getResponse = await fetch(url, {
+          headers: {
+            'Authorization': `token ${CONFIG.getGitHubToken()}`,
+            'Accept': 'application/vnd.github.v3+json'
+          }
+        });
+        if (getResponse.ok) {
+          const fileData = await getResponse.json();
+          sha = fileData.sha;
+        }
+      } catch (e) {
+        // File doesn't exist yet, that's fine
+      }
+
+      const body = {
+        message: `Update gallery data - ${new Date().toLocaleString()}`,
+        content: base64Content,
+        branch: CONFIG.GITHUB_BRANCH
+      };
+
+      if (sha) {
+        body.sha = sha;
+      }
+
+      const response = await fetch(url, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `token ${CONFIG.getGitHubToken()}`,
+          'Content-Type': 'application/json',
+          'Accept': 'application/vnd.github.v3+json'
+        },
+        body: JSON.stringify(body)
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Sync failed');
+      }
+
+      console.log('Gallery data synced to GitHub successfully');
+      return { success: true };
+    } catch (error) {
+      console.error('GitHub gallery sync error:', error);
+      return { success: false, error: error.message };
+    }
   }
 };
 
@@ -848,7 +919,7 @@ class AdminDashboard {
     });
   }
 
-  saveGalleryItem() {
+  async saveGalleryItem() {
     const gallery = ContentStorage.getSection('gallery') || [];
     const newItem = {
       id: this.currentEditId || Date.now(),
@@ -870,9 +941,20 @@ class AdminDashboard {
     this.loadGallery();
     this.closeModal();
     this.showNotification(this.currentEditId ? 'Image updated!' : 'Image added!');
+
+    // Sync gallery data to GitHub so it's visible to all visitors
+    if (GitHubUpload.isConfigured()) {
+      this.showNotification('Syncing gallery to website...');
+      const result = await GitHubUpload.syncGalleryData(gallery);
+      if (result.success) {
+        this.showNotification('Gallery synced to website!');
+      } else {
+        this.showNotification('Gallery saved locally. Sync failed: ' + result.error, 'error');
+      }
+    }
   }
 
-  deleteGalleryItem(id) {
+  async deleteGalleryItem(id) {
     if (!confirm('Are you sure you want to delete this image?')) return;
 
     let gallery = ContentStorage.getSection('gallery') || [];
@@ -880,6 +962,16 @@ class AdminDashboard {
     ContentStorage.saveSection('gallery', gallery);
     this.loadGallery();
     this.showNotification('Image deleted');
+
+    // Sync gallery data to GitHub so it's visible to all visitors
+    if (GitHubUpload.isConfigured()) {
+      const result = await GitHubUpload.syncGalleryData(gallery);
+      if (result.success) {
+        this.showNotification('Gallery synced to website!');
+      } else {
+        this.showNotification('Sync failed: ' + result.error, 'error');
+      }
+    }
   }
 
   // Testimonials management

@@ -268,6 +268,7 @@
     <div class="lightbox-caption" id="lightbox-caption"></div>
   </div>
 
+  <script src="gallery-data.js"></script>
   <script>
     (function() {
       // Lightbox functionality
@@ -305,15 +306,19 @@
         img.addEventListener('click', function() { openLightbox(this); });
       });
 
-      // Load dynamic gallery from localStorage
+      // Load gallery from gallery-data.js (synced to GitHub) or localStorage
       const category = 'kitcar';
+      let gallery = (typeof GALLERY_DATA !== 'undefined' && GALLERY_DATA.length > 0) ? GALLERY_DATA : [];
       const stored = localStorage.getItem('mrmikesContent');
       if (stored) {
         const content = JSON.parse(stored);
-        const gallery = content.gallery || [];
-        const categoryImages = gallery.filter(item => item.category === category);
+        if (content.gallery && content.gallery.length > gallery.length) {
+          gallery = content.gallery;
+        }
+      }
 
-        if (categoryImages.length > 0) {
+      const categoryImages = gallery.filter(item => item.category === category);
+      if (categoryImages.length > 0) {
           const section = document.getElementById('customer-gallery');
           const grid = document.getElementById('gallery-grid');
 
@@ -325,10 +330,9 @@
             </div>
           `).join('');
 
-          grid.querySelectorAll('.gallery-item img').forEach(img => {
-            img.addEventListener('click', function() { openLightbox(this); });
-          });
-        }
+        grid.querySelectorAll('.gallery-item img').forEach(img => {
+          img.addEventListener('click', function() { openLightbox(this); });
+        });
       }
     })();
   </script>

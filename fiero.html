@@ -231,17 +231,23 @@
     <div class="lightbox-caption" id="lightbox-caption"></div>
   </div>
 
+  <script src="gallery-data.js"></script>
   <script>
     // Load gallery images for this category
     (function() {
       const category = 'fiero';
+
+      // Get gallery from gallery-data.js (synced to GitHub) or localStorage
+      let gallery = (typeof GALLERY_DATA !== 'undefined' && GALLERY_DATA.length > 0) ? GALLERY_DATA : [];
       const stored = localStorage.getItem('mrmikesContent');
-      if (!stored) return;
+      if (stored) {
+        const content = JSON.parse(stored);
+        if (content.gallery && content.gallery.length > gallery.length) {
+          gallery = content.gallery;
+        }
+      }
 
-      const content = JSON.parse(stored);
-      const gallery = content.gallery || [];
       const categoryImages = gallery.filter(item => item.category === category);
-
       if (categoryImages.length === 0) return;
 
       const section = document.getElementById('customer-gallery');
