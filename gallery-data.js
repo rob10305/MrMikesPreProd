@@ -2,7 +2,7 @@
  * MrMikes Gallery Data
  * This file is automatically updated when gallery images are added/edited via the admin panel.
  * DO NOT EDIT MANUALLY - changes will be overwritten.
- * Last updated: 2026-02-07T01:50:04.008Z
+ * Last updated: 2026-02-07T01:50:11.140Z
  */
 const GALLERY_DATA = [
   {
@@ -26,7 +26,7 @@ const GALLERY_DATA = [
   {
     "id": "1770418182343",
     "image": "images/1770418177406_LarryLambert-BI.jpg",
-    "caption": "An MG test post for Gallery",
+    "caption": "An MG test post for Gallery!",
     "category": "mg"
   }
 ];
