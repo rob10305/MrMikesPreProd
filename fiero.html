@@ -224,6 +224,13 @@
     </div>
   </section>
 
+  <!-- Lightbox Modal -->
+  <div class="lightbox-modal" id="lightbox-modal">
+    <button class="lightbox-close" id="lightbox-close">&times;</button>
+    <img src="" alt="" id="lightbox-image">
+    <div class="lightbox-caption" id="lightbox-caption"></div>
+  </div>
+
   <script>
     // Load gallery images for this category
     (function() {
@@ -241,12 +248,48 @@
       const grid = document.getElementById('gallery-grid');
 
       section.style.display = 'block';
-      grid.innerHTML = categoryImages.map(item => `
+      grid.innerHTML = categoryImages.map((item, index) => `
         <div class="gallery-item">
-          <img src="${item.image}" alt="${item.caption || 'Customer photo'}" onclick="this.classList.toggle('zoomed')">
+          <img src="${item.image}" alt="${item.caption || 'Customer photo'}" data-index="${index}" data-caption="${item.caption || ''}">
           ${item.caption ? `<p class="gallery-caption">${item.caption}</p>` : ''}
         </div>
       `).join('');
+
+      // Lightbox functionality
+      const modal = document.getElementById('lightbox-modal');
+      const modalImg = document.getElementById('lightbox-image');
+      const modalCaption = document.getElementById('lightbox-caption');
+      const closeBtn = document.getElementById('lightbox-close');
+
+      grid.querySelectorAll('.gallery-item img').forEach(img => {
+        img.addEventListener('click', function() {
+          modal.classList.add('active');
+          modalImg.src = this.src;
+          modalImg.alt = this.alt;
+          modalCaption.textContent = this.dataset.caption || '';
+          modalCaption.style.display = this.dataset.caption ? 'block' : 'none';
+          document.body.style.overflow = 'hidden';
+        });
+      });
+
+      closeBtn.addEventListener('click', function() {
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+      });
+
+      modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+          modal.classList.remove('active');
+          document.body.style.overflow = '';
+        }
+      });
+
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && modal.classList.contains('active')) {
+          modal.classList.remove('active');
+          document.body.style.overflow = '';
+        }
+      });
     })();
   </script>
 
