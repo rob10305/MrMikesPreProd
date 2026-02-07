@@ -1238,6 +1238,45 @@ class AdminDashboard {
       }
     });
 
+    // Sync Gallery button
+    const syncGalleryBtn = document.getElementById('sync-gallery-btn');
+    const syncGalleryStatus = document.getElementById('sync-gallery-status');
+
+    syncGalleryBtn.addEventListener('click', async () => {
+      if (!GitHubUpload.isConfigured()) {
+        syncGalleryStatus.innerHTML = '<span style="color: #ef4444;">Please save your GitHub token first.</span>';
+        return;
+      }
+
+      const gallery = ContentStorage.getSection('gallery') || [];
+      if (gallery.length === 0) {
+        syncGalleryStatus.innerHTML = '<span style="color: #f59e0b;">No gallery images to sync.</span>';
+        return;
+      }
+
+      syncGalleryBtn.disabled = true;
+      syncGalleryBtn.innerHTML = 'Syncing...';
+      syncGalleryStatus.innerHTML = '<span style="color: #3b82f6;">Uploading gallery data to website...</span>';
+
+      const result = await GitHubUpload.syncGalleryData(gallery);
+
+      syncGalleryBtn.disabled = false;
+      syncGalleryBtn.innerHTML = `
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 0.25rem;">
+          <path d="M21 12a9 9 0 0 1-9 9m9-9a9 9 0 0 0-9-9m9 9H3m9 9a9 9 0 0 1-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9"></path>
+        </svg>
+        Sync Gallery Now
+      `;
+
+      if (result.success) {
+        syncGalleryStatus.innerHTML = `<span style="color: var(--admin-success);">Gallery synced! ${gallery.length} image(s) are now visible to all visitors.</span>`;
+        this.showNotification('Gallery synced to website!');
+      } else {
+        syncGalleryStatus.innerHTML = `<span style="color: #ef4444;">Sync failed: ${result.error}</span>`;
+        this.showNotification('Sync failed: ' + result.error, 'error');
+      }
+    });
+
     // Password form
     document.getElementById('settings-form').addEventListener('submit', (e) => {
       e.preventDefault();
