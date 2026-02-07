@@ -290,62 +290,66 @@
 
   <script>
     (function() {
-      const category = 'ponycars';
-      const stored = localStorage.getItem('mrmikesContent');
-      if (!stored) return;
-
-      const content = JSON.parse(stored);
-      const gallery = content.gallery || [];
-      const categoryImages = gallery.filter(item => item.category === category);
-
-      if (categoryImages.length === 0) return;
-
-      const section = document.getElementById('customer-gallery');
-      const grid = document.getElementById('gallery-grid');
-
-      section.style.display = 'block';
-      grid.innerHTML = categoryImages.map((item, index) => `
-        <div class="gallery-item">
-          <img src="${item.image}" alt="${item.caption || 'Customer photo'}" data-index="${index}" data-caption="${item.caption || ''}">
-          ${item.caption ? `<p class="gallery-caption">${item.caption}</p>` : ''}
-        </div>
-      `).join('');
-
       // Lightbox functionality
       const modal = document.getElementById('lightbox-modal');
       const modalImg = document.getElementById('lightbox-image');
       const modalCaption = document.getElementById('lightbox-caption');
       const closeBtn = document.getElementById('lightbox-close');
 
-      grid.querySelectorAll('.gallery-item img').forEach(img => {
-        img.addEventListener('click', function() {
-          modal.classList.add('active');
-          modalImg.src = this.src;
-          modalImg.alt = this.alt;
-          modalCaption.textContent = this.dataset.caption || '';
-          modalCaption.style.display = this.dataset.caption ? 'block' : 'none';
-          document.body.style.overflow = 'hidden';
-        });
-      });
+      function openLightbox(img) {
+        modal.classList.add('active');
+        modalImg.src = img.src;
+        modalImg.alt = img.alt;
+        const caption = img.dataset.caption || img.alt || '';
+        modalCaption.textContent = caption;
+        modalCaption.style.display = caption ? 'block' : 'none';
+        document.body.style.overflow = 'hidden';
+      }
 
-      closeBtn.addEventListener('click', function() {
+      function closeLightbox() {
         modal.classList.remove('active');
         document.body.style.overflow = '';
-      });
+      }
 
+      closeBtn.addEventListener('click', closeLightbox);
       modal.addEventListener('click', function(e) {
-        if (e.target === modal) {
-          modal.classList.remove('active');
-          document.body.style.overflow = '';
-        }
+        if (e.target === modal) closeLightbox();
+      });
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && modal.classList.contains('active')) closeLightbox();
       });
 
-      document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape' && modal.classList.contains('active')) {
-          modal.classList.remove('active');
-          document.body.style.overflow = '';
-        }
+      // Add lightbox to Customer Examples images
+      document.querySelectorAll('.info-page img').forEach(img => {
+        img.style.cursor = 'pointer';
+        img.addEventListener('click', function() { openLightbox(this); });
       });
+
+      // Load dynamic gallery from localStorage
+      const category = 'ponycars';
+      const stored = localStorage.getItem('mrmikesContent');
+      if (stored) {
+        const content = JSON.parse(stored);
+        const gallery = content.gallery || [];
+        const categoryImages = gallery.filter(item => item.category === category);
+
+        if (categoryImages.length > 0) {
+          const section = document.getElementById('customer-gallery');
+          const grid = document.getElementById('gallery-grid');
+
+          section.style.display = 'block';
+          grid.innerHTML = categoryImages.map((item, index) => `
+            <div class="gallery-item">
+              <img src="${item.image}" alt="${item.caption || 'Customer photo'}" data-index="${index}" data-caption="${item.caption || ''}">
+              ${item.caption ? `<p class="gallery-caption">${item.caption}</p>` : ''}
+            </div>
+          `).join('');
+
+          grid.querySelectorAll('.gallery-item img').forEach(img => {
+            img.addEventListener('click', function() { openLightbox(this); });
+          });
+        }
+      }
     })();
   </script>
 
