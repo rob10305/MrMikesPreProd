@@ -2,7 +2,7 @@
  * MrMikes Gallery Data
  * This file is automatically updated when gallery images are added/edited via the admin panel.
  * DO NOT EDIT MANUALLY - changes will be overwritten.
- * Last updated: 2026-02-07T01:49:58.574Z
+ * Last updated: 2026-02-07T01:50:04.008Z
  */
 const GALLERY_DATA = [
   {
@@ -20,7 +20,7 @@ const GALLERY_DATA = [
   {
     "id": "1770418125505",
     "image": "images/1770418118264_green_TR6.png",
-    "caption": "Its kermits car!",
+    "caption": "Its kermits car",
     "category": "triumph"
   },
   {
