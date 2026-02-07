@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="MrMikes Customer Gallery - See real customer installations of our premium upholstery kits in Corvettes, Triumphs, MGs, Mustangs, Kit Cars, and more.">
+  <title>Customer Gallery | MrMikes - Premium Car Upholstery Kits</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+  <style>
+    .gallery-filters {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: var(--spacing-sm);
+      margin-bottom: var(--spacing-2xl);
+    }
+    .filter-btn {
+      padding: 0.5rem 1.25rem;
+      border: 2px solid var(--color-gray-300);
+      border-radius: var(--radius-full);
+      background: var(--color-white);
+      color: var(--color-gray-700);
+      font-family: var(--font-primary);
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+    .filter-btn:hover {
+      border-color: var(--color-primary);
+      color: var(--color-primary);
+    }
+    .filter-btn.active {
+      background: var(--color-primary);
+      border-color: var(--color-primary);
+      color: var(--color-white);
+    }
+    .gallery-count {
+      text-align: center;
+      color: var(--color-gray-500);
+      font-size: 0.875rem;
+      margin-bottom: var(--spacing-xl);
+    }
+    .gallery-page-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: var(--spacing-xl);
+    }
+    .gallery-card {
+      background: white;
+      border: 1px solid var(--color-gray-200);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      transition: transform var(--transition-base), box-shadow var(--transition-base);
+    }
+    .gallery-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg);
+    }
+    .gallery-card img {
+      width: 100%;
+      height: 250px;
+      object-fit: cover;
+      cursor: pointer;
+      transition: transform var(--transition-slow);
+    }
+    .gallery-card:hover img {
+      transform: scale(1.03);
+    }
+    .gallery-card-body {
+      padding: var(--spacing-lg);
+    }
+    .gallery-card-body h4 {
+      margin-top: 0;
+      margin-bottom: var(--spacing-sm);
+    }
+    .gallery-card-body p {
+      margin-bottom: 0;
+      color: var(--color-gray-600);
+      font-size: 0.875rem;
+    }
+    .gallery-card-body .card-tag {
+      display: inline-block;
+      margin-top: var(--spacing-sm);
+      padding: 0.15rem 0.6rem;
+      background: var(--color-gray-100);
+      border-radius: var(--radius-full);
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--color-primary);
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+    .gallery-card.hidden {
+      display: none;
+    }
+    .gallery-empty {
+      text-align: center;
+      padding: var(--spacing-2xl);
+      color: var(--color-gray-500);
+    }
+    .gallery-empty h3 {
+      color: var(--color-gray-400);
+      margin-bottom: var(--spacing-md);
+    }
+  </style>
+</head>
+<body>
+  <!-- Top Bar -->
+  <div class="top-bar">
+    <div class="container top-bar-content">
+      <div class="top-bar-contact">
+        <a href="tel:941-922-5070">941-922-5070</a>
+        <span class="separator">|</span>
+        <span>Mon-Fri 10-4 ET</span>
+      </div>
+      <div class="top-bar-social">
+        <a href="https://www.youtube.com/watch?v=10eBaLJ-Y_A" target="_blank" rel="noopener" aria-label="YouTube">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+        </a>
+        <a href="https://www.facebook.com/MrMikesAutoUpholstery/" target="_blank" rel="noopener" aria-label="Facebook">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+        </a>
+        <a href="https://www.pinterest.com/mrmikesauto/" target="_blank" rel="noopener" aria-label="Pinterest">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.373 0 0 5.372 0 12c0 5.084 3.163 9.426 7.627 11.174-.105-.949-.2-2.405.042-3.441.218-.937 1.407-5.965 1.407-5.965s-.359-.719-.359-1.782c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738.098.119.112.224.083.345l-.333 1.36c-.053.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.631-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24 12 24c6.627 0 12-5.373 12-12 0-6.628-5.373-12-12-12z"/></svg>
+        </a>
+        <a href="https://www.instagram.com/mrmikesautoupholstery/" target="_blank" rel="noopener" aria-label="Instagram">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="container header-content">
+      <a href="index.html" class="logo">
+        <span class="logo-text">MrMikes</span>
+        <span class="logo-tagline">Car Upholstery Kits</span>
+      </a>
+      <button class="mobile-menu-toggle" aria-label="Toggle menu" aria-expanded="false">
+        <span class="hamburger"></span>
+      </button>
+      <nav class="main-nav" id="main-nav">
+        <ul class="nav-list">
+          <li><a href="index.html#products">Products</a></li>
+          <li><a href="how-to-order.html">Order Now</a></li>
+          <li><a href="gallery.html" class="active">Gallery</a></li>
+          <li><a href="index.html#about">About</a></li>
+          <li><a href="index.html#testimonials">Reviews</a></li>
+          <li><a href="index.html#contact">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Page Header -->
+  <section class="page-header">
+    <div class="container">
+      <div class="breadcrumb">
+        <a href="index.html">Home</a>
+        <span>&rsaquo;</span>
+        Customer Gallery
+      </div>
+      <h1>Customer Gallery</h1>
+      <p>Real installations by real customers. They did it, you can do it!</p>
+    </div>
+  </section>
+
+  <!-- Gallery Section -->
+  <section class="info-page" style="padding: var(--spacing-2xl) 0; background: var(--color-gray-50);">
+    <div class="container">
+
+      <!-- Filter Buttons (dynamically populated) -->
+      <div class="gallery-filters" id="gallery-filters"></div>
+
+      <p class="gallery-count" id="gallery-count"></p>
+
+      <div class="gallery-page-grid" id="gallery-grid"></div>
+
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta">
+    <div class="container cta-content">
+      <h2>Ready to Transform Your Interior?</h2>
+      <p>Get a custom quote for your vehicle or browse our catalog</p>
+      <div class="cta-buttons">
+        <a href="index.html#contact" class="btn btn-primary btn-lg">Request a Quote</a>
+        <a href="index.html#products" class="btn btn-outline btn-lg">Browse Products</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer-content">
+      <div class="footer-brand">
+        <span class="logo-text">MrMikes</span>
+        <p>"Do-it-right / Do-it-yourself"</p>
+        <p class="footer-tagline">Premium car upholstery kits since 1994</p>
+      </div>
+      <div class="footer-links">
+        <div class="footer-column">
+          <h4>Products</h4>
+          <ul>
+            <li><a href="fiero.html">Fiero</a></li>
+            <li><a href="corvette.html">Corvette</a></li>
+            <li><a href="mg.html">MG</a></li>
+            <li><a href="triumph.html">Triumph - Miata</a></li>
+            <li><a href="ponycars.html">Mustang &amp; Camaro</a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <h4>Resources</h4>
+          <ul>
+            <li><a href="options.html">Options</a></li>
+            <li><a href="colors.html">Colors</a></li>
+            <li><a href="instructions.html">Instructions</a></li>
+            <li><a href="faq.html">Common Questions</a></li>
+            <li><a href="tips.html">Tips &amp; Tricks</a></li>
+            <li><a href="how-to-order.html">How to Order</a></li>
+            <li><a href="gallery.html">Gallery</a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <h4>Company</h4>
+          <ul>
+            <li><a href="about.html">Made In USA</a></li>
+            <li><a href="associates.html">Associates</a></li>
+            <li><a href="gift-certificates.html">Gift Certificates</a></li>
+            <li><a href="legal.html">Legal</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <h4>Connect</h4>
+          <div class="footer-social">
+            <a href="https://www.youtube.com/watch?v=10eBaLJ-Y_A" target="_blank" rel="noopener" aria-label="YouTube">YouTube</a>
+            <a href="https://www.facebook.com/MrMikesAutoUpholstery/" target="_blank" rel="noopener" aria-label="Facebook">Facebook</a>
+            <a href="https://www.instagram.com/mrmikesautoupholstery/" target="_blank" rel="noopener" aria-label="Instagram">Instagram</a>
+            <a href="https://www.pinterest.com/mrmikesauto/" target="_blank" rel="noopener" aria-label="Pinterest">Pinterest</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="container">
+        <p>&copy; 1994 - 2026 MrMikes.com. All rights reserved.</p>
+        <p>30+ years experience, 24+ years selling kits online</p>
+        <p style="margin-top: 0.5rem;"><a href="admin.html" style="color: #64748b; font-size: 0.75rem;">Admin Login</a></p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Lightbox Modal -->
+  <div class="lightbox-modal" id="lightbox-modal">
+    <button class="lightbox-close" id="lightbox-close">&times;</button>
+    <img src="" alt="" id="lightbox-image">
+    <div class="lightbox-caption" id="lightbox-caption"></div>
+  </div>
+
+  <!-- Load gallery data from admin-managed file -->
+  <script src="gallery-data.js"></script>
+
+  <script>
+    // Category label mapping
+    const CATEGORY_LABELS = {
+      triumph: 'Triumph & Miata',
+      corvette: 'Corvette',
+      mg: 'MG',
+      ponycars: 'Mustang & Camaro',
+      kitcar: 'Kit Car & Pantera',
+      retro: 'Retro-Mods',
+      fiero: 'Fiero'
+    };
+
+    // Load gallery data: localStorage takes priority if it has more items
+    let gallery = (typeof GALLERY_DATA !== 'undefined' && GALLERY_DATA.length > 0) ? GALLERY_DATA : [];
+    const stored = localStorage.getItem('mrmikesContent');
+    if (stored) {
+      try {
+        const content = JSON.parse(stored);
+        if (content.gallery && content.gallery.length > gallery.length) {
+          gallery = content.gallery;
+        }
+      } catch (e) {
+        // ignore parse errors
+      }
+    }
+
+    const grid = document.getElementById('gallery-grid');
+    const filtersContainer = document.getElementById('gallery-filters');
+    const countEl = document.getElementById('gallery-count');
+
+    if (gallery.length === 0) {
+      // Empty state
+      grid.innerHTML = '<div class="gallery-empty"><h3>No Gallery Images Yet</h3><p>Check back soon — customer photos will be added here as they come in!</p></div>';
+      filtersContainer.style.display = 'none';
+      countEl.style.display = 'none';
+    } else {
+      // Determine which categories have images
+      const activeCategories = [...new Set(gallery.map(item => item.category))];
+
+      // Build filter buttons
+      let filtersHTML = '<button class="filter-btn active" data-filter="all">All</button>';
+      // Show buttons in a consistent order
+      const categoryOrder = ['triumph', 'corvette', 'mg', 'ponycars', 'kitcar', 'retro', 'fiero'];
+      categoryOrder.forEach(cat => {
+        if (activeCategories.includes(cat)) {
+          const label = CATEGORY_LABELS[cat] || cat;
+          filtersHTML += '<button class="filter-btn" data-filter="' + cat + '">' + label + '</button>';
+        }
+      });
+      filtersContainer.innerHTML = filtersHTML;
+
+      // Render gallery cards
+      grid.innerHTML = gallery.map(item => {
+        const label = CATEGORY_LABELS[item.category] || item.category;
+        const caption = item.caption || '';
+        const safeCaption = caption.replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+        return '<div class="gallery-card" data-category="' + (item.category || '') + '">' +
+          '<img src="' + item.image + '" alt="' + safeCaption + '">' +
+          '<div class="gallery-card-body">' +
+            (caption ? '<p>' + safeCaption + '</p>' : '') +
+            '<span class="card-tag">' + label + '</span>' +
+          '</div>' +
+        '</div>';
+      }).join('');
+
+      // Filter functionality
+      const filterBtns = document.querySelectorAll('.filter-btn');
+      const cards = document.querySelectorAll('.gallery-card');
+
+      function updateCount() {
+        const visible = document.querySelectorAll('.gallery-card:not(.hidden)').length;
+        const total = cards.length;
+        countEl.textContent = 'Showing ' + visible + ' of ' + total + ' customer installation' + (total !== 1 ? 's' : '');
+      }
+
+      filterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          filterBtns.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          const filter = btn.dataset.filter;
+          cards.forEach(card => {
+            if (filter === 'all' || card.dataset.category === filter) {
+              card.classList.remove('hidden');
+            } else {
+              card.classList.add('hidden');
+            }
+          });
+          updateCount();
+        });
+      });
+
+      updateCount();
+
+      // Lightbox for dynamically rendered cards
+      document.querySelectorAll('.gallery-card img').forEach(img => {
+        img.addEventListener('click', () => {
+          lightboxImg.src = img.src;
+          lightboxImg.alt = img.alt;
+          lightboxCaption.textContent = img.alt || '';
+          lightbox.classList.add('active');
+        });
+      });
+    }
+
+    // Lightbox
+    const lightbox = document.getElementById('lightbox-modal');
+    const lightboxImg = document.getElementById('lightbox-image');
+    const lightboxCaption = document.getElementById('lightbox-caption');
+    const lightboxClose = document.getElementById('lightbox-close');
+
+    lightboxClose.addEventListener('click', () => lightbox.classList.remove('active'));
+    lightbox.addEventListener('click', (e) => {
+      if (e.target === lightbox) lightbox.classList.remove('active');
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') lightbox.classList.remove('active');
+    });
+
+    // Mobile menu toggle
+    const menuToggle = document.querySelector('.mobile-menu-toggle');
+    const mainNav = document.querySelector('.main-nav');
+    menuToggle.addEventListener('click', () => {
+      const isExpanded = menuToggle.getAttribute('aria-expanded') === 'true';
+      menuToggle.setAttribute('aria-expanded', !isExpanded);
+      mainNav.classList.toggle('is-open');
+      document.body.classList.toggle('menu-open');
+    });
+
+    // Header scroll effect
+    const header = document.querySelector('.header');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 100) {
+        header.classList.add('scrolled');
+      } else {
+        header.classList.remove('scrolled');
+      }
+    });
+  </script>
+</body>
+</html>
