@@ -298,7 +298,7 @@
           </div>
 
           <div class="gallery-filter">
-            <label for="gallery-category">Filter by Category:</label>
+            <label for="gallery-category">Category:</label>
             <select id="gallery-category">
               <option value="all">All Categories</option>
               <option value="fiero">Fiero</option>
@@ -310,6 +310,17 @@
               <option value="retro">Retro-Mods</option>
               <option value="trimbright">TrimBright</option>
             </select>
+            <label for="gallery-timeframe">Uploaded:</label>
+            <select id="gallery-timeframe">
+              <option value="0">All Time</option>
+              <option value="7">Last 7 Days</option>
+              <option value="30">Last 30 Days</option>
+              <option value="60">Last 60 Days</option>
+              <option value="90">Last 90 Days</option>
+              <option value="180">Last 6 Months</option>
+              <option value="365">Last Year</option>
+            </select>
+            <span id="gallery-result-count" style="color: var(--admin-text-muted); font-size: 0.875rem;"></span>
           </div>
 
           <div class="gallery-grid" id="gallery-grid">
@@ -436,6 +447,7 @@
     </div>
   </div>
 
+  <script src="gallery-data.js"></script>
   <script src="config.js"></script>
   <script src="admin.js"></script>
   <script>

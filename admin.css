@@ -523,6 +523,17 @@
   text-overflow: ellipsis;
 }
 
+.gallery-item-caption {
+  font-weight: 500;
+  color: var(--admin-text) !important;
+}
+
+.gallery-item-meta {
+  margin-top: 0.25rem !important;
+  font-size: 0.6875rem !important;
+  text-transform: capitalize;
+}
+
 /* Testimonials List */
 .testimonials-list {
   display: flex;

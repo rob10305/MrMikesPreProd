@@ -393,6 +393,7 @@ class AdminDashboard {
     this.bindTestimonials();
     this.bindContentEdits();
     this.bindSettings();
+    this.seedGalleryFromFile();
     this.updateDashboardStats();
     this.loadGallery();
     this.loadTestimonials();
@@ -717,6 +718,61 @@ class AdminDashboard {
     this.showNotification('Product deleted');
   }
 
+  // Seed gallery from GALLERY_DATA file if localStorage is empty or missing items
+  seedGalleryFromFile() {
+    if (typeof GALLERY_DATA === 'undefined' || !Array.isArray(GALLERY_DATA)) return;
+
+    let gallery = ContentStorage.getSection('gallery') || [];
+    const existingIds = new Set(gallery.map(g => String(g.id)));
+    let added = 0;
+
+    GALLERY_DATA.forEach(item => {
+      if (!existingIds.has(String(item.id))) {
+        // Add uploadedAt timestamp - extract from the ID (which is Date.now()) or from image filename
+        const uploadedAt = this.extractTimestamp(item);
+        gallery.push({
+          ...item,
+          uploadedAt: uploadedAt
+        });
+        added++;
+      }
+    });
+
+    // Also ensure existing items have uploadedAt
+    gallery = gallery.map(item => {
+      if (!item.uploadedAt) {
+        item.uploadedAt = this.extractTimestamp(item);
+      }
+      return item;
+    });
+
+    if (added > 0) {
+      ContentStorage.saveSection('gallery', gallery);
+      console.log(`Seeded ${added} gallery items from gallery-data.js`);
+    } else if (gallery.some(g => !g.uploadedAt)) {
+      ContentStorage.saveSection('gallery', gallery);
+    }
+  }
+
+  // Extract a timestamp from a gallery item's ID or image filename
+  extractTimestamp(item) {
+    // The ID is typically Date.now() as a string
+    const idNum = parseInt(String(item.id));
+    if (idNum > 1700000000000 && idNum < 2000000000000) {
+      return idNum;
+    }
+    // Try extracting from image filename (e.g., images/1770417409913_filename.jpg)
+    if (item.image) {
+      const match = item.image.match(/(\d{13})/);
+      if (match) {
+        const ts = parseInt(match[1]);
+        if (ts > 1700000000000 && ts < 2000000000000) return ts;
+      }
+    }
+    // Fallback: unknown upload time
+    return 0;
+  }
+
   // Gallery management
   bindGallery() {
     document.getElementById('add-image-btn').addEventListener('click', () => {
@@ -726,46 +782,78 @@ class AdminDashboard {
     document.getElementById('gallery-category').addEventListener('change', () => {
       this.loadGallery();
     });
+
+    const timeframeSelect = document.getElementById('gallery-timeframe');
+    if (timeframeSelect) {
+      timeframeSelect.addEventListener('change', () => {
+        this.loadGallery();
+      });
+    }
   }
 
   loadGallery() {
     const gallery = ContentStorage.getSection('gallery') || [];
-    const filter = document.getElementById('gallery-category').value;
+    const categoryFilter = document.getElementById('gallery-category').value;
+    const timeframeSelect = document.getElementById('gallery-timeframe');
+    const days = timeframeSelect ? parseInt(timeframeSelect.value) : 0;
     const grid = document.getElementById('gallery-grid');
+    const resultCount = document.getElementById('gallery-result-count');
 
-    const filteredGallery = filter === 'all'
-      ? gallery
-      : gallery.filter(item => item.category === filter);
+    let filteredGallery = gallery;
+
+    // Apply category filter
+    if (categoryFilter !== 'all') {
+      filteredGallery = filteredGallery.filter(item => item.category === categoryFilter);
+    }
+
+    // Apply time filter
+    if (days > 0) {
+      const cutoff = Date.now() - (days * 24 * 60 * 60 * 1000);
+      filteredGallery = filteredGallery.filter(item => {
+        const ts = item.uploadedAt || 0;
+        return ts >= cutoff;
+      });
+    }
+
+    // Sort by upload date, newest first
+    filteredGallery.sort((a, b) => (b.uploadedAt || 0) - (a.uploadedAt || 0));
 
     document.getElementById('gallery-count').textContent = gallery.length;
+    if (resultCount) {
+      resultCount.textContent = filteredGallery.length === gallery.length
+        ? ''
+        : `Showing ${filteredGallery.length} of ${gallery.length}`;
+    }
 
     if (filteredGallery.length === 0) {
       grid.innerHTML = `
         <div class="empty-state" style="grid-column: 1 / -1; text-align: center; padding: 3rem; color: var(--admin-text-muted);">
-          <p>No images in gallery. Click "Add Image" to add your first image.</p>
+          <p>${gallery.length === 0 ? 'No images in gallery. Click "Add Image" to add your first image.' : 'No images match the selected filters.'}</p>
         </div>
       `;
       return;
     }
 
-    grid.innerHTML = filteredGallery.map((item, index) => `
+    grid.innerHTML = filteredGallery.map((item) => {
+      const uploadDate = item.uploadedAt
+        ? new Date(item.uploadedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+        : '';
+      return `
       <div class="gallery-item" data-id="${item.id}">
         <div class="gallery-item-image">
-          <img src="${item.image}" alt="${item.caption || ''}">
+          <img src="${item.image}" alt="${item.caption || ''}" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22150%22><rect fill=%22%23ddd%22 width=%22200%22 height=%22150%22/><text fill=%22%23999%22 x=%22100%22 y=%2275%22 text-anchor=%22middle%22 font-size=%2214%22>No Image</text></svg>'">
           <div class="gallery-item-overlay">
             <button class="btn btn-sm btn-secondary edit-gallery-btn" data-id="${item.id}">Edit</button>
             <button class="btn btn-sm btn-danger delete-gallery-btn" data-id="${item.id}">Delete</button>
           </div>
         </div>
         <div class="gallery-item-info">
-          <p>${item.caption || 'No caption'}</p>
-          <button class="btn btn-sm share-facebook-btn" data-id="${item.id}" style="margin-top: 0.5rem; background: #1877f2; color: white; border: none; display: flex; align-items: center; gap: 0.25rem; font-size: 0.75rem;">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-            Share to Facebook
-          </button>
+          <p class="gallery-item-caption">${item.caption || 'No caption'}</p>
+          <p class="gallery-item-meta">${item.category || ''}${uploadDate ? ' &middot; ' + uploadDate : ''}</p>
         </div>
       </div>
-    `).join('');
+    `;
+    }).join('');
 
     // Bind edit/delete buttons
     grid.querySelectorAll('.edit-gallery-btn').forEach(btn => {
@@ -774,11 +862,6 @@ class AdminDashboard {
 
     grid.querySelectorAll('.delete-gallery-btn').forEach(btn => {
       btn.addEventListener('click', () => this.deleteGalleryItem(btn.dataset.id));
-    });
-
-    // Bind share to Facebook buttons
-    grid.querySelectorAll('.share-facebook-btn').forEach(btn => {
-      btn.addEventListener('click', () => this.shareToFacebook(btn.dataset.id));
     });
   }
 
@@ -928,16 +1011,20 @@ class AdminDashboard {
 
   async saveGalleryItem() {
     const gallery = ContentStorage.getSection('gallery') || [];
+    const isNew = !this.currentEditId;
     const newItem = {
       id: this.currentEditId || Date.now(),
       image: document.getElementById('gallery-image').value,
       caption: document.getElementById('gallery-caption').value,
-      category: document.getElementById('gallery-cat').value
+      category: document.getElementById('gallery-cat').value,
+      uploadedAt: isNew ? Date.now() : undefined
     };
 
     if (this.currentEditId) {
       const index = gallery.findIndex(g => g.id == this.currentEditId);
       if (index !== -1) {
+        // Preserve existing uploadedAt when editing
+        newItem.uploadedAt = gallery[index].uploadedAt || this.extractTimestamp(gallery[index]);
         gallery[index] = newItem;
       }
     } else {
