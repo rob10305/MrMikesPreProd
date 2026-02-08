@@ -396,6 +396,7 @@ class AdminDashboard {
     this.updateDashboardStats();
     this.loadGallery();
     this.loadTestimonials();
+    this.analyticsDashboard = new AnalyticsDashboard();
   }
 
   // Navigation
@@ -426,12 +427,18 @@ class AdminDashboard {
     // Update title
     const titles = {
       dashboard: 'Dashboard',
+      analytics: 'Website Analytics',
       products: 'Product Management',
       gallery: 'Gallery Management',
       testimonials: 'Testimonials',
       content: 'Page Content',
       settings: 'Settings'
     };
+
+    // Refresh analytics when switching to analytics section
+    if (section === 'analytics' && this.analyticsDashboard) {
+      this.analyticsDashboard.refresh();
+    }
     document.getElementById('section-title').textContent = titles[section] || section;
 
     // Close mobile sidebar
@@ -1346,6 +1353,266 @@ class AdminDashboard {
       notification.style.animation = 'slideOut 0.3s ease';
       setTimeout(() => notification.remove(), 300);
     }, 3000);
+  }
+}
+
+// =====================
+// Analytics Dashboard
+// =====================
+class AnalyticsDashboard {
+  constructor() {
+    this.storageKey = 'mrmikes_analytics';
+    this.bindControls();
+    this.refresh();
+  }
+
+  bindControls() {
+    const rangeSelect = document.getElementById('analytics-range');
+    if (rangeSelect) {
+      rangeSelect.addEventListener('change', () => this.refresh());
+    }
+
+    const clearBtn = document.getElementById('clear-analytics-btn');
+    if (clearBtn) {
+      clearBtn.addEventListener('click', () => {
+        if (confirm('Are you sure you want to clear all analytics data? This cannot be undone.')) {
+          localStorage.removeItem(this.storageKey);
+          this.refresh();
+        }
+      });
+    }
+  }
+
+  getEvents() {
+    try {
+      return JSON.parse(localStorage.getItem(this.storageKey)) || [];
+    } catch (e) {
+      return [];
+    }
+  }
+
+  getFilteredEvents() {
+    var events = this.getEvents();
+    var rangeSelect = document.getElementById('analytics-range');
+    var days = parseInt(rangeSelect ? rangeSelect.value : '30');
+
+    if (days === 0) return events; // All time
+
+    var cutoff = Date.now() - (days * 24 * 60 * 60 * 1000);
+    return events.filter(function(e) { return e.timestamp >= cutoff; });
+  }
+
+  refresh() {
+    var events = this.getFilteredEvents();
+    this.renderSummary(events);
+    this.renderChart(events);
+    this.renderTopPages(events);
+    this.renderReferrers(events);
+    this.renderDevices(events);
+  }
+
+  renderSummary(events) {
+    // Total views
+    document.getElementById('analytics-views').textContent = events.length;
+
+    // Unique visitors
+    var visitors = {};
+    events.forEach(function(e) { visitors[e.visitorId] = true; });
+    document.getElementById('analytics-visitors').textContent = Object.keys(visitors).length;
+
+    // Pages per session
+    var sessions = {};
+    events.forEach(function(e) {
+      if (!sessions[e.sessionId]) sessions[e.sessionId] = 0;
+      sessions[e.sessionId]++;
+    });
+    var sessionKeys = Object.keys(sessions);
+    var avgPages = sessionKeys.length > 0
+      ? (events.length / sessionKeys.length).toFixed(1)
+      : '0';
+    document.getElementById('analytics-pages-per-session').textContent = avgPages;
+
+    // Top page
+    var pages = {};
+    events.forEach(function(e) {
+      pages[e.page] = (pages[e.page] || 0) + 1;
+    });
+    var topPage = '-';
+    var topCount = 0;
+    Object.keys(pages).forEach(function(p) {
+      if (pages[p] > topCount) { topCount = pages[p]; topPage = p; }
+    });
+    document.getElementById('analytics-top-page').textContent = topPage;
+  }
+
+  renderChart(events) {
+    var container = document.getElementById('analytics-chart');
+    if (!container) return;
+
+    var rangeSelect = document.getElementById('analytics-range');
+    var days = parseInt(rangeSelect ? rangeSelect.value : '30');
+    if (days === 0) days = 30; // For "all time", still show last 30 days in chart
+    var chartDays = Math.min(days, 30);
+
+    // Group events by day
+    var dailyCounts = {};
+    for (var i = 0; i < chartDays; i++) {
+      var d = new Date();
+      d.setDate(d.getDate() - i);
+      var key = d.toISOString().split('T')[0];
+      dailyCounts[key] = 0;
+    }
+
+    events.forEach(function(e) {
+      var key = new Date(e.timestamp).toISOString().split('T')[0];
+      if (dailyCounts.hasOwnProperty(key)) {
+        dailyCounts[key]++;
+      }
+    });
+
+    var sortedDays = Object.keys(dailyCounts).sort();
+    var maxCount = Math.max.apply(null, sortedDays.map(function(d) { return dailyCounts[d]; }));
+    if (maxCount === 0) maxCount = 1;
+
+    if (events.length === 0) {
+      container.innerHTML = '<p style="color: var(--admin-text-muted); text-align: center; padding: 2rem;">No data yet. Visit some pages to start tracking.</p>';
+      return;
+    }
+
+    var barsHtml = sortedDays.map(function(day) {
+      var count = dailyCounts[day];
+      var pct = (count / maxCount) * 100;
+      var label = new Date(day + 'T12:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+      return '<div class="chart-bar-group">' +
+        '<div class="chart-bar-wrapper">' +
+          '<div class="chart-bar" style="height: ' + Math.max(pct, 2) + '%;" title="' + label + ': ' + count + ' views"></div>' +
+        '</div>' +
+        '<span class="chart-label">' + label + '</span>' +
+        '<span class="chart-value">' + count + '</span>' +
+      '</div>';
+    }).join('');
+
+    container.innerHTML = '<div class="chart-bars">' + barsHtml + '</div>';
+  }
+
+  renderTopPages(events) {
+    var container = document.getElementById('analytics-top-pages');
+    if (!container) return;
+
+    var pages = {};
+    events.forEach(function(e) {
+      pages[e.page] = (pages[e.page] || 0) + 1;
+    });
+
+    var sorted = Object.keys(pages).sort(function(a, b) { return pages[b] - pages[a]; }).slice(0, 10);
+    var maxCount = sorted.length > 0 ? pages[sorted[0]] : 1;
+
+    if (sorted.length === 0) {
+      container.innerHTML = '<p style="color: var(--admin-text-muted); text-align: center; padding: 2rem;">No data yet</p>';
+      return;
+    }
+
+    container.innerHTML = '<table class="analytics-table">' +
+      '<thead><tr><th>Page</th><th>Views</th><th></th></tr></thead>' +
+      '<tbody>' +
+      sorted.map(function(page) {
+        var count = pages[page];
+        var pct = (count / maxCount) * 100;
+        return '<tr>' +
+          '<td class="page-name">' + page + '</td>' +
+          '<td class="page-count">' + count + '</td>' +
+          '<td class="page-bar-cell"><div class="page-bar" style="width: ' + pct + '%;"></div></td>' +
+        '</tr>';
+      }).join('') +
+      '</tbody></table>';
+  }
+
+  renderReferrers(events) {
+    var container = document.getElementById('analytics-referrers');
+    if (!container) return;
+
+    var referrers = {};
+    events.forEach(function(e) {
+      var ref = e.referrer || 'direct';
+      referrers[ref] = (referrers[ref] || 0) + 1;
+    });
+
+    var sorted = Object.keys(referrers).sort(function(a, b) { return referrers[b] - referrers[a]; }).slice(0, 10);
+    var total = events.length || 1;
+
+    if (sorted.length === 0) {
+      container.innerHTML = '<p style="color: var(--admin-text-muted); text-align: center; padding: 2rem;">No data yet</p>';
+      return;
+    }
+
+    var labels = { direct: 'Direct / Bookmark', internal: 'Internal Navigation', unknown: 'Unknown' };
+
+    container.innerHTML = '<table class="analytics-table">' +
+      '<thead><tr><th>Source</th><th>Visits</th><th>%</th></tr></thead>' +
+      '<tbody>' +
+      sorted.map(function(ref) {
+        var count = referrers[ref];
+        var pct = ((count / total) * 100).toFixed(1);
+        var displayName = labels[ref] || ref;
+        return '<tr><td>' + displayName + '</td><td>' + count + '</td><td>' + pct + '%</td></tr>';
+      }).join('') +
+      '</tbody></table>';
+  }
+
+  renderDevices(events) {
+    var container = document.getElementById('analytics-devices');
+    if (!container) return;
+
+    var devices = {};
+    var browsers = {};
+    events.forEach(function(e) {
+      var dev = e.device || 'unknown';
+      var br = e.browser || 'unknown';
+      devices[dev] = (devices[dev] || 0) + 1;
+      browsers[br] = (browsers[br] || 0) + 1;
+    });
+
+    var total = events.length || 1;
+
+    if (events.length === 0) {
+      container.innerHTML = '<p style="color: var(--admin-text-muted); text-align: center; padding: 2rem;">No data yet</p>';
+      return;
+    }
+
+    var desktopPct = ((devices['desktop'] || 0) / total * 100).toFixed(1);
+    var mobilePct = ((devices['mobile'] || 0) / total * 100).toFixed(1);
+
+    var browsersSorted = Object.keys(browsers).sort(function(a, b) { return browsers[b] - browsers[a]; });
+
+    container.innerHTML =
+      '<div class="device-breakdown">' +
+        '<h4>Device Type</h4>' +
+        '<div class="device-bars">' +
+          '<div class="device-bar-row">' +
+            '<span class="device-label">Desktop</span>' +
+            '<div class="device-bar-track"><div class="device-bar-fill desktop" style="width: ' + desktopPct + '%;"></div></div>' +
+            '<span class="device-pct">' + desktopPct + '%</span>' +
+          '</div>' +
+          '<div class="device-bar-row">' +
+            '<span class="device-label">Mobile</span>' +
+            '<div class="device-bar-track"><div class="device-bar-fill mobile" style="width: ' + mobilePct + '%;"></div></div>' +
+            '<span class="device-pct">' + mobilePct + '%</span>' +
+          '</div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="browser-breakdown">' +
+        '<h4>Browsers</h4>' +
+        '<table class="analytics-table">' +
+          '<thead><tr><th>Browser</th><th>Visits</th><th>%</th></tr></thead>' +
+          '<tbody>' +
+          browsersSorted.map(function(br) {
+            var count = browsers[br];
+            var pct = ((count / total) * 100).toFixed(1);
+            return '<tr><td>' + br + '</td><td>' + count + '</td><td>' + pct + '%</td></tr>';
+          }).join('') +
+          '</tbody>' +
+        '</table>' +
+      '</div>';
   }
 }
 
