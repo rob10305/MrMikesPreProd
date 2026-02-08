@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+
+  <!-- Headrest front face -->
+  <g data-zone="Headrest" data-zone-id="fiero-headrest">
+    <polygon points="400,138 620,138 632,152 632,268 620,278 400,278 388,268 388,152" fill="none" stroke="#ff0000" stroke-width="2" opacity="0.82"/>
+  </g>
+
+  <!-- Headrest side panels -->
+  <g data-zone="Headrest Sides" data-zone-id="fiero-headrest-sides">
+    <polygon points="352,145 388,138 388,278 358,272" fill="none" stroke="#00cc00" stroke-width="2" opacity="0.82"/>
+    <polygon points="632,138 668,145 662,272 632,278" fill="none" stroke="#00cc00" stroke-width="2" opacity="0.82"/>
+  </g>
+
+  <!-- Upper back (below headrest, above ribbed insert) -->
+  <g data-zone="Upper Back" data-zone-id="fiero-upper-back">
+    <polygon points="388,298 632,298 625,408 395,408" fill="none" stroke="#9900cc" stroke-width="2" opacity="0.82"/>
+  </g>
+
+  <!-- Side bolsters (backrest + cushion sides) -->
+  <g data-zone="Bolsters" data-zone-id="fiero-bolsters">
+    <polygon points="292,312 368,298 375,408 418,408 418,628 398,655 378,875 292,875" fill="none" stroke="#0066ff" stroke-width="2" opacity="0.82"/>
+    <polygon points="748,312 672,298 665,408 622,408 622,628 642,655 662,875 748,875" fill="none" stroke="#0066ff" stroke-width="2" opacity="0.82"/>
+  </g>
+
+  <!-- Center ribbed backrest panel -->
+  <g data-zone="Back Insert" data-zone-id="fiero-back-insert">
+    <polygon points="398,408 622,408 622,628 398,628" fill="none" stroke="#ff6600" stroke-width="2" opacity="0.82"/>
+  </g>
+
+  <!-- Center ribbed cushion panel -->
+  <g data-zone="Cushion Insert" data-zone-id="fiero-cushion-insert">
+    <polygon points="439,657 659,683 639,899 341,887" fill="none" stroke="#cc9900" stroke-width="2" opacity="0.82"/>
+  </g>
+
+</svg>

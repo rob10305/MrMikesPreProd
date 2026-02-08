@@ -401,6 +401,27 @@
               </div>
             </div>
 
+            <div class="settings-info" style="margin-bottom: 2rem;">
+              <h3>OpenAI Seat Configurator</h3>
+              <p>Enter your OpenAI API key to enable AI-powered seat preview generation in the <a href="seat-colorizer.html">Seat Configurator</a>. <a href="https://platform.openai.com/api-keys" target="_blank">Get API key here</a>.</p>
+              <div class="form-group" style="margin-top: 1rem;">
+                <label for="openai-key">OpenAI API Key</label>
+                <input type="password" id="openai-key" placeholder="sk-... (OpenAI API key)" style="font-family: monospace;">
+              </div>
+              <div id="openai-key-status" style="margin-top: 0.5rem; font-size: 0.875rem;"></div>
+              <button type="button" class="btn btn-primary" id="save-openai-key" style="margin-top: 0.5rem;">Save Key</button>
+
+              <div class="form-group" style="margin-top: 1rem;">
+                <label for="openai-model">AI Model</label>
+                <select id="openai-model" style="width: 100%; padding: 0.5rem; border: 1px solid var(--admin-border); border-radius: 4px;">
+                  <option value="gpt-image-1">gpt-image-1 (Best quality)</option>
+                  <option value="dall-e-2">dall-e-2 (Legacy, wider access)</option>
+                </select>
+              </div>
+              <button type="button" class="btn btn-secondary" id="save-openai-model" style="margin-top: 0.5rem;">Save Model</button>
+              <p style="font-size: 0.8rem; color: var(--admin-text-muted); margin-top: 0.5rem;">Cost: ~$0.02-0.08 per generation. Key is stored in browser localStorage only.</p>
+            </div>
+
             <form id="settings-form" class="admin-form">
               <h3>Change Password</h3>
               <div class="form-group">
@@ -471,6 +492,43 @@
 
     // Initialize admin dashboard
     const dashboard = new AdminDashboard();
+
+    // OpenAI Settings
+    (function() {
+      var keyInput = document.getElementById('openai-key');
+      var keyStatus = document.getElementById('openai-key-status');
+      var modelSelect = document.getElementById('openai-model');
+
+      function updateKeyStatus() {
+        var key = localStorage.getItem('mrmikes_openai_key') || '';
+        if (key) {
+          keyStatus.textContent = 'API key configured (ends in ...' + key.slice(-4) + ')';
+          keyStatus.style.color = '#16a34a';
+        } else {
+          keyStatus.textContent = 'No API key set';
+          keyStatus.style.color = '#888';
+        }
+      }
+
+      document.getElementById('save-openai-key').addEventListener('click', function() {
+        var key = keyInput.value.trim().replace(/[^\x20-\x7E]/g, '');
+        if (key) {
+          localStorage.setItem('mrmikes_openai_key', key);
+          keyInput.value = '';
+        } else {
+          localStorage.removeItem('mrmikes_openai_key');
+        }
+        updateKeyStatus();
+      });
+
+      modelSelect.value = localStorage.getItem('mrmikes_ai_model') || 'gpt-image-1';
+      document.getElementById('save-openai-model').addEventListener('click', function() {
+        localStorage.setItem('mrmikes_ai_model', modelSelect.value);
+        alert('Model saved: ' + modelSelect.value);
+      });
+
+      updateKeyStatus();
+    })();
   </script>
 </body>
 </html>

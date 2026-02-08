@@ -1,0 +1,1364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="MrMikes Interactive Seat Color Configurator - Visualize your custom upholstery colors.">
+  <title>Seat Color Configurator | MrMikes</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+  <style>
+    .configurator {
+      display: grid;
+      grid-template-columns: 1fr 360px;
+      gap: var(--spacing-xl);
+      max-width: 1100px;
+      margin: 0 auto;
+      padding-bottom: var(--spacing-3xl);
+    }
+    .seat-viewer {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+    }
+    .seat-container {
+      position: relative;
+      width: 100%;
+      max-width: 512px;
+    }
+    .seat-container img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    .seat-container svg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+    .seat-zone path,
+    .seat-zone polygon {
+      cursor: pointer;
+      pointer-events: all;
+      transition: opacity 0.2s;
+    }
+    .seat-zone:hover path,
+    .seat-zone:hover polygon {
+      opacity: 0.85 !important;
+    }
+    .seat-zone.selected path,
+    .seat-zone.selected polygon {
+      stroke: #333;
+      stroke-width: 3;
+      stroke-dasharray: 12 4;
+      animation: dash 0.6s linear infinite;
+      fill: rgba(120, 120, 120, 0.25) !important;
+    }
+    @keyframes dash {
+      to { stroke-dashoffset: -16; }
+    }
+    .color-panel {
+      background: white;
+      border: 1px solid var(--color-gray-200);
+      border-radius: var(--radius-lg);
+      padding: var(--spacing-xl);
+      position: sticky;
+      top: var(--spacing-lg);
+      max-height: calc(100vh - 200px);
+      overflow-y: auto;
+    }
+    .color-panel h3 {
+      margin-top: 0;
+      margin-bottom: var(--spacing-sm);
+    }
+    .zone-indicator {
+      background: var(--color-gray-50);
+      padding: var(--spacing-sm) var(--spacing-md);
+      border-radius: var(--radius-md);
+      margin-bottom: var(--spacing-lg);
+      font-weight: 600;
+      text-align: center;
+      min-height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-gray-600);
+    }
+    .zone-indicator.active {
+      background: var(--color-primary);
+      color: white;
+    }
+    .color-category {
+      margin-bottom: var(--spacing-md);
+    }
+    .color-category h4 {
+      margin: 0 0 var(--spacing-xs);
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--color-gray-500);
+    }
+    .color-swatches {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(36px, 1fr));
+      gap: 6px;
+    }
+    .color-swatch {
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius-md);
+      border: 2px solid var(--color-gray-200);
+      cursor: pointer;
+      transition: transform 0.15s, border-color 0.15s;
+      position: relative;
+    }
+    .color-swatch:hover {
+      transform: scale(1.15);
+      border-color: var(--color-primary);
+      z-index: 1;
+    }
+    .color-swatch.active {
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 2px var(--color-primary);
+    }
+    .color-swatch[title]:hover::after {
+      content: attr(title);
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #333;
+      color: white;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 0.7rem;
+      white-space: nowrap;
+      z-index: 10;
+      pointer-events: none;
+      margin-bottom: 4px;
+    }
+    .zone-summary {
+      margin-top: var(--spacing-lg);
+      padding-top: var(--spacing-lg);
+      border-top: 1px solid var(--color-gray-200);
+    }
+    .zone-summary h4 {
+      margin: 0 0 var(--spacing-sm);
+      font-size: 0.875rem;
+    }
+    .summary-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: var(--spacing-xs) 0;
+      font-size: 0.85rem;
+    }
+    .summary-swatch {
+      width: 20px;
+      height: 20px;
+      border-radius: 4px;
+      border: 1px solid var(--color-gray-300);
+      display: inline-block;
+      margin-left: var(--spacing-xs);
+      vertical-align: middle;
+    }
+    .btn-row {
+      display: flex;
+      gap: var(--spacing-sm);
+      margin-top: var(--spacing-lg);
+    }
+    .btn-row .btn {
+      flex: 1;
+      text-align: center;
+      font-size: 0.85rem;
+    }
+    @media (max-width: 900px) {
+      .configurator {
+        grid-template-columns: 1fr;
+      }
+      .color-panel {
+        position: static;
+        max-height: none;
+      }
+    }
+
+    /* Zone Buttons */
+    .zone-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      margin-bottom: var(--spacing-md);
+    }
+    .zone-buttons:empty {
+      display: none;
+    }
+    .zone-btn {
+      padding: 4px 10px;
+      border: 1px solid var(--color-gray-300);
+      border-radius: var(--radius-full);
+      background: white;
+      font-size: 0.7rem;
+      cursor: pointer;
+      transition: all 0.15s;
+      white-space: nowrap;
+    }
+    .zone-btn:hover {
+      border-color: var(--color-primary);
+      color: var(--color-primary);
+    }
+    .zone-btn.active {
+      background: var(--color-primary);
+      color: white;
+      border-color: var(--color-primary);
+    }
+    .zone-btn.has-color {
+      position: relative;
+      padding-right: 22px;
+    }
+    .zone-btn .zone-dot {
+      position: absolute;
+      right: 6px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      border: 1px solid rgba(0,0,0,0.2);
+    }
+
+    /* Seat Type Selector */
+    .seat-type-option {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      padding: var(--spacing-xs);
+      border: 2px solid var(--color-gray-200);
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: border-color 0.15s;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--color-gray-600);
+    }
+    .seat-type-option:hover {
+      border-color: var(--color-primary);
+    }
+    .seat-type-option.selected {
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 2px var(--color-primary);
+    }
+
+    /* Generate AI Preview Button */
+    .btn-generate {
+      width: 100%;
+      margin-top: var(--spacing-md);
+      padding: var(--spacing-sm) var(--spacing-md);
+      background: linear-gradient(135deg, #7c3aed, #6d28d9);
+      color: white;
+      border: none;
+      border-radius: var(--radius-md);
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.1s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--spacing-xs);
+    }
+    .btn-generate:hover:not(:disabled) {
+      opacity: 0.9;
+      transform: translateY(-1px);
+    }
+    .btn-generate:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* Loading Overlay */
+    .loading-overlay {
+      display: none;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      border-radius: var(--radius-md);
+      z-index: 10;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: var(--spacing-md);
+    }
+    .loading-overlay.active {
+      display: flex;
+    }
+    .loading-spinner {
+      width: 40px;
+      height: 40px;
+      border: 4px solid rgba(255, 255, 255, 0.3);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    .loading-overlay .loading-text {
+      color: white;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    /* AI Result Display */
+    .ai-result {
+      display: none;
+      position: relative;
+      width: 100%;
+    }
+    .ai-result.active {
+      display: block;
+    }
+    .ai-result img {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: var(--radius-md);
+    }
+    .ai-result-badge {
+      position: absolute;
+      top: var(--spacing-sm);
+      left: var(--spacing-sm);
+      background: linear-gradient(135deg, #7c3aed, #6d28d9);
+      color: white;
+      padding: 2px 10px;
+      border-radius: var(--radius-full);
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+    }
+    .ai-result-actions {
+      display: flex;
+      gap: var(--spacing-sm);
+      margin-top: var(--spacing-sm);
+    }
+    .ai-result-actions .btn {
+      flex: 1;
+      text-align: center;
+      font-size: 0.8rem;
+      padding: var(--spacing-xs) var(--spacing-sm);
+    }
+  </style>
+</head>
+<body>
+  <div class="top-bar">
+    <div class="container top-bar-content">
+      <div class="top-bar-contact">
+        <a href="tel:941-922-5070">941-922-5070</a>
+        <span class="separator">|</span>
+        <span>Mon-Fri 10-4 ET</span>
+      </div>
+    </div>
+  </div>
+
+  <header class="header">
+    <div class="container header-content">
+      <a href="index.html" class="logo">
+        <span class="logo-text">MrMikes</span>
+        <span class="logo-tagline">Car Upholstery Kits</span>
+      </a>
+      <nav class="main-nav">
+        <ul class="nav-list">
+          <li><a href="index.html#products">Products</a></li>
+          <li><a href="gallery.html">Gallery</a></li>
+          <li><a href="index.html#about">About</a></li>
+          <li><a href="index.html#contact">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <section class="page-header">
+    <div class="container">
+      <nav class="breadcrumb">
+        <a href="index.html">Home</a> <span>/</span> <span>Seat Color Configurator</span>
+      </nav>
+      <h1>Seat Color Configurator</h1>
+      <p>Click a seat zone, then pick a color to visualize your custom upholstery</p>
+    </div>
+  </section>
+
+  <section class="info-page">
+    <div class="container">
+      <div class="configurator">
+
+        <!-- Seat Viewer -->
+        <div class="seat-viewer">
+          <div class="seat-container" id="seatContainer">
+            <img src="images/seat-colorizer.png" alt="Seat base image" id="seatImg">
+            <!-- AI Result Display -->
+            <div class="ai-result" id="aiResult">
+              <img id="aiResultImg" src="" alt="AI generated seat preview">
+            </div>
+            <!-- Loading Overlay -->
+            <div class="loading-overlay" id="loadingOverlay">
+              <div class="loading-spinner"></div>
+              <span class="loading-text">Generating preview...</span>
+            </div>
+            <svg viewBox="0 0 1024 1536" xmlns="http://www.w3.org/2000/svg" id="seatSvg">
+
+              <!-- OUTER zone: Bolsters + Headrest + Frame (from traced SVG paths) -->
+              <g id="zone-outer" class="seat-zone" data-zone="Outer (Bolsters &amp; Headrest)">
+                <path transform="translate(480,198)" d="m0 0h44l27 2 25 4 13 3 13 4 14 8 8 8 2 1 6 11 8 15 6 17 6 25 7 41 2 17v25l8 29 4 15 11 36 13 31 17 35 10 19 11 21 13 28 9 23 8 24 8 32 5 30 3 24 2 29 1 20v85l-2 21-4 18-7 14-9 10-6 2v13l-3 13 3 1 6 9 4 7v2h4l-2-2 1-6 2-1 1 2 3-4 8-2h8l7-2h25l6 8 3 13v26l-4 3-5 1-2 7-2 4 4 2 14 14 13 17 8 14 8 22 3 13 2 19v16l-3 34-5 30-5 21-6 18-5 12-9 17-12 16-9 10-4 1v2l-5 3h-2l2 9-2 9h-2l-2 6-4 6h-2v2l-18 9v18l-4 6-9 7-5 1-13 1h-16l-31-2-16-2-2-2v-9l1-1h29l36 3h12l8-2-1-8-2 1h-10l-11-3-22 3-33 1-36-2h-233l-115-2-18-1-22-4-9-3-7-1-19-7-10-5-5-5v-2h-2l-4-8-3-9-1-7v-14l4-9h-2l-3-6-8-13-6-12-8-22-3-7-6-26-2-10-3-27-1-17v-39l3-19 4-13 6-15 8-14 11-13 14-14 8-7 10-8h2l-1-9-4-5-1-3-1-45-3-4-3-12-1-8v-34l3-13 5-9 7-8h2v-82l2-33 4-34 5-29 7-29 8-27 12-29 13-27 8-16 14-29 11-26 6-18 15-52 8-31 1-4-1-1v-15l5-39 6-38 6-23 5-12 6-11 5-6 3-5 7-6 12-7 15-5 14-3 31-4z" fill="transparent" opacity="0.82"/>
+                <path transform="translate(235,843)" d="m0 0h1l3 20v11l-1 5v23l-1 3-2 35-1 28h19l-1 8 8-5h2v-15h1l1 12 12-6 10-1 2-1 19-1 21-3h15l13 4-2 6-5 18-3 12-7 32-5 7-16 32-10 21-6 17-5 14-12 24-3 19-2 26-1 34 2 34 5 28 5 16 4 8 4 5 5 2 12 2 73 2 79 1h163l62-3 28-1 14-1 5-3 5-6 5-14 5-21 3-22 1-19v-23l-1-16-3-25-4-15-3-7-7-11-8-12-7-15-10-19-6-9-4-7-10-14-10-15-10-14-4-9-4-13-7-23-5-12-1-6 1-5 10-2h13l24 2 6 1 20 1 5 1 3-1 7 3 5 2 3 1-1-17 2-4v4l3 1 6 9 4 7v2h4l-2-2 1-6 2-1 1 2 3-4 8-2h8l7-2h25l6 8 3 13v26l-4 3-5 1-2 7-2 4 4 2 14 14 13 17 8 14 8 22 3 13 2 19v16l-3 34-5 30-5 21-6 18-5 12-9 17-12 16-9 10-4 1v2l-5 3h-2l2 9-2 9h-2l-2 6-4 6h-2v2l-18 9v18l-4 6-9 7-5 1-13 1h-16l-31-2-16-2-2-2v-9l1-1h29l36 3h12l8-2-1-8-2 1h-10l-11-3-22 3-33 1-36-2h-233l-115-2-18-1-22-4-9-3-7-1-19-7-10-5-5-5v-2h-2l-4-8-3-9-1-7v-14l4-9h-2l-3-6-8-13-6-12-8-22-3-7-6-26-2-10-3-27-1-17v-39l3-19 4-13 6-15 8-14 11-13 14-14 8-7 10-8h2l-1-9-4-5-1-3-1-45-3-4-3-12-1-8v-34l3-13 4-7 4-2z" fill="transparent" opacity="0.82"/>
+              </g>
+
+              <!-- INSERT zone: Back Insert + Seat Cushion Insert (from traced SVG paths) -->
+              <g id="zone-insert" class="seat-zone" data-zone="Inserts (Center Panels)">
+                <path transform="translate(456,512)" d="m0 0h70l37 1 20 2 13 4 10 7 10 13 10 18 4 9 4 11 5 11 6 18 5 23 3 15 4 35 2 27 1 44v88l-2 43v14l-3 36-2 15-1 3-5 3-203-1-73-1-13-2-1-3-2-24-1-37-1-5v-16l-1-22v-71l1-23 1-52 2-27 3-26 4-20 4-16 4-13 8-20 7-15 8-15 7-11 9-10 6-4 10-3 15-2z" fill="transparent" opacity="0.82"/>
+                <path transform="translate(388,953)" d="m0 0h229l29 2 5 4 8 16 13 39 4 13 9 12 10 15 15 21 6 11 6 10 8 16 4 9 8 12 9 14 4 17 2 8 2 19 1 16v23l-1 19-4 28-6 22-5 10-6 6-3 1-14 1-90 4h-163l-79-1-73-2-15-3-5-4-3-4-5-14-3-9-5-28-2-36 1-32 3-35 3-12 8-16 5-12 5-15 5-12 10-21 8-16 10-19 2-2 7-32 4-16 4-14 5-8 8-3z" fill="transparent" opacity="0.82"/>
+              </g>
+
+            </svg>
+            <!-- Fiero GT SVG overlay (hidden by default) -->
+            <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" id="seatSvgFiero" style="display:none;">
+              <!-- Headrest front face -->
+              <g class="seat-zone" data-zone="Headrest" data-zone-id="fiero-headrest">
+                <polygon points="400,138 620,138 632,152 632,268 620,278 400,278 388,268 388,152" fill="transparent" opacity="0.82"/>
+              </g>
+              <!-- Headrest side panels -->
+              <g class="seat-zone" data-zone="Headrest Sides" data-zone-id="fiero-headrest-sides">
+                <polygon points="352,145 388,138 388,278 358,272" fill="transparent" opacity="0.82"/>
+                <polygon points="632,138 668,145 662,272 632,278" fill="transparent" opacity="0.82"/>
+              </g>
+              <!-- Upper back (below headrest, above ribbed insert) -->
+              <g class="seat-zone" data-zone="Upper Back" data-zone-id="fiero-upper-back">
+                <polygon points="388,298 632,298 625,408 395,408" fill="transparent" opacity="0.82"/>
+              </g>
+              <!-- Side bolsters (backrest + cushion sides) -->
+              <g class="seat-zone" data-zone="Bolsters" data-zone-id="fiero-bolsters">
+                <polygon points="292,312 368,298 375,408 418,408 418,628 398,655 378,875 292,875" fill="transparent" opacity="0.82"/>
+                <polygon points="748,312 672,298 665,408 622,408 622,628 642,655 662,875 748,875" fill="transparent" opacity="0.82"/>
+              </g>
+              <!-- Center ribbed backrest panel -->
+              <g class="seat-zone" data-zone="Back Insert" data-zone-id="fiero-back-insert">
+                <polygon points="398,408 622,408 622,628 398,628" fill="transparent" opacity="0.82"/>
+              </g>
+              <!-- Center ribbed cushion panel -->
+              <g class="seat-zone" data-zone="Cushion Insert" data-zone-id="fiero-cushion-insert">
+                <polygon points="439,657 659,683 639,899 341,887" fill="transparent" opacity="0.82"/>
+              </g>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Color Panel -->
+        <div class="color-panel">
+          <div class="color-category" style="margin-bottom:var(--spacing-md);">
+            <h4>Seat Type</h4>
+            <div style="display:flex;gap:var(--spacing-sm);">
+              <label class="seat-type-option selected" id="seatType-miata" onclick="selectSeatType('miata')">
+                <img src="images/seat-colorizer.png" alt="Miata NB" style="width:60px;height:80px;object-fit:cover;border-radius:var(--radius-sm);">
+                <span>Miata NB</span>
+              </label>
+              <label class="seat-type-option" id="seatType-fiero-gt" onclick="selectSeatType('fiero-gt')">
+                <img src="images/seat-fiero-gt.png" alt="Fiero GT" style="width:60px;height:80px;object-fit:cover;border-radius:var(--radius-sm);">
+                <span>Fiero GT</span>
+              </label>
+            </div>
+          </div>
+          <h3>Select a Zone & Color</h3>
+          <div class="zone-indicator" id="zoneIndicator">Click a section of the seat</div>
+          <div class="zone-buttons" id="zoneButtons"></div>
+
+          <div class="color-category">
+            <h4>Blacks & Grays</h4>
+            <div class="color-swatches">
+              <div class="color-swatch" style="background:#1a1a1a" title="Black #1" data-color="#1a1a1a" data-name="Black #1" onclick="applyColor(this)"></div>
+              <div class="color-swatch" style="background:#2d3436" title="Midnight #9" data-color="#2d3436" data-name="Midnight #9" onclick="applyColor(this)"></div>
+              <div class="color-swatch" style="background:#555555" title="Dark Gray #8" data-color="#555555" data-name="Dark Gray #8" onclick="applyColor(this)"></div>
+              <div class="color-swatch" style="background:#9e9e9e" title="Light Gray #7" data-color="#9e9e9e" data-name="Light Gray #7" onclick="applyColor(this)"></div>
+            </div>
+          </div>
+
+          <div class="color-category">
+            <h4>Whites</h4>
+            <div class="color-swatches">
+              <div class="color-swatch" style="background:#dcdcdc" title="Oxford White #41" data-color="#dcdcdc" data-name="Oxford White #41" onclick="applyColor(this)"></div>
+              <div class="color-swatch" style="background:#f0ebe0" title="Off-White #42" data-color="#f0ebe0" data-name="Off-White #42" onclick="applyColor(this)"></div>
+              <div class="color-swatch" style="background:#f8f8f8" title="Bright White #43" data-color="#f8f8f8" data-name="Bright White #43" onclick="applyColor(this)"></div>
+            </div>
+          </div>
+
+          <div class="color-category">
+            <h4>Tans & Browns</h4>
+            <div class="color-swatches">
+              <div class="color-swatch" style="background:#c4a87a" title="New-Tan #31" data-color="#c4a87a" data-name="New-Tan #31" onclick="applyColor(this)"></div>
+              <div class="color-swatch" style="background:#b8923e" title="Golden-Tan #34" data-color="#b8923e" data-name="Golden-Tan #34" onclick="applyColor(this)"></div>
+              <div class="color-swatch" style="background:#d4a84b" title="Honey-Tan #35" data-color="#d4a84b" data-name="Honey-Tan #35" onclick="applyColor(this)"></div>
+              <div class="color-swatch" style="background:#6b3a2a" title="Saddle #36" data-color="#6b3a2a" data-name="Saddle #36" onclick="applyColor(this)"></div>
+              <div class="color-swatch" style="background:#3e2723" title="Chestnut #33" data-color="#3e2723" data-name="Chestnut #33" onclick="applyColor(this)"></div>
+              <div class="color-swatch" style="background:#d2b48c" title="Light Tan #13" data-color="#d2b48c" data-name="Light Tan #13" onclick="applyColor(this)"></div>
+              <div class="color-swatch" style="background:#8b7355" title="Dark Tan #14" data-color="#8b7355" data-name="Dark Tan #14" onclick="applyColor(this)"></div>
+              <div class="color-swatch" style="background:#c9b99a" title="Cashmere #15" data-color="#c9b99a" data-name="Cashmere #15" onclick="applyColor(this)"></div>
+              <div class="color-swatch" style="background:#8b7d6b" title="Taupe #16" data-color="#8b7d6b" data-name="Taupe #16" onclick="applyColor(this)"></div>
+              <div class="color-swatch" style="background:#6d4c41" title="Bronze #17" data-color="#6d4c41" data-name="Bronze #17" onclick="applyColor(this)"></div>
+            </div>
+          </div>
+
+          <div class="color-category">
+            <h4>Blues</h4>
+            <div class="color-swatches">
+              <div class="color-swatch" style="background:#1565c0" title="Electric Blue #4" data-color="#1565c0" data-name="Electric Blue #4" onclick="applyColor(this)"></div>
+              <div class="color-swatch" style="background:#1a237e" title="Patriot Blue #5" data-color="#1a237e" data-name="Patriot Blue #5" onclick="applyColor(this)"></div>
+              <div class="color-swatch" style="background:#283593" title="Navy Blue #6" data-color="#283593" data-name="Navy Blue #6" onclick="applyColor(this)"></div>
+            </div>
+          </div>
+
+          <div class="color-category">
+            <h4>Bright Colors</h4>
+            <div class="color-swatches">
+              <div class="color-swatch" style="background:#fdd835" title="Yellow" data-color="#fdd835" data-name="Yellow" onclick="applyColor(this)"></div>
+              <div class="color-swatch" style="background:#ef6c00" title="Orange" data-color="#ef6c00" data-name="Orange" onclick="applyColor(this)"></div>
+              <div class="color-swatch" style="background:#bf360c" title="Burnt Orange" data-color="#bf360c" data-name="Burnt Orange" onclick="applyColor(this)"></div>
+              <div class="color-swatch" style="background:#c62828" title="Red #3" data-color="#c62828" data-name="Red #3" onclick="applyColor(this)"></div>
+              <div class="color-swatch" style="background:#5d0000" title="Maroon #18" data-color="#5d0000" data-name="Maroon #18" onclick="applyColor(this)"></div>
+              <div class="color-swatch" style="background:#6a1b9a" title="Purple" data-color="#6a1b9a" data-name="Purple" onclick="applyColor(this)"></div>
+            </div>
+          </div>
+
+          <div class="color-category">
+            <h4>Metallics & Specialty</h4>
+            <div class="color-swatches">
+              <div class="color-swatch" style="background:#b0b0b0" title="Silver Metallic #20" data-color="#b0b0b0" data-name="Silver Metallic #20" onclick="applyColor(this)"></div>
+              <div class="color-swatch" style="background:#707070" title="Steel Metallic #21" data-color="#707070" data-name="Steel Metallic #21" onclick="applyColor(this)"></div>
+              <div class="color-swatch" style="background:#558b2f" title="Gecko" data-color="#558b2f" data-name="Gecko" onclick="applyColor(this)"></div>
+            </div>
+          </div>
+
+          <!-- Pleat Style -->
+          <div class="color-category" style="margin-top:var(--spacing-lg);padding-top:var(--spacing-lg);border-top:1px solid var(--color-gray-200);">
+            <h4>Pleat Style</h4>
+            <select id="pleatStyle" onchange="updateSummary()" style="width:100%;padding:var(--spacing-xs) var(--spacing-sm);border:1px solid var(--color-gray-300);border-radius:var(--radius-sm);font-size:0.85rem;">
+              <option value="">None (smooth)</option>
+              <option value="4-inch" selected>4 Inch Pleats (standard)</option>
+              <option value="2-inch">2 Inch Pleats (refined)</option>
+              <option value="multi">Multi-Pleats (premium)</option>
+            </select>
+            <label style="display:flex;align-items:center;gap:var(--spacing-xs);margin-top:var(--spacing-xs);font-size:0.8rem;cursor:pointer;">
+              <input type="checkbox" id="twinLines" onchange="updateSummary()">
+              Twin Lines (racing stripes)
+            </label>
+          </div>
+
+          <!-- Embroidered Logo -->
+          <div class="color-category" style="margin-top:var(--spacing-md);">
+            <h4>Embroidered Logo</h4>
+            <select id="logoOption" onchange="toggleLogoText(); updateSummary()" style="width:100%;padding:var(--spacing-xs) var(--spacing-sm);border:1px solid var(--color-gray-300);border-radius:var(--radius-sm);font-size:0.85rem;margin-bottom:var(--spacing-xs);">
+            </select>
+            <input type="text" id="logoCustomText" placeholder="Enter custom text" onchange="updateSummary()" style="display:none;width:100%;padding:var(--spacing-xs) var(--spacing-sm);border:1px solid var(--color-gray-300);border-radius:var(--radius-sm);font-size:0.8rem;margin-bottom:var(--spacing-xs);">
+            <div id="logoColorRow" style="display:none;">
+              <label style="font-size:0.75rem;color:var(--color-gray-500);">Thread Color</label>
+              <div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:2px;">
+                <div class="color-swatch logo-color-swatch" style="background:#1a1a1a;width:28px;height:28px;" title="Black" data-logo-color="Black" onclick="selectLogoColor(this)"></div>
+                <div class="color-swatch logo-color-swatch" style="background:#f8f8f8;width:28px;height:28px;border-color:#ccc;" title="White" data-logo-color="White" onclick="selectLogoColor(this)"></div>
+                <div class="color-swatch logo-color-swatch" style="background:#b0b0b0;width:28px;height:28px;" title="Silver" data-logo-color="Silver" onclick="selectLogoColor(this)"></div>
+                <div class="color-swatch logo-color-swatch" style="background:#c62828;width:28px;height:28px;" title="Red" data-logo-color="Red" onclick="selectLogoColor(this)"></div>
+                <div class="color-swatch logo-color-swatch" style="background:#1565c0;width:28px;height:28px;" title="Blue" data-logo-color="Blue" onclick="selectLogoColor(this)"></div>
+                <div class="color-swatch logo-color-swatch" style="background:#d4a84b;width:28px;height:28px;" title="Gold" data-logo-color="Gold" onclick="selectLogoColor(this)"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Piping Color -->
+          <div class="color-category" style="margin-top:var(--spacing-md);">
+            <h4>Piping / Welt Color</h4>
+            <p style="font-size:0.75rem;color:var(--color-gray-500);margin:0 0 var(--spacing-xs);">Decorative trim along seams between zones</p>
+            <div style="display:flex;gap:4px;flex-wrap:wrap;">
+              <div class="color-swatch piping-color-swatch" style="background:transparent;width:28px;height:28px;position:relative;" title="None" data-piping-color="" onclick="selectPipingColor(this)"><span style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:0.65rem;color:var(--color-gray-400);">&#10005;</span></div>
+              <div class="color-swatch piping-color-swatch" style="background:#1a1a1a;width:28px;height:28px;" title="Black" data-piping-color="Black" onclick="selectPipingColor(this)"></div>
+              <div class="color-swatch piping-color-swatch" style="background:#f8f8f8;width:28px;height:28px;border-color:#ccc;" title="White" data-piping-color="White" onclick="selectPipingColor(this)"></div>
+              <div class="color-swatch piping-color-swatch" style="background:#b0b0b0;width:28px;height:28px;" title="Silver" data-piping-color="Silver" onclick="selectPipingColor(this)"></div>
+              <div class="color-swatch piping-color-swatch" style="background:#c62828;width:28px;height:28px;" title="Red" data-piping-color="Red" onclick="selectPipingColor(this)"></div>
+              <div class="color-swatch piping-color-swatch" style="background:#1565c0;width:28px;height:28px;" title="Blue" data-piping-color="Blue" onclick="selectPipingColor(this)"></div>
+              <div class="color-swatch piping-color-swatch" style="background:#d4a84b;width:28px;height:28px;" title="Gold" data-piping-color="Gold" onclick="selectPipingColor(this)"></div>
+              <div class="color-swatch piping-color-swatch" style="background:#c4a87a;width:28px;height:28px;" title="Tan" data-piping-color="Tan" onclick="selectPipingColor(this)"></div>
+              <div class="color-swatch piping-color-swatch" style="background:#283593;width:28px;height:28px;" title="Navy" data-piping-color="Navy" onclick="selectPipingColor(this)"></div>
+            </div>
+          </div>
+
+          <!-- Selection Summary -->
+          <div class="zone-summary">
+            <h4>Your Selections</h4>
+            <div id="zoneSummaryRows"></div>
+            <div class="summary-item">
+              <span>Piping</span>
+              <span id="sum-piping">-</span>
+            </div>
+            <div class="summary-item">
+              <span>Pleat Style</span>
+              <span id="sum-pleat">4 Inch Pleats</span>
+            </div>
+            <div class="summary-item">
+              <span>Embroidery</span>
+              <span id="sum-logo">-</span>
+            </div>
+          </div>
+
+          <div class="btn-row">
+            <button class="btn btn-secondary" onclick="resetAll()">Reset</button>
+            <a href="how-to-order.html" class="btn btn-primary">Order This Configuration</a>
+          </div>
+
+          <!-- AI Preview Button -->
+          <button class="btn-generate" id="btnGenerate" disabled onclick="generateAIPreview()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+            Generate my Seat
+          </button>
+          <div class="ai-result-actions" id="aiActions" style="display:none;">
+            <button class="btn btn-secondary" onclick="backToOriginal()">Back to Original</button>
+            <button class="btn btn-secondary" onclick="downloadAIImage()">Download</button>
+            <button class="btn btn-primary" onclick="generateAIPreview()">Regenerate</button>
+          </div>
+
+          <p style="font-size:0.7rem;color:var(--color-gray-500);margin-top:var(--spacing-sm);text-align:center;"><a href="admin-dashboard.html">Admin Settings</a></p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container footer-content">
+      <div class="footer-brand">
+        <span class="logo-text">MrMikes</span>
+        <p>"Do-it-right / Do-it-yourself"</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="container">
+        <p>&copy; 1994 - 2026 MrMikes.com. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="analytics.js"></script>
+  <script>
+    var selectedZone = null;
+    var zoneColors = {};
+    var currentSeatType = 'miata';
+
+    var seatTypes = {
+      'miata': {
+        image: 'images/seat-colorizer.png',
+        hasSvg: true,
+        svgId: 'seatSvg',
+        zones: [
+          { id: 'zone-outer', label: 'Outer (Bolsters & Headrest)', promptKey: 'side bolsters, headrest, and outer frame' },
+          { id: 'zone-insert', label: 'Inserts (Center Panels)', promptKey: 'center insert panels on backrest and seat cushion' }
+        ],
+        logos: [
+          { value: '', label: 'None' },
+          { value: 'Mazda', label: 'Mazda Logo' },
+          { value: 'Miata', label: 'Miata Script' },
+          { value: 'MX-5', label: 'MX-5 Badge' },
+          { value: 'Roadster', label: 'Roadster Script' },
+          { value: 'custom', label: 'Custom Text...' }
+        ],
+        promptDesc: 'Photorealistic product photo of a Mazda Miata NB (1999-2005) bucket seat viewed from the front, centered on a plain white studio background. The seat has the distinctive Miata NB shape: tall integrated headrest, pronounced curved side bolsters, center insert panels on both the backrest and seat cushion, and a compact sporty profile.'
+      },
+      'fiero-gt': {
+        image: 'images/seat-fiero-gt.png',
+        hasSvg: false,
+        svgId: 'seatSvgFiero',
+        zones: [
+          { id: 'fiero-headrest', label: 'Headrest', promptKey: 'headrest front face' },
+          { id: 'fiero-headrest-sides', label: 'Headrest Sides', promptKey: 'headrest side panels' },
+          { id: 'fiero-upper-back', label: 'Upper Back', promptKey: 'upper backrest area below the headrest' },
+          { id: 'fiero-bolsters', label: 'Bolsters', promptKey: 'side bolsters on the backrest and seat cushion' },
+          { id: 'fiero-back-insert', label: 'Back Insert', promptKey: 'center ribbed insert panel on the backrest' },
+          { id: 'fiero-cushion-insert', label: 'Cushion Insert', promptKey: 'center ribbed insert panel on the seat cushion' }
+        ],
+        logos: [
+          { value: '', label: 'None' },
+          { value: 'Pontiac', label: 'Pontiac Logo' },
+          { value: 'Fiero', label: 'Fiero Script' },
+          { value: 'Fiero GT', label: 'Fiero GT Badge' },
+          { value: 'Ferrari', label: 'Ferrari Prancing Horse' },
+          { value: 'custom', label: 'Custom Text...' }
+        ],
+        promptDesc: 'Photorealistic product photo of a Pontiac Fiero GT (1984-1988) bucket seat viewed from the front, centered on a plain white studio background. The seat has the distinctive Fiero GT shape: separate squared headrest, smooth rounded side bolsters, horizontal ribbed center insert panels on both the backrest and seat cushion with black piping along the edges, and a sporty reclined profile.'
+      }
+    };
+
+    function selectSeatType(type) {
+      currentSeatType = type;
+      var info = seatTypes[type];
+
+      // Update seat image
+      document.getElementById('seatImg').src = info.image;
+
+      // Hide all SVGs, then show the current seat type's SVG
+      document.getElementById('seatSvg').style.display = 'none';
+      document.getElementById('seatSvgFiero').style.display = 'none';
+      document.getElementById(info.svgId).style.display = '';
+
+      // Update selector highlight
+      document.querySelectorAll('.seat-type-option').forEach(function(el) {
+        el.classList.remove('selected');
+      });
+      document.getElementById('seatType-' + type).classList.add('selected');
+
+      // Build zone buttons
+      var container = document.getElementById('zoneButtons');
+      container.innerHTML = '';
+      if (!info.hasSvg) {
+        info.zones.forEach(function(zone) {
+          var btn = document.createElement('button');
+          btn.className = 'zone-btn';
+          btn.textContent = zone.label;
+          btn.setAttribute('data-zone-id', zone.id);
+          btn.setAttribute('data-zone-label', zone.label);
+          btn.onclick = function() { selectButtonZone(zone.id, zone.label); };
+          container.appendChild(btn);
+        });
+      }
+
+      // Update logo dropdown options
+      var sel = document.getElementById('logoOption');
+      sel.innerHTML = '';
+      info.logos.forEach(function(logo) {
+        var opt = document.createElement('option');
+        opt.value = logo.value;
+        opt.textContent = logo.label;
+        sel.appendChild(opt);
+      });
+      toggleLogoText();
+
+      // Clear zone selections and reset
+      zoneColors = {};
+      selectedZone = null;
+      document.querySelectorAll('.seat-zone').forEach(function(z) {
+        z.classList.remove('selected');
+        z.querySelectorAll('path, polygon').forEach(function(p) {
+          p.setAttribute('fill', 'transparent');
+        });
+      });
+      document.querySelectorAll('.color-swatch:not(.logo-color-swatch)').forEach(function(s) {
+        s.classList.remove('active');
+      });
+      document.getElementById('zoneIndicator').textContent = info.hasSvg ? 'Click a section of the seat' : 'Select a zone above';
+      document.getElementById('zoneIndicator').classList.remove('active');
+
+      // Reset AI view if active
+      backToOriginal();
+      updateSummary();
+    }
+
+    function selectButtonZone(zoneId, zoneLabel) {
+      // Set as active zone for color application
+      selectedZone = { id: zoneId, getAttribute: function(attr) { return attr === 'data-zone' ? zoneLabel : zoneId; } };
+
+      // Update button highlights
+      document.querySelectorAll('.zone-btn').forEach(function(b) { b.classList.remove('active'); });
+      var btn = document.querySelector('.zone-btn[data-zone-id="' + zoneId + '"]');
+      if (btn) btn.classList.add('active');
+
+      // Highlight matching SVG zone
+      var svgEl = document.getElementById(seatTypes[currentSeatType].svgId);
+      svgEl.querySelectorAll('.seat-zone').forEach(function(z) { z.classList.remove('selected'); });
+      var svgZone = svgEl.querySelector('[data-zone-id="' + zoneId + '"]');
+      if (svgZone) svgZone.classList.add('selected');
+
+      // Update indicator
+      var indicator = document.getElementById('zoneIndicator');
+      indicator.textContent = zoneLabel;
+      indicator.classList.add('active');
+
+      // Highlight active swatch if zone already has a color
+      document.querySelectorAll('.color-swatch:not(.logo-color-swatch)').forEach(function(s) {
+        s.classList.remove('active');
+      });
+      if (zoneColors[zoneId]) {
+        var match = document.querySelector('.color-swatch[data-color="' + zoneColors[zoneId].color + '"]');
+        if (match) match.classList.add('active');
+      }
+    }
+
+    // Initialize logo dropdown on load
+    selectSeatType('miata');
+
+    // Zone click handler for Miata SVG - listeners on <g> groups
+    document.querySelectorAll('#seatSvg .seat-zone').forEach(function(zone) {
+      zone.addEventListener('click', function(e) {
+        e.stopPropagation();
+        selectZone(this);
+      });
+    });
+
+    // Zone click handler for Fiero GT SVG - clicking SVG zones activates the matching button zone
+    document.querySelectorAll('#seatSvgFiero .seat-zone').forEach(function(zone) {
+      zone.addEventListener('click', function(e) {
+        e.stopPropagation();
+        var zoneId = zone.getAttribute('data-zone-id');
+        var zoneLabel = zone.getAttribute('data-zone');
+        selectButtonZone(zoneId, zoneLabel);
+      });
+    });
+
+    function selectZone(el) {
+      // Get the group element if a child path was clicked
+      var zone = el.closest('.seat-zone') || el;
+
+      // Remove previous selection
+      document.querySelectorAll('.seat-zone').forEach(function(z) {
+        z.classList.remove('selected');
+      });
+      zone.classList.add('selected');
+      selectedZone = zone;
+
+      var zoneName = zone.getAttribute('data-zone');
+      var indicator = document.getElementById('zoneIndicator');
+      indicator.textContent = zoneName;
+      indicator.classList.add('active');
+
+      // Highlight active swatch if this zone already has a color
+      document.querySelectorAll('.color-swatch').forEach(function(s) {
+        s.classList.remove('active');
+      });
+      if (zoneColors[zone.id]) {
+        var match = document.querySelector('.color-swatch[data-color="' + zoneColors[zone.id].color + '"]');
+        if (match) match.classList.add('active');
+      }
+    }
+
+    function applyColor(swatch) {
+      if (!selectedZone) {
+        document.getElementById('zoneIndicator').textContent = seatTypes[currentSeatType].hasSvg ? 'Click a seat zone first!' : 'Select a zone above first!';
+        return;
+      }
+
+      var color = swatch.getAttribute('data-color');
+      var name = swatch.getAttribute('data-name');
+      var zoneId = selectedZone.id;
+
+      // Apply fill to SVG zone
+      if (seatTypes[currentSeatType].hasSvg && selectedZone.querySelectorAll) {
+        // Miata: selectedZone IS the SVG group
+        selectedZone.querySelectorAll('path').forEach(function(p) {
+          p.setAttribute('fill', color);
+        });
+      } else {
+        // Fiero GT: find matching SVG group by data-zone-id
+        var svgEl = document.getElementById(seatTypes[currentSeatType].svgId);
+        var svgZone = svgEl.querySelector('[data-zone-id="' + zoneId + '"]');
+        if (svgZone) {
+          svgZone.querySelectorAll('polygon').forEach(function(p) {
+            p.setAttribute('fill', color);
+          });
+        }
+      }
+
+      // Store selection
+      zoneColors[zoneId] = { color: color, name: name };
+
+      // Update swatch highlights
+      document.querySelectorAll('.color-swatch:not(.logo-color-swatch)').forEach(function(s) {
+        s.classList.remove('active');
+      });
+      swatch.classList.add('active');
+
+      // Update zone button color dot (for button-based zones)
+      if (!seatTypes[currentSeatType].hasSvg) {
+        var btn = document.querySelector('.zone-btn[data-zone-id="' + zoneId + '"]');
+        if (btn) {
+          btn.classList.add('has-color');
+          var dot = btn.querySelector('.zone-dot');
+          if (!dot) {
+            dot = document.createElement('span');
+            dot.className = 'zone-dot';
+            btn.appendChild(dot);
+          }
+          dot.style.background = color;
+        }
+      }
+
+      // Update summary
+      updateSummary();
+    }
+
+    var selectedPipingColor = '';
+
+    function selectPipingColor(swatch) {
+      document.querySelectorAll('.piping-color-swatch').forEach(function(s) {
+        s.classList.remove('active');
+      });
+      swatch.classList.add('active');
+      selectedPipingColor = swatch.getAttribute('data-piping-color');
+      updateSummary();
+    }
+
+    var selectedLogoColor = '';
+
+    function toggleLogoText() {
+      var sel = document.getElementById('logoOption');
+      var txt = document.getElementById('logoCustomText');
+      var colorRow = document.getElementById('logoColorRow');
+      txt.style.display = sel.value === 'custom' ? 'block' : 'none';
+      colorRow.style.display = sel.value ? 'block' : 'none';
+    }
+
+    function selectLogoColor(swatch) {
+      document.querySelectorAll('.logo-color-swatch').forEach(function(s) {
+        s.classList.remove('active');
+      });
+      swatch.classList.add('active');
+      selectedLogoColor = swatch.getAttribute('data-logo-color');
+      updateSummary();
+    }
+
+    function getLogoText() {
+      var sel = document.getElementById('logoOption');
+      if (sel.value === 'custom') {
+        return document.getElementById('logoCustomText').value.trim() || '';
+      }
+      return sel.value || '';
+    }
+
+    function getPleatInfo() {
+      var style = document.getElementById('pleatStyle').value;
+      var twin = document.getElementById('twinLines').checked;
+      return { style: style, twin: twin };
+    }
+
+    function updateSummary() {
+      // Build dynamic zone summary rows
+      var container = document.getElementById('zoneSummaryRows');
+      var info = seatTypes[currentSeatType];
+      container.innerHTML = '';
+      info.zones.forEach(function(zone) {
+        var row = document.createElement('div');
+        row.className = 'summary-item';
+        var label = document.createElement('span');
+        label.textContent = zone.label;
+        var value = document.createElement('span');
+        if (zoneColors[zone.id]) {
+          value.innerHTML = zoneColors[zone.id].name + ' <span class="summary-swatch" style="background:' + zoneColors[zone.id].color + '"></span>';
+        } else {
+          value.textContent = '-';
+        }
+        row.appendChild(label);
+        row.appendChild(value);
+        container.appendChild(row);
+      });
+
+      // Piping summary
+      var pipingSum = document.getElementById('sum-piping');
+      pipingSum.textContent = selectedPipingColor || '-';
+
+      // Pleat summary
+      var pleat = getPleatInfo();
+      var pleatText = '-';
+      if (pleat.style) {
+        var labels = { '4-inch': '4 Inch Pleats', '2-inch': '2 Inch Pleats', 'multi': 'Multi-Pleats' };
+        pleatText = labels[pleat.style] || pleat.style;
+        if (pleat.twin) pleatText += ' + Twin Lines';
+      } else if (pleat.twin) {
+        pleatText = 'Twin Lines';
+      }
+      document.getElementById('sum-pleat').textContent = pleatText;
+
+      // Logo summary
+      var logo = getLogoText();
+      var logoSum = document.getElementById('sum-logo');
+      if (logo) {
+        logoSum.textContent = logo + (selectedLogoColor ? ' (' + selectedLogoColor + ')' : '');
+      } else {
+        logoSum.textContent = '-';
+      }
+    }
+
+    function resetAll() {
+      // Reset all SVG zones (both Miata and Fiero)
+      document.querySelectorAll('.seat-zone').forEach(function(zone) {
+        zone.classList.remove('selected');
+        zone.querySelectorAll('path, polygon').forEach(function(p) {
+          p.setAttribute('fill', 'transparent');
+        });
+      });
+      // Reset zone button color dots
+      document.querySelectorAll('.zone-btn').forEach(function(btn) {
+        btn.classList.remove('active', 'has-color');
+        var dot = btn.querySelector('.zone-dot');
+        if (dot) dot.remove();
+      });
+      zoneColors = {};
+      selectedZone = null;
+      selectedPipingColor = '';
+      selectedLogoColor = '';
+      var info = seatTypes[currentSeatType];
+      document.getElementById('zoneIndicator').textContent = info.hasSvg ? 'Click a section of the seat' : 'Select a zone above';
+      document.getElementById('zoneIndicator').classList.remove('active');
+      document.querySelectorAll('.color-swatch').forEach(function(s) {
+        s.classList.remove('active');
+      });
+      document.getElementById('pleatStyle').value = '4-inch';
+      document.getElementById('twinLines').checked = false;
+      document.getElementById('logoOption').value = '';
+      document.getElementById('logoCustomText').value = '';
+      document.getElementById('logoCustomText').style.display = 'none';
+      document.getElementById('logoColorRow').style.display = 'none';
+      updateSummary();
+    }
+
+    // Deselect when clicking outside (SVG-based seat types only)
+    document.addEventListener('click', function(e) {
+      if (seatTypes[currentSeatType].hasSvg && !e.target.closest('.seat-zone') && !e.target.closest('.color-panel')) {
+        document.querySelectorAll('.seat-zone').forEach(function(z) {
+          z.classList.remove('selected');
+        });
+        selectedZone = null;
+        document.getElementById('zoneIndicator').textContent = 'Click a section of the seat';
+        document.getElementById('zoneIndicator').classList.remove('active');
+      }
+    });
+
+    // ---- AI Preview Feature ----
+    var aiViewActive = false;
+
+    function getOpenAIKey() {
+      return localStorage.getItem('mrmikes_openai_key') || '';
+    }
+
+    function getAIModel() {
+      return localStorage.getItem('mrmikes_ai_model') || 'gpt-image-1';
+    }
+
+    function updateGenerateButton() {
+      var btn = document.getElementById('btnGenerate');
+      var hasKey = !!getOpenAIKey();
+      var hasColors = Object.keys(zoneColors).length > 0;
+      btn.disabled = !(hasKey && hasColors);
+    }
+
+    // Override updateSummary to also update the generate button state
+    var _origUpdateSummary = updateSummary;
+    updateSummary = function() {
+      _origUpdateSummary();
+      updateGenerateButton();
+    };
+
+    // Also update button when resetting
+    var _origResetAll = resetAll;
+    resetAll = function() {
+      _origResetAll();
+      updateGenerateButton();
+      backToOriginal();
+    };
+
+    function buildPrompt() {
+      var info = seatTypes[currentSeatType];
+      var colorParts = [];
+      info.zones.forEach(function(zone) {
+        if (zoneColors[zone.id]) {
+          colorParts.push('The ' + zone.promptKey + ' are ' + zoneColors[zone.id].name + ' leather.');
+        }
+      });
+      var colorDesc = colorParts.join(' ');
+      if (!colorDesc) {
+        colorDesc = 'The seat is upholstered in black leather.';
+      }
+
+      // Pleat description
+      var pleat = getPleatInfo();
+      var pleatDesc = '';
+      if (pleat.style === '4-inch') {
+        pleatDesc = 'The center insert panels have horizontal pleats with 4-inch spacing between stitch lines, creating a classic balanced pattern.';
+      } else if (pleat.style === '2-inch') {
+        pleatDesc = 'The center insert panels have tight horizontal pleats with 2-inch spacing between stitch lines, creating a refined detailed pattern.';
+      } else if (pleat.style === 'multi') {
+        pleatDesc = 'The center insert panels have a premium multi-pleat pattern with groups of closely-spaced stitch lines, creating a luxury sports car appearance.';
+      } else {
+        pleatDesc = 'The center insert panels are smooth with no pleats.';
+      }
+      if (pleat.twin) {
+        pleatDesc += ' Twin racing stripe stitch lines run vertically down the center of each insert panel.';
+      }
+
+      // Piping description
+      var pipingDesc = '';
+      if (selectedPipingColor) {
+        pipingDesc = ' Visible ' + selectedPipingColor + ' piping (welt cord trim) runs along every seam between adjacent seat zones, clearly outlining and separating each panel.';
+      }
+
+      // Logo description
+      var logoText = getLogoText();
+      var logoDesc = '';
+      if (logoText) {
+        var colorNote = selectedLogoColor ? ' in ' + selectedLogoColor + ' thread' : '';
+        logoDesc = ' An embroidered "' + logoText + '" logo' + colorNote + ' is stitched into the upper backrest area just below the headrest.';
+      }
+
+      var seatDesc = seatTypes[currentSeatType].promptDesc;
+      return seatDesc + ' ' + pleatDesc + ' ' + colorDesc + pipingDesc + logoDesc + ' IMPORTANT: Each seat zone must have sharp, clean color boundaries with no blending or bleeding between adjacent zones. Colors must stay strictly within their designated area, separated by visible piping or stitch lines at every zone boundary. Show realistic leather texture with natural grain, soft studio lighting with gentle shadows, and fine contrast stitching detail. Just the isolated seat, no person, no car interior, no steering wheel.';
+    }
+
+    function seatImageToBlob() {
+      var imgSrc = document.getElementById('seatImg').src;
+      return fetch(imgSrc)
+        .then(function(response) {
+          if (!response.ok) throw new Error('Failed to load seat image');
+          return response.blob();
+        })
+        .then(function(blob) {
+          if (getAIModel() !== 'dall-e-2') return blob;
+          // DALL-E 2 requires RGBA — re-encode via canvas
+          return new Promise(function(resolve, reject) {
+            var img = new Image();
+            img.onload = function() {
+              var canvas = document.createElement('canvas');
+              canvas.width = img.naturalWidth;
+              canvas.height = img.naturalHeight;
+              var ctx = canvas.getContext('2d');
+              ctx.drawImage(img, 0, 0);
+              canvas.toBlob(function(rgbaBlob) {
+                URL.revokeObjectURL(img.src);
+                if (rgbaBlob) resolve(rgbaBlob);
+                else reject(new Error('Failed to convert image to RGBA PNG'));
+              }, 'image/png');
+            };
+            img.onerror = function() {
+              URL.revokeObjectURL(img.src);
+              reject(new Error('Failed to load image for conversion'));
+            };
+            img.src = URL.createObjectURL(blob);
+          });
+        });
+    }
+
+    function seatImageToBase64() {
+      var imgSrc = document.getElementById('seatImg').src;
+      return fetch(imgSrc)
+        .then(function(response) {
+          if (!response.ok) throw new Error('Failed to load seat image');
+          return response.blob();
+        })
+        .then(function(blob) {
+          // Resize to 512x768 via canvas to keep payload small
+          return new Promise(function(resolve, reject) {
+            var img = new Image();
+            img.onload = function() {
+              var canvas = document.createElement('canvas');
+              canvas.width = 512;
+              canvas.height = 768;
+              var ctx = canvas.getContext('2d');
+              ctx.drawImage(img, 0, 0, 512, 768);
+              var dataUrl = canvas.toDataURL('image/png');
+              URL.revokeObjectURL(img.src);
+              resolve(dataUrl);
+            };
+            img.onerror = function() {
+              URL.revokeObjectURL(img.src);
+              reject(new Error('Failed to load image for base64 conversion'));
+            };
+            img.src = URL.createObjectURL(blob);
+          });
+        });
+    }
+
+    function showLoading(show) {
+      var overlay = document.getElementById('loadingOverlay');
+      if (show) {
+        overlay.classList.add('active');
+      } else {
+        overlay.classList.remove('active');
+      }
+    }
+
+    function showAIResult(dataUrl) {
+      var resultDiv = document.getElementById('aiResult');
+      var resultImg = document.getElementById('aiResultImg');
+      var seatImg = document.getElementById('seatImg');
+      var actions = document.getElementById('aiActions');
+
+      resultImg.src = dataUrl;
+      resultDiv.classList.add('active');
+      document.getElementById('seatSvg').style.display = 'none';
+      document.getElementById('seatSvgFiero').style.display = 'none';
+      seatImg.style.display = 'none';
+      actions.style.display = 'flex';
+      aiViewActive = true;
+    }
+
+    function downloadAIImage() {
+      var img = document.getElementById('aiResultImg');
+      if (!img.src) return;
+      var a = document.createElement('a');
+      a.href = img.src;
+      var info = seatTypes[currentSeatType];
+      var colorParts = [];
+      info.zones.forEach(function(zone) {
+        if (zoneColors[zone.id]) {
+          colorParts.push(zoneColors[zone.id].name.replace(/\s+/g, '-'));
+        }
+      });
+      var name = 'MrMikes-' + currentSeatType + (colorParts.length ? '-' + colorParts.join('-') : '') + '.png';
+      a.download = name;
+      a.click();
+    }
+
+    function backToOriginal() {
+      var resultDiv = document.getElementById('aiResult');
+      var seatImg = document.getElementById('seatImg');
+      var actions = document.getElementById('aiActions');
+
+      resultDiv.classList.remove('active');
+      seatImg.style.display = '';
+      // Hide all SVGs, show the current seat type's SVG
+      document.getElementById('seatSvg').style.display = 'none';
+      document.getElementById('seatSvgFiero').style.display = 'none';
+      document.getElementById(seatTypes[currentSeatType].svgId).style.display = '';
+      actions.style.display = 'none';
+      aiViewActive = false;
+    }
+
+    async function generateAIPreview() {
+      var apiKey = getOpenAIKey();
+      if (!apiKey) {
+        alert('Please configure your OpenAI API key in Admin Settings.');
+        return;
+      }
+
+      if (Object.keys(zoneColors).length === 0) {
+        alert('Please select at least one color for a zone first.');
+        return;
+      }
+
+      showLoading(true);
+      document.getElementById('btnGenerate').disabled = true;
+
+      try {
+        var prompt = buildPrompt();
+        var model = getAIModel();
+        var response;
+
+        if (model === 'dall-e-2') {
+          // DALL-E 2: use /images/edits with source image
+          var blob = await seatImageToBlob();
+          var formData = new FormData();
+          formData.append('image', blob, 'seat.png');
+          formData.append('prompt', prompt);
+          formData.append('model', 'dall-e-2');
+          formData.append('size', '1024x1024');
+          formData.append('response_format', 'b64_json');
+
+          response = await fetch('https://api.openai.com/v1/images/edits', {
+            method: 'POST',
+            headers: { 'Authorization': 'Bearer ' + apiKey },
+            body: formData
+          });
+        } else {
+          // gpt-image-1: try Responses API with reference image first
+          var seatBase64 = await seatImageToBase64();
+          var useResponsesApi = true;
+
+          response = await fetch('https://api.openai.com/v1/responses', {
+            method: 'POST',
+            headers: {
+              'Authorization': 'Bearer ' + apiKey,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              model: 'gpt-4o-mini',
+              input: [
+                {
+                  role: 'user',
+                  content: [
+                    { type: 'input_image', image_url: seatBase64 },
+                    { type: 'input_text', text: 'Edit this car seat photo. ' + prompt + ' Keep the exact same seat shape, angle, and perspective as the reference photo. Only change the colors and details described.' }
+                  ]
+                }
+              ],
+              tools: [{ type: 'image_generation', quality: 'high', size: '1024x1536' }],
+              tool_choice: 'required'
+            })
+          });
+
+          // If Responses API fails (403 = image_generation tool not yet available), fall back to generations
+          if (response.status === 403) {
+            useResponsesApi = false;
+            response = await fetch('https://api.openai.com/v1/images/generations', {
+              method: 'POST',
+              headers: {
+                'Authorization': 'Bearer ' + apiKey,
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                model: 'gpt-image-1',
+                prompt: prompt,
+                n: 1,
+                size: '1024x1536',
+                quality: 'high',
+                output_format: 'png'
+              })
+            });
+          }
+        }
+
+        if (!response.ok) {
+          var errData = await response.json().catch(function() { return {}; });
+          var errMsg = (errData.error && errData.error.message) || ('API error: ' + response.status);
+
+          if (response.status === 401) {
+            localStorage.removeItem('mrmikes_openai_key');
+            updateGenerateButton();
+            throw new Error('Invalid API key. Key has been cleared — please update it in Admin Settings.');
+          }
+          if (response.status === 429) {
+            throw new Error('Rate limit reached. Please wait a moment and try again.');
+          }
+          throw new Error(errMsg);
+        }
+
+        var data = await response.json();
+        // Handle both Images API (dall-e-2) and Responses API (gpt-image-1) formats
+        if (data.data && data.data[0] && data.data[0].b64_json) {
+          // Images API format
+          var dataUrl = 'data:image/png;base64,' + data.data[0].b64_json;
+          showAIResult(dataUrl);
+        } else if (data.output) {
+          // Responses API format - find the image_generation_call result
+          var found = false;
+          for (var i = 0; i < data.output.length; i++) {
+            var item = data.output[i];
+            if (item.type === 'image_generation_call' && item.result) {
+              var dataUrl = 'data:image/png;base64,' + item.result;
+              showAIResult(dataUrl);
+              found = true;
+              break;
+            }
+          }
+          if (!found) throw new Error('No image was generated. Try again.');
+        } else {
+          throw new Error('Unexpected API response format.');
+        }
+      } catch (err) {
+        alert('AI Preview Error: ' + err.message);
+      } finally {
+        showLoading(false);
+        updateGenerateButton();
+      }
+    }
+
+    // Initialize generate button state on load
+    updateGenerateButton();
+  </script>
+</body>
+</html>
