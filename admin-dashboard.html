@@ -401,32 +401,6 @@
               </div>
             </div>
 
-            <div class="settings-info" style="margin-bottom: 2rem;">
-              <h3>OpenAI Seat Configurator</h3>
-              <p><strong>Server-Side Configuration:</strong> The OpenAI API key is now securely stored on the server via Netlify environment variables. This keeps your API key safe and prevents it from being exposed in the browser.</p>
-              <div style="background: #f0f9ff; border-left: 4px solid #0284c7; padding: 1rem; margin: 1rem 0; border-radius: 4px;">
-                <p style="margin: 0; font-size: 0.875rem;"><strong>To configure the API key:</strong></p>
-                <ol style="margin: 0.5rem 0 0 1.5rem; font-size: 0.875rem; line-height: 1.6;">
-                  <li>Go to your Netlify dashboard</li>
-                  <li>Navigate to Site Settings → Environment Variables</li>
-                  <li>Add a new variable: <code style="background: #e0f2fe; padding: 2px 6px; border-radius: 3px;">OPENAI_API_KEY</code></li>
-                  <li>Set its value to your OpenAI API key (<a href="https://platform.openai.com/api-keys" target="_blank">Get key here</a>)</li>
-                  <li>Redeploy your site for changes to take effect</li>
-                </ol>
-              </div>
-              <div id="openai-key-status" style="margin-top: 0.5rem; font-size: 0.875rem; color: #16a34a;">✓ API key is configured server-side via Netlify environment variables</div>
-
-              <div class="form-group" style="margin-top: 1rem;">
-                <label for="openai-model">AI Model</label>
-                <select id="openai-model" style="width: 100%; padding: 0.5rem; border: 1px solid var(--admin-border); border-radius: 4px;">
-                  <option value="gpt-image-1">gpt-image-1 (Best quality)</option>
-                  <option value="dall-e-2">dall-e-2 (Legacy, wider access)</option>
-                </select>
-              </div>
-              <button type="button" class="btn btn-secondary" id="save-openai-model" style="margin-top: 0.5rem;">Save Model</button>
-              <p style="font-size: 0.8rem; color: var(--admin-text-muted); margin-top: 0.5rem;">Cost: ~$0.02-0.08 per generation. Key is stored in browser localStorage only.</p>
-            </div>
-
             <form id="settings-form" class="admin-form">
               <h3>Change Password</h3>
               <div class="form-group">
@@ -498,24 +472,6 @@
     // Initialize admin dashboard
     const dashboard = new AdminDashboard();
 
-    // OpenAI Settings
-    (function() {
-      var modelSelect = document.getElementById('openai-model');
-
-      // Clean up any old API keys from localStorage (no longer used)
-      if (localStorage.getItem('mrmikes_openai_key')) {
-        console.log('Removing old API key from localStorage - now using server-side configuration');
-        localStorage.removeItem('mrmikes_openai_key');
-      }
-
-      modelSelect.value = localStorage.getItem('mrmikes_ai_model') || 'gpt-image-1';
-      document.getElementById('save-openai-model').addEventListener('click', function() {
-        localStorage.setItem('mrmikes_ai_model', modelSelect.value);
-        alert('Model saved: ' + modelSelect.value);
-      });
-
-      updateKeyStatus();
-    })();
   </script>
 </body>
 </html>

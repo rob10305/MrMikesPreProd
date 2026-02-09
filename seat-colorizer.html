@@ -628,7 +628,6 @@
             <button class="btn btn-primary" onclick="generateAIPreview()">Regenerate</button>
           </div>
 
-          <p style="font-size:0.7rem;color:var(--color-gray-500);margin-top:var(--spacing-sm);text-align:center;"><a href="admin-dashboard.html">Admin Settings</a></p>
         </div>
 
       </div>
@@ -1033,19 +1032,10 @@
     // ---- AI Preview Feature ----
     var aiViewActive = false;
 
-    function getOpenAIKey() {
-      return localStorage.getItem('mrmikes_openai_key') || '';
-    }
-
-    function getAIModel() {
-      return localStorage.getItem('mrmikes_ai_model') || 'gpt-image-1';
-    }
-
     function updateGenerateButton() {
       var btn = document.getElementById('btnGenerate');
-      var hasKey = !!getOpenAIKey();
       var hasColors = Object.keys(zoneColors).length > 0;
-      btn.disabled = !(hasKey && hasColors);
+      btn.disabled = !hasColors;
     }
 
     // Override updateSummary to also update the generate button state
@@ -1108,39 +1098,6 @@
 
       var seatDesc = seatTypes[currentSeatType].promptDesc;
       return seatDesc + ' ' + pleatDesc + ' ' + colorDesc + pipingDesc + logoDesc + ' IMPORTANT: Each seat zone must have sharp, clean color boundaries with no blending or bleeding between adjacent zones. Colors must stay strictly within their designated area, separated by visible piping or stitch lines at every zone boundary. Show realistic leather texture with natural grain, soft studio lighting with gentle shadows, and fine contrast stitching detail. Just the isolated seat, no person, no car interior, no steering wheel.';
-    }
-
-    function seatImageToBlob() {
-      var imgSrc = document.getElementById('seatImg').src;
-      return fetch(imgSrc)
-        .then(function(response) {
-          if (!response.ok) throw new Error('Failed to load seat image');
-          return response.blob();
-        })
-        .then(function(blob) {
-          if (getAIModel() !== 'dall-e-2') return blob;
-          // DALL-E 2 requires RGBA — re-encode via canvas
-          return new Promise(function(resolve, reject) {
-            var img = new Image();
-            img.onload = function() {
-              var canvas = document.createElement('canvas');
-              canvas.width = img.naturalWidth;
-              canvas.height = img.naturalHeight;
-              var ctx = canvas.getContext('2d');
-              ctx.drawImage(img, 0, 0);
-              canvas.toBlob(function(rgbaBlob) {
-                URL.revokeObjectURL(img.src);
-                if (rgbaBlob) resolve(rgbaBlob);
-                else reject(new Error('Failed to convert image to RGBA PNG'));
-              }, 'image/png');
-            };
-            img.onerror = function() {
-              URL.revokeObjectURL(img.src);
-              reject(new Error('Failed to load image for conversion'));
-            };
-            img.src = URL.createObjectURL(blob);
-          });
-        });
     }
 
     function seatImageToBase64() {
@@ -1230,12 +1187,6 @@
     }
 
     async function generateAIPreview() {
-      var apiKey = getOpenAIKey();
-      if (!apiKey) {
-        alert('Please configure your OpenAI API key in Admin Settings.');
-        return;
-      }
-
       if (Object.keys(zoneColors).length === 0) {
         alert('Please select at least one color for a zone first.');
         return;
@@ -1246,95 +1197,37 @@
 
       try {
         var prompt = buildPrompt();
-        var model = getAIModel();
-        var response;
+        var seatBase64 = await seatImageToBase64();
 
-        if (model === 'dall-e-2') {
-          // DALL-E 2: use /images/edits with source image
-          var blob = await seatImageToBlob();
-          var formData = new FormData();
-          formData.append('image', blob, 'seat.png');
-          formData.append('prompt', prompt);
-          formData.append('model', 'dall-e-2');
-          formData.append('size', '1024x1024');
-          formData.append('response_format', 'b64_json');
+        var response = await fetch('/.netlify/functions/generate-seat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            prompt: prompt,
+            referenceImage: seatBase64
+          })
+        });
 
-          response = await fetch('https://api.openai.com/v1/images/edits', {
-            method: 'POST',
-            headers: { 'Authorization': 'Bearer ' + apiKey },
-            body: formData
-          });
-        } else {
-          // gpt-image-1: try Responses API with reference image first
-          var seatBase64 = await seatImageToBase64();
-          var useResponsesApi = true;
-
-          response = await fetch('https://api.openai.com/v1/responses', {
-            method: 'POST',
-            headers: {
-              'Authorization': 'Bearer ' + apiKey,
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-              model: 'gpt-4o-mini',
-              input: [
-                {
-                  role: 'user',
-                  content: [
-                    { type: 'input_image', image_url: seatBase64 },
-                    { type: 'input_text', text: 'Edit this car seat photo. ' + prompt + ' Keep the exact same seat shape, angle, and perspective as the reference photo. Only change the colors and details described.' }
-                  ]
-                }
-              ],
-              tools: [{ type: 'image_generation', quality: 'high', size: '1024x1536' }],
-              tool_choice: 'required'
-            })
-          });
-
-          // If Responses API fails (403 = image_generation tool not yet available), fall back to generations
-          if (response.status === 403) {
-            useResponsesApi = false;
-            response = await fetch('https://api.openai.com/v1/images/generations', {
-              method: 'POST',
-              headers: {
-                'Authorization': 'Bearer ' + apiKey,
-                'Content-Type': 'application/json'
-              },
-              body: JSON.stringify({
-                model: 'gpt-image-1',
-                prompt: prompt,
-                n: 1,
-                size: '1024x1536',
-                quality: 'high',
-                output_format: 'png'
-              })
-            });
-          }
-        }
-
+        // Pre-stream errors (validation, missing API key)
         if (!response.ok) {
           var errData = await response.json().catch(function() { return {}; });
-          var errMsg = (errData.error && errData.error.message) || ('API error: ' + response.status);
-
-          if (response.status === 401) {
-            localStorage.removeItem('mrmikes_openai_key');
-            updateGenerateButton();
-            throw new Error('Invalid API key. Key has been cleared — please update it in Admin Settings.');
-          }
-          if (response.status === 429) {
-            throw new Error('Rate limit reached. Please wait a moment and try again.');
-          }
-          throw new Error(errMsg);
+          throw new Error((errData.error && errData.error.message) || 'API error: ' + response.status);
         }
 
-        var data = await response.json();
-        // Handle both Images API (dall-e-2) and Responses API (gpt-image-1) formats
+        // Read streamed response (heartbeat spaces + JSON result)
+        var text = await response.text();
+        var data = JSON.parse(text.trim());
+
+        // Check for errors returned in the stream body
+        if (data.error) {
+          throw new Error(data.error.message || 'API error');
+        }
+
+        // Handle both Images API and Responses API formats
         if (data.data && data.data[0] && data.data[0].b64_json) {
-          // Images API format
           var dataUrl = 'data:image/png;base64,' + data.data[0].b64_json;
           showAIResult(dataUrl);
         } else if (data.output) {
-          // Responses API format - find the image_generation_call result
           var found = false;
           for (var i = 0; i < data.output.length; i++) {
             var item = data.output[i];
