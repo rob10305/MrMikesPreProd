@@ -403,13 +403,18 @@
 
             <div class="settings-info" style="margin-bottom: 2rem;">
               <h3>OpenAI Seat Configurator</h3>
-              <p>Enter your OpenAI API key to enable AI-powered seat preview generation in the <a href="seat-colorizer.html">Seat Configurator</a>. <a href="https://platform.openai.com/api-keys" target="_blank">Get API key here</a>.</p>
-              <div class="form-group" style="margin-top: 1rem;">
-                <label for="openai-key">OpenAI API Key</label>
-                <input type="password" id="openai-key" placeholder="sk-... (OpenAI API key)" style="font-family: monospace;">
+              <p><strong>Server-Side Configuration:</strong> The OpenAI API key is now securely stored on the server via Netlify environment variables. This keeps your API key safe and prevents it from being exposed in the browser.</p>
+              <div style="background: #f0f9ff; border-left: 4px solid #0284c7; padding: 1rem; margin: 1rem 0; border-radius: 4px;">
+                <p style="margin: 0; font-size: 0.875rem;"><strong>To configure the API key:</strong></p>
+                <ol style="margin: 0.5rem 0 0 1.5rem; font-size: 0.875rem; line-height: 1.6;">
+                  <li>Go to your Netlify dashboard</li>
+                  <li>Navigate to Site Settings → Environment Variables</li>
+                  <li>Add a new variable: <code style="background: #e0f2fe; padding: 2px 6px; border-radius: 3px;">OPENAI_API_KEY</code></li>
+                  <li>Set its value to your OpenAI API key (<a href="https://platform.openai.com/api-keys" target="_blank">Get key here</a>)</li>
+                  <li>Redeploy your site for changes to take effect</li>
+                </ol>
               </div>
-              <div id="openai-key-status" style="margin-top: 0.5rem; font-size: 0.875rem;"></div>
-              <button type="button" class="btn btn-primary" id="save-openai-key" style="margin-top: 0.5rem;">Save Key</button>
+              <div id="openai-key-status" style="margin-top: 0.5rem; font-size: 0.875rem; color: #16a34a;">✓ API key is configured server-side via Netlify environment variables</div>
 
               <div class="form-group" style="margin-top: 1rem;">
                 <label for="openai-model">AI Model</label>
@@ -495,31 +500,13 @@
 
     // OpenAI Settings
     (function() {
-      var keyInput = document.getElementById('openai-key');
-      var keyStatus = document.getElementById('openai-key-status');
       var modelSelect = document.getElementById('openai-model');
 
-      function updateKeyStatus() {
-        var key = localStorage.getItem('mrmikes_openai_key') || '';
-        if (key) {
-          keyStatus.textContent = 'API key configured (ends in ...' + key.slice(-4) + ')';
-          keyStatus.style.color = '#16a34a';
-        } else {
-          keyStatus.textContent = 'No API key set';
-          keyStatus.style.color = '#888';
-        }
+      // Clean up any old API keys from localStorage (no longer used)
+      if (localStorage.getItem('mrmikes_openai_key')) {
+        console.log('Removing old API key from localStorage - now using server-side configuration');
+        localStorage.removeItem('mrmikes_openai_key');
       }
-
-      document.getElementById('save-openai-key').addEventListener('click', function() {
-        var key = keyInput.value.trim().replace(/[^\x20-\x7E]/g, '');
-        if (key) {
-          localStorage.setItem('mrmikes_openai_key', key);
-          keyInput.value = '';
-        } else {
-          localStorage.removeItem('mrmikes_openai_key');
-        }
-        updateKeyStatus();
-      });
 
       modelSelect.value = localStorage.getItem('mrmikes_ai_model') || 'gpt-image-1';
       document.getElementById('save-openai-model').addEventListener('click', function() {
